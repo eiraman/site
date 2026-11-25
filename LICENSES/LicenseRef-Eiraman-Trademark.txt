@@ -1,0 +1,10 @@
+Eiraman Trademark notice
+
+The files marked with LicenseRef-Eiraman-Trademark (the Eiraman name and logo, brand assets) are not
+licensed under any copyright licence of the Eiraman project: neither CC BY-SA 4.0, CC BY 4.0 nor the
+Apache License 2.0 applies to them. They are trademarks of the Eiraman project, held by its Steward.
+
+Their use is governed by the Eiraman Trademark Policy, in the file TRADEMARK.md of the community
+repository: https://github.com/eiraman/community/blob/main/TRADEMARK.md
+
+Provenance of the logo: brand/PROVENANCE.md in the site repository.

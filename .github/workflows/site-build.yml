@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Reproducible site build: the generator runs twice from the same commit into two folders, and the two
+# manifests (SHA-256 of every output file) and output trees must be identical. Different fingerprints fail.
+# No publication happens here: publishing is a separate, human-approved step.
+name: site-build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  PROFILES_REPO: eiraman/role-profiles
+  # Full commit SHA of role-profiles read by the build (profilo.json files and the kit), never a branch,
+  # so that two builds from the same site commit read the same registry. Updating it is a reviewed change.
+  PROFILES_REF: "c9af3d847346fc7443a3393a751c9470c70da1f7"
+
+jobs:
+  build:
+    name: Two builds, same manifest
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: site
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.PROFILES_REPO }}
+          ref: ${{ env.PROFILES_REF }}
+          path: role-profiles
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Build twice
+        run: |
+          set -euo pipefail
+          for n in 1 2; do
+            EIRAMAN_OUT="$RUNNER_TEMP/build-$n" EIRAMAN_PROFILES="$GITHUB_WORKSPACE/role-profiles" \
+              python3 -I -B site/generator/build.py
+          done
+      - name: Compare manifests and trees
+        run: |
+          set -euo pipefail
+          sha256sum "$RUNNER_TEMP/build-1/manifest.json" "$RUNNER_TEMP/build-2/manifest.json"
+          cmp "$RUNNER_TEMP/build-1/manifest.json" "$RUNNER_TEMP/build-2/manifest.json"
+          diff -r "$RUNNER_TEMP/build-1" "$RUNNER_TEMP/build-2"
+          python3 -I -c 'import json,sys; m=json.load(open(sys.argv[1])); print(len(m["sha256"]), "files; placeholders:", ", ".join(m.get("placeholders", [])) or "none")' "$RUNNER_TEMP/build-1/manifest.json"
+      - name: Output contains no local paths
+        run: |
+          if grep -rIlE '/Users/|/home/runner/|OneDrive' "$RUNNER_TEMP/build-1"; then
+            echo "::error::local paths in the generated site"; exit 1
+          fi

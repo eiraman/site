@@ -1,0 +1,5 @@
+build/
+releases/
+generator/spec03/
+__pycache__/
+.eiraman-deny.local

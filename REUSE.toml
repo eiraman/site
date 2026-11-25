@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
+# SPDX-License-Identifier: Apache-2.0
+# REUSE Specification 3.3. Code files carry SPDX headers; the website text and the brand files are declared here.
+version = 1
+
+[[annotations]]
+path = "generator/content.py"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Paolo Ungari and contributors"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
+path = ["NOTICE", ".gitignore", ".lycheeignore"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Paolo Ungari and contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Brand files: trademarks, not covered by the CC or Apache licences (brand/PROVENANCE.md, TRADEMARK.md).
+[[annotations]]
+path = ["brand/*.png"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Paolo Ungari (trademark owner; copyright status uncertain, see brand/PROVENANCE.md)"
+SPDX-License-Identifier = "LicenseRef-Eiraman-Trademark"
