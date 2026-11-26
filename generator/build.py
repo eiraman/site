@@ -23,8 +23,8 @@ def _missing(what):
 
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 # Versions (community/VERSIONING.md). Bump them together with the CHANGELOG.md entry of the release.
-SITE_VERSION = "0.8.1"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
-KIT_VERSION = "0.8.1"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
+SITE_VERSION = "0.9.0"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
+KIT_VERSION = "0.9.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
 OLD = os.environ.get("EIRAMAN_OLD") or os.path.join(ROOT, "releases", "0.2.0-candidata")
 OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else SITE_VERSION)
 LOGO = os.environ.get("EIRAMAN_BRAND") or os.path.join(ROOT, "brand")

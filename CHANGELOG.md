@@ -18,6 +18,31 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-26
+
+Scope: Change Requests CR-011 and CR-012 of the method project. The kit follows the Role Profiles registry
+0.7.0 (commit `fae9b7adf5e0f965c88355801434b1a0fac04e10`). Site bump: MINOR, a bundled artifact has a MINOR
+(VERSIONING §2.4). Kit 0.8.1 → 0.9.0: MINOR.
+
+### Changed
+
+- Kit: the registry is 0.7.0 and the AI Coordinator profile is 0.6.0. The AI Coordinator profile fixes the
+  order of the steps of a project, requires a recorded phase check before any Work Package that builds the
+  product and forbids skipping or reducing a mandatory phase on its own choice; `STATO.md` and
+  `tools/vista_manager.py` add the phase of each package and an automatic bad news when build work starts
+  with Discovery or Design and planning not closed. The Design Thinking Facilitator profile (0.4.0) and the
+  AI Coordinator profile carry the engagement brief of Discovery; the AI Reviewer profile (0.3.0) checks the
+  phase check. Details in the registry changelog, entry 0.7.0.
+- Projects pages (`progetti.html`, `en/projects.html`): 433 catalogued tasks (they said 432).
+- Role Profiles pages, read from the registry: the catalogues of the changed profiles.
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit.
+- `manifest.json`: `version` 0.9.0, `kit.version` 0.9.0, `kit.bundled` gives `registry` 0.7.0 and
+  `ai_coordinator_profile` 0.6.0.
+- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles 0.7.0.
+
+The known gaps of 0.8.0 stay open: the pages that tell the method still follow specification 0.3, and the
+kit does not contain the Guide.
+
 ## [0.8.1] - 2026-11-26
 
 Scope: Change Request CR-010 of the method project. The kit follows the Role Profiles registry 0.6.1
@@ -314,7 +339,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.8.1...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.9.0...main
+[0.9.0]: https://github.com/eiraman/site/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/eiraman/site/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/eiraman/site/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/eiraman/site/compare/v0.6.0...v0.7.0
