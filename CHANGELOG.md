@@ -125,6 +125,6 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/c6965036abc4855ebfbd3fdd786c86fd12e73e80...main
-[0.4.1]: https://github.com/eiraman/site/compare/c6965036abc4855ebfbd3fdd786c86fd12e73e80...main
-[0.4.0]: https://github.com/eiraman/site/tree/c6965036abc4855ebfbd3fdd786c86fd12e73e80
+[Unreleased]: https://github.com/eiraman/site/compare/v0.4.1...main
+[0.4.1]: https://github.com/eiraman/site/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/eiraman/site/releases/tag/v0.4.0
