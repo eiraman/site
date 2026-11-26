@@ -17,7 +17,7 @@ EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
 
 | Variable | Meaning | Default |
 |---|---|---|
-| `EIRAMAN_OUT` | output folder (emptied before the build) | `build/<site version>`, for example `build/0.4.0` |
+| `EIRAMAN_OUT` | output folder (emptied before the build) | `build/<site version>`, for example `build/0.4.1` |
 | `EIRAMAN_PROFILES` | checkout of the `role-profiles` repository | `../role-profiles` |
 | `EIRAMAN_BRAND` | folder holding `eiraman-su-chiaro.png` and `eiraman-su-scuro.png` | `brand/` |
 | `EIRAMAN_PHOTO` | author photo for the Author & community page | unset |

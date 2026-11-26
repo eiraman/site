@@ -18,14 +18,17 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-26
+
 ### Fixed
 
-- `manifest.json` gives the site version as `0.4.0` instead of `0.3.0`, the label under which the
-  25 November 2026 deployment was published (see 0.4.0, "Known deviation").
+- `manifest.json` gives the site version as a SemVer label of its own (`0.4.1`) instead of `0.3.0`, the
+  label under which the 25 November 2026 deployment (0.4.0) was published (see 0.4.0, "Known deviation").
 
 ### Added
 
-- `manifest.json` has a `kit` object: path, kit version (`0.4.0`) and `bundled`, the versions of what the
+- `manifest.json` has a `kit` object: path, kit version (`0.4.0`, unchanged because the kit bytes did not
+  change) and `bundled`, the versions of what the
   kit contains: `registry` (read from the `CHANGELOG.md` of the `role-profiles` checkout),
   `ai_coordinator_profile` (read from `controllore/CONTROLLORE.md`), `specification` (`0.3` when the
   withheld historical specification is supplied), and `guide` and `tools` as `null`, because the kit
@@ -37,12 +40,12 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 - The default output folder of the generator is `build/<site version>` instead of `build/0.3.0-candidata`.
 
 No page and no kit byte changes: two builds from this commit differ from a build of `c696503` only in
-`manifest.json`. Whether this goes online as a corrected manifest of 0.4.0 or as 0.4.1 is a decision for
-the Human Manager (community/RELEASING.md).
+`manifest.json`.
 
 ## [0.4.0] - 2026-11-25
 
-Deployed on eiraman.tech during the restricted launch of 25 November 2026, built from commit `c696503` of
+Published as commit `c696503` of this repository; the tag `v0.4.0` will be applied retroactively to that
+commit. Deployed on eiraman.tech during the restricted launch of 25 November 2026, built from commit `c696503` of
 this repository with the withheld inputs (author photo, historical specification 0.3, 0.2 map pages)
 supplied locally. Two builds were identical; 48 changed files and the manifest were uploaded by SFTP;
 63 of 63 fingerprints matched over HTTPS; `.htaccess` answers 403. Online manifest SHA-256 `affbcab3…c6eb6a`.
@@ -51,7 +54,7 @@ Kit version 0.4.0, the first kit under the open licences.
 ### Known deviation
 
 - The deployed `manifest.json` says `"version": "0.3.0"`, although the content changed. The correct
-  version of that content is 0.4.0. The label is fixed in [Unreleased].
+  version of that content is 0.4.0. The label is fixed in [0.4.1].
 
 ### Changed
 
@@ -84,8 +87,9 @@ copy of the 0.2 site was kept before the upload.
 On 25 November 2026 the site was republished many times with new content and the label stayed 0.3.0.
 Under the current rules each of these would have been a MINOR or PATCH version. The log records, in order:
 
-- the opening sentence of the home page restored; a new home page with "The pearl of love" and the page
-  "Frameworks rethought", then the first 0.3 home page restored (49 files);
+- the opening sentence of the home page restored (47 files);
+- a new home page with "The pearl of love" and the page "Frameworks rethought", then the first 0.3 home
+  page restored (49 files);
 - the tone review of the whole site, with a text home page, the Levels page and costs (49 files);
 - the home page drawing "Vision → Mandate → AI Squad → Evidence → Service in production", "AI Squad"
   instead of "squad of agents", and the roles renamed to "Human Manager" and "AI Coordinator" (49 files);
@@ -111,7 +115,8 @@ The log does not give every intermediate manifest, so these states cannot all be
 First site online on eiraman.tech: bilingual (Italian at the root, English in `/en/`), 10 pages, desktop
 and mobile, light and dark theme. 15 files uploaded by SFTP with a dedicated key and checked against the
 manifest over HTTPS. Owner shown: Paolo Ungari, all rights reserved. An independent review asked for
-corrections R1–R6, applied before publication.
+corrections R1–R6: R2–R6 were applied before publication, and R1 (the owner named in the footer) was
+closed by the owner's choice: Paolo Ungari, all rights reserved.
 
 ## [0.1.0] - 2026-11-24
 
@@ -121,4 +126,5 @@ verified; the external HTTPS check then found the hosting provider's "under cons
 not record that 0.1.0 itself went online.
 
 [Unreleased]: https://github.com/eiraman/site/compare/c6965036abc4855ebfbd3fdd786c86fd12e73e80...main
+[0.4.1]: https://github.com/eiraman/site/compare/c6965036abc4855ebfbd3fdd786c86fd12e73e80...main
 [0.4.0]: https://github.com/eiraman/site/tree/c6965036abc4855ebfbd3fdd786c86fd12e73e80
