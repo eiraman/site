@@ -18,6 +18,24 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-11-26
+
+Scope: Change Request CR-010 of the method project. The kit follows the Role Profiles registry 0.6.1
+(commit `ab294eff14d5b88ef4b40fd63bacead2399e450c`), a PATCH that corrects 0.6.0 after its independent re-review.
+Site bump: PATCH, a bundled artifact has a PATCH (VERSIONING §2.4). Kit 0.8.0 → 0.8.1: PATCH.
+
+### Changed
+
+- Kit: the registry is 0.6.1 and the AI Coordinator profile is 0.5.1; the bundled files that change are those
+  listed in the registry changelog, entry 0.6.1 (the AI Coordinator profile, `_seniority/SENIORITY.md`, five
+  family files, two profiles and the registry changelog).
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit.
+- `manifest.json`: `version` 0.8.1, `kit.version` 0.8.1, `kit.bundled` gives `registry` 0.6.1 and
+  `ai_coordinator_profile` 0.5.1.
+- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles 0.6.1.
+
+No page text changes. The known gaps of 0.8.0 stay open.
+
 ## [0.8.0] - 2026-11-26
 
 Scope: two Change Requests of the method project released together. CR-007 implements RFC 0002
@@ -296,7 +314,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.8.0...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.8.1...main
+[0.8.1]: https://github.com/eiraman/site/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/eiraman/site/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/eiraman/site/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/eiraman/site/compare/v0.5.0...v0.6.0
