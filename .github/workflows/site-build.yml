@@ -18,7 +18,7 @@ env:
   PROFILES_REPO: eiraman/role-profiles
   # Full commit SHA of role-profiles read by the build (profilo.json files and the kit), never a branch,
   # so that two builds from the same site commit read the same registry. Updating it is a reviewed change.
-  PROFILES_REF: "c9af3d847346fc7443a3393a751c9470c70da1f7"
+  PROFILES_REF: "77ca4d0e80ac4c0fef441ae39ea141b117590eca" # role-profiles v0.2.0
 
 jobs:
   build:

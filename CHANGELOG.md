@@ -18,6 +18,44 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-26
+
+The site and the kit follow the Role Profiles registry 0.2.0 (`role-profiles@v0.2.0`, commit
+`77ca4d0e80ac4c0fef441ae39ea141b117590eca`). Kit version 0.5.0: the kit content changes. Built against
+`tools` 0.2.1 only through CI references; the kit still contains no tools.
+
+### Added
+
+- Role Profiles page (`role-profile.html`, `en/role-profiles.html`): the family **Governo** (Governance),
+  with its one profile `governo/revisore-ai` 0.1.0, the AI Reviewer. The profile count shown goes from
+  41 to 42 (41 standard profiles plus the AI Coordinator). The generator lists the families in a fixed
+  table (`RP_FAM` in `generator/content.py`), so the family needed a new entry there: name and one-line
+  description in Italian and English, and an icon. No other generator text changes.
+- Kit: `role-profiles/governo/FAMIGLIA.md` and `role-profiles/governo/revisore-ai/` (the AI Reviewer
+  profile), and the templates `role-profiles/_modello/business-analyst/` and
+  `role-profiles/_modello/user-persona/`.
+
+### Changed
+
+- Role Profiles page: the cards of `analisi-funzionale/analista-funzionale` (0.1.0 → 0.2.0, 11 → 12
+  tasks) and `analisi-funzionale/facilitatore-design-thinking` (0.1.0 → 0.2.0, 7 → 11 tasks) show their
+  new short descriptions, task counts and first example tasks, read from `profilo.json` at registry 0.2.0.
+  Two example tasks of the analyst's card are replaced, because its catalogue changed. The card of
+  `utente-simulato` (0.1.0 → 0.2.0) shows the same text as before.
+- Kit: `CONTROLLORE.md` is the AI Coordinator profile 0.4.0 (was 0.3.0); `AVVIO.md` adds the paragraph on
+  setting up the AI Reviewer; `role-profiles/README.md` and the files of the family `analisi-funzionale`
+  (`FAMIGLIA.md`, `analista-funzionale`, `facilitatore-design-thinking`, `utente-simulato`) follow the
+  registry 0.2.0.
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit; no
+  other change on those pages.
+- `manifest.json`: `version` 0.5.0, `kit.version` 0.5.0, and `kit.bundled` gives `registry` 0.2.0 and
+  `ai_coordinator_profile` 0.4.0.
+- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles v0.2.0
+  (`77ca4d0e80ac4c0fef441ae39ea141b117590eca`).
+
+No page is added or removed. Compared with the deployed 0.4.1, five served files change: the two Role
+Profiles pages, the two start-prompt pages and the kit.
+
 ## [0.4.1] - 2026-11-26
 
 ### Fixed
@@ -125,6 +163,7 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.4.1...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.5.0...main
+[0.5.0]: https://github.com/eiraman/site/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/eiraman/site/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/eiraman/site/releases/tag/v0.4.0

@@ -1915,6 +1915,7 @@ RP_FAM = [
  ("sviluppo", "Sviluppo", "Development", "Sviluppatori per linguaggio che seguono le regole del metodo e lo stile corretto di ogni linguaggio, con controlli automatici obbligatori.", "Language developers who follow the method's rules and each language's correct style, with mandatory automated checks.", "pen"),
  ("web-design", "Web design", "Web design", "Interfacce chiare e accessibili, con criteri di usabilità misurabili.", "Clear, accessible interfaces with measurable usability criteria.", "eye"),
  ("analisi-funzionale", "Analisi funzionale", "Functional analysis", "Dalla Visione ai requisiti, ai test e alla documentazione per il Manager umano.", "From the Vision to requirements, tests and documentation for the Human Manager.", "lens"),
+ ("governo", "Governo", "Governance", "Sorveglianza del metodo in modo indipendente dal Coordinatore AI: segnalazioni al Coordinatore e al Manager umano, non comandi.", "Oversight of the method independently of the AI Coordinator: reports to the Coordinator and the Human Manager, not commands.", "shield"),
 ]
 RPAGE = {
  "it": dict(title="Role Profile · Eiraman", desc="I Role Profile disponibili per le AI Squad di Eiraman, raggruppati per famiglia.",
