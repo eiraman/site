@@ -18,6 +18,32 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-26
+
+Scope: Change Request CR-007 of the method project, implementing RFC 0002 (`guide/rfcs/0002-governo-family.md`),
+alternative B (Do-S18). The site follows the Role Profiles registry 0.4.2 (candidate commit
+`d28dfae2782ab04fbae2368b3fd2cceea733fbb5`). Site bump: MINOR, content (VERSIONING §2.4). Kit 0.7.0 → 0.7.1:
+PATCH, because the bundled registry and `governo/FAMIGLIA.md` have a PATCH.
+
+### Changed
+
+- About page (`chi-sono.html`, `en/about.html`), "Family groups" tile ("Gruppi di famiglia"): the list ends
+  with "Governance & Assurance", the family group of `governo/` created by RFC 0002, in Italian and English.
+  Until this release Do-S16 kept Governo off the list; the description of family groups is unchanged.
+- Kit: `role-profiles/governo/FAMIGLIA.md` is 0.2.2 (was 0.2.1), with the header on ownership and
+  co-review; `role-profiles/README.md` names Governance & Assurance in the families table. No other kit
+  file changes.
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit; no
+  other change on those pages.
+- `manifest.json`: `version` 0.8.0, `kit.version` 0.7.1, and `kit.bundled` gives `registry` 0.4.2. `date`
+  stays 2026-11-26.
+- CI: `PROFILES_REF` in `site-build.yml` pins the role-profiles 0.4.2 candidate commit
+  (`d28dfae2782ab04fbae2368b3fd2cceea733fbb5`, not yet tagged).
+
+No page is added or removed. Compared with the deployed 0.7.0, the served files that change are the two About
+pages, the two start-prompt pages and the kit. The Role Profiles and Projects pages do not change: no profile
+and no count changes in registry 0.4.2.
+
 ## [0.7.0] - 2026-11-26
 
 Scope: Change Requests CR-004, CR-005 and CR-006 of the method project (Wave REL-07). The site and the kit
@@ -247,7 +273,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.7.0...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.8.0...main
+[0.8.0]: https://github.com/eiraman/site/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/eiraman/site/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/eiraman/site/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/eiraman/site/compare/v0.4.1...v0.5.0
