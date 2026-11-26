@@ -17,7 +17,7 @@ EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
 
 | Variable | Meaning | Default |
 |---|---|---|
-| `EIRAMAN_OUT` | output folder (emptied before the build) | `build/0.3.0-candidata` |
+| `EIRAMAN_OUT` | output folder (emptied before the build) | `build/<site version>`, for example `build/0.4.0` |
 | `EIRAMAN_PROFILES` | checkout of the `role-profiles` repository | `../role-profiles` |
 | `EIRAMAN_BRAND` | folder holding `eiraman-su-chiaro.png` and `eiraman-su-scuro.png` | `brand/` |
 | `EIRAMAN_PHOTO` | author photo for the Author & community page | unset |
@@ -26,6 +26,11 @@ EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
 
 The build writes `manifest.json` with the SHA-256 of every output file. Two builds from the same commit
 must produce the same manifest; CI checks this (`.github/workflows/site-build.yml`).
+
+`manifest.json` also records the site version (`version`) and, under `kit`, the kit version and the
+versions of what the kit bundles. The rules are in
+[community/VERSIONING.md](https://github.com/eiraman/community/blob/main/VERSIONING.md), the history in
+[CHANGELOG.md](CHANGELOG.md).
 
 ## Brand files
 

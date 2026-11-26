@@ -22,8 +22,11 @@ def _missing(what):
     if what not in PLACEHOLDERS: PLACEHOLDERS.append(what)
 
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
+# Versions (community/VERSIONING.md). Bump them together with the CHANGELOG.md entry of the release.
+SITE_VERSION = "0.4.0"  # the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
+KIT_VERSION = "0.4.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
 OLD = os.environ.get("EIRAMAN_OLD") or os.path.join(ROOT, "releases", "0.2.0-candidata")
-OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else "0.3.0-candidata")
+OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else SITE_VERSION)
 LOGO = os.environ.get("EIRAMAN_BRAND") or os.path.join(ROOT, "brand")
 LOGO_FILES = ("eiraman-su-chiaro.png", "eiraman-su-scuro.png")
 # A fork without the brand files (the Marks are not licensed) still builds, with a text wordmark.
@@ -993,6 +996,24 @@ KIT_LICENSE = ("# Licences · Licenze\n\n"
     "Nome e logo Eiraman: marchio, non coperto da queste licenze (TRADEMARK.md). Le copie distribuite fino alla versione 0.3.x "
     "restano disponibili ai loro titolari con le licenze originali (CC BY-NC-ND 4.0 e MIT).\n")
 KIT_SHA = None  # impronta SHA-256 dello zip del kit: calcolata in main() prima delle pagine che la citano
+KIT_BUNDLED = None  # versions of the artifacts inside the kit, written to manifest.json (community/VERSIONING.md)
+
+def _released_version(changelog):
+    """Latest released version in a Keep a Changelog file, or None."""
+    if not os.path.isfile(changelog): return None
+    m = re.search(r"^## \[(\d+\.\d+\.\d+[^\]]*)\]", open(changelog, encoding="utf-8").read(), re.M)
+    return m.group(1) if m else None
+
+def kit_bundled(arcs, rp):
+    """Versions of what the kit contains. None: not in the kit; "unknown": in the kit, version not recorded at the source."""
+    ctrl = os.path.join(rp, "controllore", "CONTROLLORE.md")
+    m = re.search(r"^Versione (\d+\.\d+\.\d+)", open(ctrl, encoding="utf-8").read(), re.M) if "CONTROLLORE.md" in arcs else None
+    return {"guide": None,  # the kit does not ship the Eiraman Guide
+            "specification": "0.3" if "framework/Eiraman.md" in arcs else None,  # historical Italian specification, withheld input
+            "registry": (_released_version(os.path.join(rp, "CHANGELOG.md")) or "unknown") if any(a.startswith("role-profiles/") for a in arcs) else None,
+            "ai_coordinator_profile": (m.group(1) if m else "unknown") if "CONTROLLORE.md" in arcs else None,
+            "tools": None}  # the validator and the activation tool are not in the kit
+
 def build_kit():
     import zipfile
     rp = RP_DIR
@@ -1015,6 +1036,8 @@ def build_kit():
         for f in sorted(fs):
             if f.startswith(".") or not f.endswith((".md", ".json", ".py")): continue
             files.append((os.path.join(base, f), "role-profiles/" + os.path.join(rel, f).replace(os.sep, "/")))
+    global KIT_BUNDLED
+    KIT_BUNDLED = kit_bundled({a for _, a in files}, rp)
     files.append((None, "LEGGIMI.md"))
     files.append(("@LIC", "LICENSE.md"))
     out = os.path.join(OUT, "kit", "eiraman-kit.zip"); os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -1189,8 +1212,9 @@ def main():
             if f == "manifest.json" or (f.startswith(".") and f != ".htaccess"): continue
             files.append(os.path.relpath(os.path.join(r, f), OUT))
     files.sort()
-    man = {"format": 1, "version": "0.3.0", "date": "2026-11-25", "languages": ["it", "en"],
+    man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-25", "languages": ["it", "en"],
            "placeholders": sorted(PLACEHOLDERS),
+           "kit": {"path": "kit/eiraman-kit.zip", "version": KIT_VERSION, "bundled": KIT_BUNDLED},
            "sha256": {f: hashlib.sha256(open(os.path.join(OUT, f), "rb").read()).hexdigest() for f in files}}
     json.dump(man, open(os.path.join(OUT, "manifest.json"), "w"), indent=2, ensure_ascii=False)
     print("pagine:", sum(1 for f in files if f.endswith(".html")), "file:", len(files))
