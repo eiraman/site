@@ -20,29 +20,52 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [0.8.0] - 2026-11-26
 
-Scope: Change Request CR-007 of the method project, implementing RFC 0002 (`guide/rfcs/0002-governo-family.md`),
-alternative B (Do-S18). The site follows the Role Profiles registry 0.4.2 (candidate commit
-`d28dfae2782ab04fbae2368b3fd2cceea733fbb5`). Site bump: MINOR, content (VERSIONING §2.4). Kit 0.7.0 → 0.7.1:
-PATCH, because the bundled registry and `governo/FAMIGLIA.md` have a PATCH.
+Scope: two Change Requests of the method project released together. CR-007 implements RFC 0002
+(`guide/rfcs/0002-governo-family.md`), alternative B (Do-S18). CR-010 (Wave CONS-01) brings the site and the
+kit to the Role Profiles registry 0.6.0 (candidate commit `8eb5fa852faeac6ea91219b85beb30b4f512c31b`), which is
+aligned to The Eiraman Guide 1.0.0-rc.3. The first candidate of this version (Wave GOV-01) followed registry
+0.4.2 with kit 0.7.1 and was never published; this entry replaces it. Site bump: MINOR, content (VERSIONING
+§2.4). Kit 0.7.0 → 0.8.0: MINOR, because the bundled registry and the bundled AI Coordinator profile have a
+MINOR, marked breaking in the registry changelog.
+
+**Order of publication:** tools 0.3.0, then role-profiles 0.6.0, then this release.
 
 ### Changed
 
 - About page (`chi-sono.html`, `en/about.html`), "Family groups" tile ("Gruppi di famiglia"): the list ends
   with "Governance & Assurance", the family group of `governo/` created by RFC 0002, in Italian and English.
   Until this release Do-S16 kept Governo off the list; the description of family groups is unchanged.
-- Kit: `role-profiles/governo/FAMIGLIA.md` is 0.2.2 (was 0.2.1), with the header on ownership and
-  co-review; `role-profiles/README.md` names Governance & Assurance in the families table. No other kit
-  file changes.
-- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit; no
-  other change on those pages.
-- `manifest.json`: `version` 0.8.0, `kit.version` 0.7.1, and `kit.bundled` gives `registry` 0.4.2. `date`
-  stays 2026-11-26.
-- CI: `PROFILES_REF` in `site-build.yml` pins the role-profiles 0.4.2 candidate commit
-  (`d28dfae2782ab04fbae2368b3fd2cceea733fbb5`, not yet tagged).
+- Role Profiles pages (`role-profile.html`, `en/role-profiles.html`), read from the registry: the AI Scrum
+  Master is listed in Functional analysis (registry 0.5.0); the Digital Seniority paragraph says that a task
+  outside the list runs at the fallback level the mandate sets, indicative value SD3, and SD4 for
+  architecture, security and effects hard to undo (it said "runs at SD4"); in the table of levels the word
+  "fallback" moves from SD4 to SD3, as an indicative fallback.
+- Projects pages (`progetti.html`, `en/projects.html`), the counts of the registry: 48 profiles in 8 families
+  and 432 catalogued tasks (they said 47 and 420).
+- Manager View description: Work Packages in progress show the mandatory checks passed over the total (it
+  said "with their percentage").
+- Kit: the registry is 0.6.0 and the AI Coordinator profile is 0.5.0, with `STATO.md` and
+  `tools/vista_manager.py` of that release; `role-profiles/governo/FAMIGLIA.md` is 0.2.3;
+  `role-profiles/README.md` names Governance & Assurance. The changes of the bundled files are in the
+  registry changelog, entries 0.5.0, 0.5.1 and 0.6.0.
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit.
+- `manifest.json`: `version` 0.8.0, `kit.version` 0.8.0, and `kit.bundled` gives `registry` 0.6.0 and
+  `ai_coordinator_profile` 0.5.0. `date` stays 2026-11-26.
+- CI: `PROFILES_REF` in `site-build.yml` pins the role-profiles 0.6.0 candidate commit
+  (`8eb5fa852faeac6ea91219b85beb30b4f512c31b`, not yet tagged).
 
 No page is added or removed. Compared with the deployed 0.7.0, the served files that change are the two About
-pages, the two start-prompt pages and the kit. The Role Profiles and Projects pages do not change: no profile
-and no count changes in registry 0.4.2.
+pages, the two start-prompt pages, the two Role Profiles pages, the two Projects pages and the kit.
+
+### Known gaps
+
+- The pages that tell the method (how it works, phases, quality, the method map) still follow specification
+  0.3. Where the Guide 1.0.0-rc.3 replaced a rule, the page and the kit differ: for example the page says
+  that the agent of scripted functional tests "fixes trivial errors itself", that convergence is "by a single
+  analyst" and that verification of security and personal data "uses a different model", while the profiles
+  in the kit follow the Guide. Bringing those pages to the Guide is a content change of its own.
+- The kit ships specification 0.3 as `framework/Eiraman.md` and does not contain the Guide. The AI
+  Coordinator profile in the kit says on which rules it prevails over the specification.
 
 ## [0.7.0] - 2026-11-26
 
