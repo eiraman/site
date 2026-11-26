@@ -2021,7 +2021,7 @@ PROGETTI = {
              "Le revisioni sono state fatte da agenti dello stesso fornitore dell'autore: un'indipendenza limitata."],
         sections=[
          ("Come funziona il deliverable", ["La specifica descrive come un Manager umano affida il lavoro a un Coordinatore AI e alle sue AI Squad, con decisioni, livelli e prove.",
-                                         "Il registro dei Role Profile contiene 43 profili in 8 famiglie più il Coordinatore AI, con 384 task catalogati e la Seniority Digitale che sceglie motore e ragionamento.",
+                                         "Il registro dei Role Profile contiene 47 profili in 8 famiglie più il Coordinatore AI, con 420 task catalogati e la Seniority Digitale che sceglie motore e ragionamento.",
                                          "La Vista del Manager mostra decisioni, budget, albero del lavoro e documenti. Un pacchetto scaricabile è progettato per avviare il metodo in un nuovo progetto con un solo prompt (il percorso completo con un LLM non è ancora stato provato); il sito bilingue viene pubblicato solo dopo il via del Manager, verificando ogni file online."]),
          ("Come ha lavorato il metodo", ["Wave pilota e Wave di avvio: valutazione della proposta e prima specifica.",
                                         "W2: raffinamento con le decisioni su responsabilità, livelli, escalation e meccanismi concorrenziali; specifica 0.2.",
@@ -2082,7 +2082,7 @@ PROGETTI = {
              "Reviews were done by agents from the author's own provider: limited independence."],
         sections=[
          ("How the deliverable works", ["The specification describes how a Human Manager entrusts work to an AI Coordinator and its AI Squads, with decisions, levels and evidence.",
-                                       "The Role Profile registry holds 43 profiles in 8 families plus the AI Coordinator, with 384 catalogued tasks and the Digital Seniority that picks engine and reasoning.",
+                                       "The Role Profile registry holds 47 profiles in 8 families plus the AI Coordinator, with 420 catalogued tasks and the Digital Seniority that picks engine and reasoning.",
                                        "The Manager view shows decisions, budget, the work tree and documents. A downloadable package is designed to start the method in a new project with a single prompt (the full path with an LLM has not been tested yet); the bilingual site is published only after the Manager's go-ahead, verifying every file online."]),
          ("How the method worked", ["Pilot and start-up Waves: assessment of the proposal and first specification.",
                                    "W2: refinement with decisions on accountability, levels, escalation and competitive mechanisms; specification 0.2.",
