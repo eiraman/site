@@ -21,8 +21,8 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 ## [0.5.0] - 2026-11-26
 
 The site and the kit follow the Role Profiles registry 0.2.0 (`role-profiles@v0.2.0`, commit
-`77ca4d0e80ac4c0fef441ae39ea141b117590eca`). Kit version 0.5.0: the kit content changes. Built against
-`tools` 0.2.1 only through CI references; the kit still contains no tools.
+`77ca4d0e80ac4c0fef441ae39ea141b117590eca`). Kit version 0.5.0: the kit content changes. The kit still contains no tools, and the site build does not
+reference the tools repository.
 
 ### Added
 
@@ -40,6 +40,8 @@ The site and the kit follow the Role Profiles registry 0.2.0 (`role-profiles@v0.
 - Role Profiles page: the cards of `analisi-funzionale/analista-funzionale` (0.1.0 → 0.2.0, 11 → 12
   tasks) and `analisi-funzionale/facilitatore-design-thinking` (0.1.0 → 0.2.0, 7 → 11 tasks) show their
   new short descriptions, task counts and first example tasks, read from `profilo.json` at registry 0.2.0.
+  On the English page the facilitator's name becomes "Design Thinking Facilitator" (`nome_en` of the
+  registry, glossary of the Guide 1.0.0-rc.2).
   Two example tasks of the analyst's card are replaced, because its catalogue changed. The card of
   `utente-simulato` (0.1.0 → 0.2.0) shows the same text as before.
 - Kit: `CONTROLLORE.md` is the AI Coordinator profile 0.4.0 (was 0.3.0); `AVVIO.md` adds the paragraph on
@@ -52,9 +54,20 @@ The site and the kit follow the Role Profiles registry 0.2.0 (`role-profiles@v0.
   `ai_coordinator_profile` 0.4.0.
 - CI: `PROFILES_REF` in `site-build.yml` pins role-profiles v0.2.0
   (`77ca4d0e80ac4c0fef441ae39ea141b117590eca`).
+- Projects page (`progetti.html`, `en/projects.html`), case of the method itself: it now says the registry holds 41 profiles in 8 families
+  plus the AI Coordinator, with 366 catalogued tasks (it said 40, 7 and 350, the figures of registry
+  0.1.1), in Italian and English. The numbers are written in the text, not read from the registry.
+- `manifest.json`: `date` is the release date, 2026-11-26 (it stayed at 2026-11-25 in 0.4.1).
 
-No page is added or removed. Compared with the deployed 0.4.1, five served files change: the two Role
-Profiles pages, the two start-prompt pages and the kit.
+### Fixed
+
+- Role Profiles page: a family with one profile shows the singular label, "1 profilo" / "1 profile",
+  instead of "1 profili" / "1 profiles". The generator already had the singular label (`n1`) for the AI
+  Coordinator tile; the family tile and pane now use it when the count is 1. The Governo family is the
+  first with a single profile.
+
+No page is added or removed. Compared with the deployed 0.4.1, the served files that change are the two Role
+Profiles pages, the two start-prompt pages, the two Projects pages and the kit.
 
 ## [0.4.1] - 2026-11-26
 

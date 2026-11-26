@@ -941,7 +941,7 @@ def build_rp(lang):
         if not items: continue
         n += 1; fname = n_it if it else n_en; fdesc = d_it if it else d_en
         tiles.append(f'<div class="tile ai gstep rp-tile" role="button" tabindex="0" aria-expanded="false" aria-controls="guida" data-g="{n}">'
-                     f'<div class="ic">{icon(ic,"lg")}</div><h3>{esc(fname)}</h3><span class="n">{len(items)} {esc(a["n"])}</span><p>{esc(fdesc)}</p></div>')
+                     f'<div class="ic">{icon(ic,"lg")}</div><h3>{esc(fname)}</h3><span class="n">{len(items)} {esc(a["n1"] if len(items) == 1 else a["n"])}</span><p>{esc(fdesc)}</p></div>')
         cards = []
         for p in items:
             nome = p.get("nome_en") if not it and p.get("nome_en") else p.get("nome", "")
@@ -953,7 +953,7 @@ def build_rp(lang):
                          f'<p class="rp-meta">{esc(a["pyr"].get(p.get("piramide"), p.get("piramide","")))} · Seniority {esc(s.get("minima","?"))}–{esc(s.get("massima","?"))} · {len(cat)} {esc(a["tasks"])}</p>'
                          + (f'<p class="lbl">{esc(a["ex"])}</p><ul class="rp-ex">{ex}</ul>' if ex else "") + '</article>')
         panes.append(f'<section class="gpane rp-pane" id="guida-{n}" data-g="{n}" aria-labelledby="gt-{n}">'
-                     f'<h3 id="gt-{n}">{esc(fname)} <small>{len(items)} {esc(a["n"])}</small></h3><p class="muted">{esc(fdesc)}</p>'
+                     f'<h3 id="gt-{n}">{esc(fname)} <small>{len(items)} {esc(a["n1"] if len(items) == 1 else a["n"])}</small></h3><p class="muted">{esc(fdesc)}</p>'
                      f'<div class="rp-cards">{"".join(cards)}</div><p class="muted rp-full">{esc(a["full"])}</p></section>')
     guide_js = _guide(lang)[1]
     blocks_html = (f'<p class="g-hint">{esc(a["rp_hint"])}</p><div class="gwrap"><div class="tiles rp-tiles">{"".join(tiles)}</div>'
@@ -1212,7 +1212,7 @@ def main():
             if f == "manifest.json" or (f.startswith(".") and f != ".htaccess"): continue
             files.append(os.path.relpath(os.path.join(r, f), OUT))
     files.sort()
-    man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-25", "languages": ["it", "en"],
+    man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-26", "languages": ["it", "en"],
            "placeholders": sorted(PLACEHOLDERS),
            "kit": {"path": "kit/eiraman-kit.zip", "version": KIT_VERSION, "bundled": KIT_BUNDLED},
            "sha256": {f: hashlib.sha256(open(os.path.join(OUT, f), "rb").read()).hexdigest() for f in files}}
