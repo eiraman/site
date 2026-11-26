@@ -21,24 +21,29 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 ## [0.9.0] - 2026-11-26
 
 Scope: Change Requests CR-011 and CR-012 of the method project. The kit follows the Role Profiles registry
-0.7.0 (commit `fae9b7adf5e0f965c88355801434b1a0fac04e10`). Site bump: MINOR, a bundled artifact has a MINOR
-(VERSIONING §2.4). Kit 0.8.1 → 0.9.0: MINOR.
+0.8.0 (commit `0bc7f8624e484b2aacd3731c25a13377bc57a84f`), which contains 0.7.0 and its corrections. A first
+candidate of this version followed registry 0.7.0 and was never published. Site bump: MINOR, a bundled
+artifact has a MINOR (VERSIONING §2.4). Kit 0.8.1 → 0.9.0: MINOR.
 
 ### Changed
 
-- Kit: the registry is 0.7.0 and the AI Coordinator profile is 0.6.0. The AI Coordinator profile fixes the
+- Kit: the registry is 0.8.0 and the AI Coordinator profile is 0.7.0. The AI Coordinator profile fixes the
   order of the steps of a project, requires a recorded phase check before any Work Package that builds the
   product and forbids skipping or reducing a mandatory phase on its own choice; `STATO.md` and
   `tools/vista_manager.py` add the phase of each package and an automatic bad news when build work starts
-  with Discovery or Design and planning not closed. The Design Thinking Facilitator profile (0.4.0) and the
+  with Discovery or Design and planning not closed. The Design Thinking Facilitator profile (0.5.0) and the
   AI Coordinator profile carry the engagement brief of Discovery; the AI Reviewer profile (0.3.0) checks the
-  phase check. Details in the registry changelog, entry 0.7.0.
+  phase check. Details in the registry changelog, entries 0.7.0 and 0.8.0.
+- With this kit the AI Coordinator states the applicability gate in full: a project whose class exceeds the
+  qualified level of the adopter does not start (Guide §14). An adoption at level 0 cannot start a project of
+  class 1 or 2, for example one that keeps data of colleagues; with the kits up to 0.8.1 such projects
+  started after a decision of the Human Manager.
 - Projects pages (`progetti.html`, `en/projects.html`): 433 catalogued tasks (they said 432).
 - Role Profiles pages, read from the registry: the catalogues of the changed profiles.
 - The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit.
-- `manifest.json`: `version` 0.9.0, `kit.version` 0.9.0, `kit.bundled` gives `registry` 0.7.0 and
-  `ai_coordinator_profile` 0.6.0.
-- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles 0.7.0.
+- `manifest.json`: `version` 0.9.0, `kit.version` 0.9.0, `kit.bundled` gives `registry` 0.8.0 and
+  `ai_coordinator_profile` 0.7.0.
+- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles 0.8.0.
 
 The known gaps of 0.8.0 stay open: the pages that tell the method still follow specification 0.3, and the
 kit does not contain the Guide.
