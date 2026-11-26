@@ -18,6 +18,37 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-26
+
+The site and the kit follow the Role Profiles registry 0.3.0 (`role-profiles@v0.3.0`, commit
+`adeedb4c940c637f93d46a9b58d22839e6dfee7a`). Kit version 0.6.0: the kit content changes. No generator
+code changes; the only text change is the registry figures on the Projects page.
+
+### Added
+
+- Role Profiles page (`role-profile.html`, `en/role-profiles.html`): the Governo family shows three
+  profiles, with the new cards of `governo/revisore-sicurezza` 0.1.0 and `governo/revisore-privacy` 0.1.0
+  (9 tasks each). The profile count shown goes from 42 to 44 (43 standard profiles plus the AI
+  Coordinator).
+- Kit: `role-profiles/governo/revisore-sicurezza/` and `role-profiles/governo/revisore-privacy/`.
+
+### Changed
+
+- Kit: `CONTROLLORE.md` is the AI Coordinator profile 0.4.1 (was 0.4.0); `role-profiles/governo/FAMIGLIA.md`
+  is 0.2.0 (was 0.1.0); `role-profiles/README.md` follows the registry 0.3.0.
+- Projects page (`progetti.html`, `en/projects.html`), case of the method itself: the registry holds 43
+  profiles in 8 families plus the AI Coordinator, with 384 catalogued tasks (it said 41 and 366), in Italian
+  and English. The figures are counted from registry 0.3.0 and written in the text.
+- The start prompt in `come-usarlo.html` and `en/how-to-use.html` carries the SHA-256 of the new kit; no
+  other change on those pages.
+- `manifest.json`: `version` 0.6.0, `kit.version` 0.6.0, and `kit.bundled` gives `registry` 0.3.0 and
+  `ai_coordinator_profile` 0.4.1. `date` stays 2026-11-26.
+- CI: `PROFILES_REF` in `site-build.yml` pins role-profiles v0.3.0
+  (`adeedb4c940c637f93d46a9b58d22839e6dfee7a`).
+
+No page is added or removed. Compared with the deployed 0.5.0, the served files that change are the two Role
+Profiles pages, the two start-prompt pages, the two Projects pages and the kit.
+
 ## [0.5.0] - 2026-11-26
 
 The site and the kit follow the Role Profiles registry 0.2.0 (`role-profiles@v0.2.0`, commit
@@ -176,7 +207,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.5.0...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.6.0...main
+[0.6.0]: https://github.com/eiraman/site/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/eiraman/site/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/eiraman/site/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/eiraman/site/releases/tag/v0.4.0
