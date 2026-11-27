@@ -5,6 +5,6 @@
 # when the commit contains it). The first line that is not a comment is the full commit SHA of eiraman/guide,
 # never a branch or a tag. Read by generator/build.py (which refuses a checkout at another commit) and by
 # .github/workflows/site-build.yml. Updating it is a reviewed change, with the Guide version below.
-# Guide version: 1.0.0-rc.5 (release candidate)
-# TODO before release (CR-029, D-IT-1): move it to the guide commit that contains the Italian translation.
-2635a69f879bca37b73c8a8ef2142254dc282e2a
+# Guide version: 1.0.0-rc.6 (+it.1)
+# Before release this must be the published commit of eiraman/guide (publication order: guide, role-profiles, site).
+4184518d353beaaced5e5ae34fc88488e7d7ce67

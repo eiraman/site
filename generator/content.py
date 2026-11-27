@@ -13,13 +13,13 @@ ORDER = ["principi", "ruoli", "fasi", "decisioni", "qualita", "ritmo", "livelli"
 UI = {
     "it": dict(skip="Vai al contenuto", nav=[("metodo", "Il metodo"), ("livelli", "Livelli"), ("progetti", "I progetti"), ("guida", "La Guida")],
                menu="Menu", home="Home", method="Il metodo", part="Parte {n} di {t}", prev="Precedente", next="Successiva",
-               how="Come funziona", what="Che cosa prevede", gref="Nella Guida", gref_hist="Testo storico: specifica 0.3", gref_en="Il testo inglese è canonico: la traduzione italiana non è ancora disponibile, i rimandi portano alla Guida in inglese.", gref_values="La Guida descrive i meccanismi senza valori: i valori indicativi (per esempio scadenze e soglie) sono nel Framework esteso.",
+               how="Come funziona", what="Che cosa prevede", gref="Nella Guida", gref_hist="Testo storico: specifica 0.3", gref_en="Il testo inglese è canonico: la traduzione italiana non è ancora disponibile, i rimandi portano alla Guida in inglese.", gref_values="La Guida descrive i meccanismi senza valori: i valori indicativi (per esempio scadenze e soglie) sono nelle linee guida del Framework esteso, in inglese",
                foot="© 2026 Paolo Ungari e contributori · Testi della Guida e del sito CC BY-SA 4.0 · Role Profile CC BY 4.0 · Codice Apache 2.0 · Nome e logo Eiraman: marchio, vedi <a href=\"https://github.com/eiraman/community/blob/main/TRADEMARK.md\" rel=\"noopener\">TRADEMARK.md</a>", tog="TOGAF® è un marchio registrato di The Open Group.",
                footnav=[("metodo", "Il metodo"), ("mappa", "Mappa funzionale"), ("progetti", "I progetti"), ("guida", "La Guida"), ("specifica", "Specifica 0.3 (storica)")],
                lang_label="Lingua", explore="Esplora"),
     "en": dict(skip="Skip to content", nav=[("metodo", "The method"), ("livelli", "Levels"), ("progetti", "Projects"), ("guida", "The Guide")],
                menu="Menu", home="Home", method="The method", part="Part {n} of {t}", prev="Previous", next="Next",
-               how="How it works", what="What it requires", gref="In the Guide", gref_hist="Historical text: specification 0.3", gref_en="", gref_values="The Guide describes the mechanisms without values: indicative values (for example deadlines and thresholds) are in the Extended Framework.",
+               how="How it works", what="What it requires", gref="In the Guide", gref_hist="Historical text: specification 0.3", gref_en="", gref_values="The Guide describes the mechanisms without values: indicative values (for example deadlines and thresholds) are in the guidance of the Extended Framework",
                foot="© 2026 Paolo Ungari and contributors · Guide and site text CC BY-SA 4.0 · Role Profiles CC BY 4.0 · Code Apache 2.0 · Eiraman name and logo: trademark, see <a href=\"https://github.com/eiraman/community/blob/main/TRADEMARK.md\" rel=\"noopener\">TRADEMARK.md</a>", tog="TOGAF® is a registered trademark of The Open Group.",
                footnav=[("metodo", "The method"), ("mappa", "Functional map"), ("progetti", "Projects"), ("guida", "The Guide"), ("specifica", "Specification 0.3 (historical)")],
                lang_label="Language", explore="Explore"),
@@ -1006,7 +1006,7 @@ FWPAGE = {
         change=["L'AI aggiunge pezzi con facilità: senza priorità nasce un patchwork. Si costruisce in ordine: spina, cervello, interfacce, periferiche.", "I compiti del Brain sono trusted o untrusted: quelli untrusted non si delegano senza un controllo deterministico."],
         you="Approvi Principi e Decisioni con impatto di business.",
         rules=[("Backbone per primo, poi Brain, poi interfacce; le funzioni Hairs si tolgono solo se il nucleo regge.", "architettura", "s6bis"),
-               ("Richieste diverse a motori locali ed esterni, scelte misurando lo stesso carico.", "architettura", "s6bis")]),
+               ("Verso i motori esterni esce solo ciò che il mandato autorizza: stato, log, repository e segreti restano nell'ambiente di sviluppo.", "architettura", "s6bis")]),
    dict(id="devsecops", ic="shield", old="DevSecOps e test", new="DevSecOps fatto dagli agenti",
         orig="Sviluppo, sicurezza ed esercizio integrati, con controlli automatici lungo tutta la consegna.",
         src=[("NIST SP 800-218 (SSDF)", "https://csrc.nist.gov/pubs/sp/800/218/final"), ("OWASP ASVS", "https://asvs.owasp.org/")],
@@ -1077,7 +1077,7 @@ FWPAGE["en"] = dict(title="Frameworks rethought · Eiraman", crumb="Frameworks r
         change=["AI adds pieces easily: without priorities you get a patchwork. Build in order: spine, brain, interfaces, periphery.", "Brain tasks are trusted or untrusted: untrusted ones are not delegated without a deterministic check."],
         you="Approve Principles and Decisions with business impact.",
         rules=[("Backbone first, then Brain, then interfaces; Hairs are removed only if the core still holds.", "architettura", "s6bis"),
-               ("Different requests to local and external engines, chosen by measuring the same load.", "architettura", "s6bis")]),
+               ("Only what the mandate authorises goes out to external engines: state, logs, repository and secrets stay in the Development Environment.", "architettura", "s6bis")]),
    dict(id="devsecops", ic="shield", old="DevSecOps and testing", new="Agent DevSecOps",
         orig="Development, security and operations integrated, with automated checks throughout delivery.",
         src=FWPAGE["it"]["fws"][4]["src"],
@@ -1820,13 +1820,13 @@ AVVIO_IT = ("Questa cartella vuota conterrà il mio progetto. "
             "1) Scarica il pacchetto Eiraman dal sito {zip} e mettilo in questa cartella. "
             "Prima di estrarlo calcola lo SHA-256 del file: deve essere {sha}. Se è diverso, fermati e dimmelo. "
             "Se coincide, estraine qui il contenuto. "
-            "2) Leggi CONTROLLORE.md e guide/EIRAMAN-GUIDE.md: la Guida è il riferimento del metodo; la specifica 0.3, se il profilo la cita, è superata e non è nel pacchetto. "
+            "2) Leggi CONTROLLORE.md e guide/EIRAMAN-GUIDE.md: la Guida è il riferimento del metodo. "
             "3) Da ora sei il Coordinatore AI Eiraman di questo progetto e io sono il Manager umano: segui la procedura di avvio del profilo, apri la Vista del Manager e chiedimi la mia richiesta.")
 AVVIO_EN = ("This empty folder will hold my project. "
             "1) Download the Eiraman package from the site {zip} and put it in this folder. "
             "Before extracting it, compute the file's SHA-256: it must be {sha}. If it differs, stop and tell me. "
             "If it matches, extract its content here. "
-            "2) Read CONTROLLORE.md and guide/EIRAMAN-GUIDE.md: the Guide is the reference of the method; the specification 0.3, if the profile cites it, is superseded and not in the package. "
+            "2) Read CONTROLLORE.md and guide/EIRAMAN-GUIDE.md: the Guide is the reference of the method. "
             "3) From now on you are the Eiraman AI Coordinator of this project and I am the Human Manager: follow the profile's start-up procedure, open the Manager view and ask me for my request.")
 GUIDE = {
  "it": dict(
@@ -2150,13 +2150,78 @@ GUIDE_REF = {
     "scoperta": ["s8", "s8-1"],
 }
 # Component pages that say where the values are (the Guide states none): the thresholds and deadlines of the old text.
-GUIDE_VALUES = {"ritmo", "decisioni", "qualita"}
+# They are in the Extended Framework (repository eiraman/framework, guidance/VALUES.md, candidate 0.3.0): page -> (anchor, IT label, EN label).
+FW_GUIDANCE_URL = "https://github.com/eiraman/framework/blob/main/guidance/"
+GUIDE_VALUES = {
+    "ritmo": [("wave-spending-thresholds", "Soglie di spesa della Wave", "Wave spending thresholds"),
+              ("cadence-of-the-governance-cycle", "Cadenza del ciclo di governo", "Cadence of the governance cycle")],
+    "decisioni": [("deadlines-of-a-do", "Scadenze di un Do", "Deadlines of a Do")],
+    "qualita": [("number-of-candidates-k3", "Numero di candidati (K3)", "Number of candidates (K3)"),
+                ("attempts-before-promotion", "Tentativi prima della promozione", "Attempts before promotion")],
+}
 # Framework page: one Guide section for each rule of each framework, in the order of the rules.
 FW_GUIDE = {
     "design-thinking": ["s8", "s8"],
-    "scrum": ["s7", "s7", "s6"],
+    "scrum": ["s7", "s5", "s6"],  # rule 2 (SWOT on a Decision change) is Guide §5, "Changing a Decision" (REV-029-02)
     "delega": ["s5", "s5", "s5"],
-    "architettura": ["s10", "s10"],
+    "architettura": ["s10", "s1"],  # rule 2 is Guide §1, "Local and external boundary"; §10 says nothing on local and external engines (REV-029-02)
     "devsecops": ["s9-1", "s9"],
     "reporting": ["s8", "s8", "s6", "s7", "s5", "s12", "s12"],
 }
+
+# ===================== CR-015 recuperata (CR-031, WP-30F): dati e rischi delle piccole applicazioni =====================
+# Il testo di CR-015 (ramo cr-015-livelli-perche, de12f52, mai pubblicato) è riportato sulla struttura attuale e allineato alla Guida 1.0.0-rc.6:
+# il ruolo del Manager umano si estende alla sicurezza (Guida §2); il Security Officer classifica (§14); modalità informativa o bloccante (§14, Classification mode).
+# Perché: home («Contesto») e panoramica del metodo («Perché esiste»)
+HOME7["it"]["blocks"][0] = (HOME7["it"]["blocks"][0][0], HOME7["it"]["blocks"][0][1], HOME7["it"]["blocks"][0][2] +
+    " Con l'AI chiunque in un'organizzazione può costruirsi una piccola applicazione senza sapere quali dati tratta"
+    " né che cosa succede se il computer viene rubato. Il metodo lo fa emergere prima di costruire: chi delega un compito ne conosce le implicazioni"
+    " per sicurezza, privacy e conformità normativa.")
+HOME7["en"]["blocks"][0] = (HOME7["en"]["blocks"][0][0], HOME7["en"]["blocks"][0][1], HOME7["en"]["blocks"][0][2] +
+    " With AI, anyone in an organisation can build a small application without knowing what data it handles"
+    " or what happens if the computer is stolen. The method brings this to light before anything is built: whoever delegates a task knows its implications"
+    " for security, privacy and regulatory compliance.")
+_T(METHOD, ["cols", 0, 2], METHOD["it"]["cols"][0][2] + " Chi si costruisce da sé una piccola applicazione spesso non sa quali dati tratta: nel metodo il ruolo del Manager umano si estende alla sicurezza, e chi delega un compito ne conosce le implicazioni per sicurezza, privacy e conformità normativa.",
+   METHOD["en"]["cols"][0][2] + " Whoever builds a small application for themselves often does not know what data it handles: in the method the Human Manager's role extends to security, and whoever delegates a task knows its implications for security, privacy and regulatory compliance.")
+# Il metodo si applica a se stesso (Guida §2 e §15): il testo onesto sullo stato della misura; {v} è la versione della Guida letta dalla build
+METHOD["it"]["measure"] = dict(h="Il metodo si applica a se stesso",
+    p="Eiraman tratta ogni sua regola come un'ipotesi e ne misura gli effetti contro una linea di base: gli stessi compiti svolti senza il metodo. Evolve applicandosi a se stesso: il Manager umano dà la direzione, gli agenti la traducono in richieste di modifica e scelte specifiche, e il Manager umano decide.",
+    nm=" La Guida {v} è una release candidate non misurata: nessuna campagna di misura è stata completata, e ogni regola resta un'ipotesi finché una misura non la sostiene.",
+    more="Misurare il metodo nella Guida", bench="Linee guida del banco di prova (in inglese)")
+METHOD["en"]["measure"] = dict(h="The method applies to itself",
+    p="Eiraman treats each of its rules as a hypothesis and measures its effects against a baseline: the same tasks carried out without the method. It evolves by applying itself: the Human Manager gives the direction, the agents translate it into change requests and specific choices, and the Human Manager decides.",
+    nm=" The Guide {v} is a release candidate that has not been measured: no measurement campaign has been completed, and every rule stays a hypothesis until a measurement supports it.",
+    more="Measuring the method in the Guide", bench="Guidance for the test bench")
+# Livelli: che cosa si sa prima di costruire (reso da levels_graphic dopo «Come funziona», prima delle schede 0/1/2)
+LEVELS["it"]["aware"] = dict(
+    h="Che cosa si sa prima di costruire",
+    p="Nel metodo il ruolo del Manager umano si estende alla sicurezza: chi delega un compito ne conosce le implicazioni per sicurezza, privacy e conformità normativa. "
+      "Prima di costruire lo rendono noto la classificazione del progetto e il Security Officer, un agente AI con un proprio Role Profile di conformità: "
+      "con una lista di controllo assegna al progetto una classe all'apertura, a ogni Wave e a ogni cambio di mandato.",
+    tiles=[("doc", "fw", "Quali dati", "Solo i propri, oppure anche nomi e informazioni di colleghi o clienti."),
+           ("globe", "fw", "Dove saranno esposti", "Sul proprio computer, nella rete aziendale o su Internet. Un portatile rubato o un file inoltrato espongono i dati che contengono.")],
+    ex="Per esempio, un foglio turni del reparto che registra il motivo delle assenze tratta dati dei colleghi; se il motivo è una malattia, è un dato particolare: in modalità bloccante il progetto è escluso dal metodo a qualunque livello, in modalità informativa il caso è registrato nel Security Report.",
+    modes_p="Che cosa succede quando il controllo trova un rischio dipende dalla modalità. La sceglie il Manager umano all'apertura del progetto e vale per tutto il progetto.",
+    modes=[("doc", "fw", "Modalità informativa", "Il controllo non ferma il lavoro: registra la classe e ogni rilievo nel Security Report, che arriva con ogni rilascio. La scelta di procedere resta al Manager umano, che ne risponde. È la modalità predefinita quando si usa il metodo per conto proprio."),
+           ("lock", "fw", "Modalità bloccante", "Il progetto che supera il livello qualificato o rientra tra i casi esclusi si ferma; nel dubbio è trattato come escluso (vedi «" + LEVELS["it"]["out"]["h"] + "»). È la modalità predefinita in ogni altro caso: contesti di lavoro e di organizzazione, o dubbio sul contesto. Le regole dell'organizzazione possono imporla.")],
+    note="Il controllo classifica il progetto: non protegge i dati nell'uso quotidiano e non sostituisce un parere legale.")
+LEVELS["en"]["aware"] = dict(
+    h="What is known before building",
+    p="In the method the Human Manager's role extends to security: whoever delegates a task knows its implications for security, privacy and regulatory compliance. "
+      "Before building, the classification of the project and the Security Officer make them known. The Security Officer is an AI agent with its own compliance Role Profile: "
+      "using a checklist, it assigns the project a class when the project opens, at every Wave and at every change of mandate.",
+    tiles=[("doc", "fw", "What data", "Only one's own, or also names and information about colleagues or customers."),
+           ("globe", "fw", "Where it will be exposed", "On one's own computer, on the company network or on the Internet. A stolen laptop or a forwarded file exposes the data it contains.")],
+    ex="For example, a department shift sheet that records the reason for absences handles colleagues' data; if the reason is an illness, it is special-category data: in the blocking mode the project is excluded from the method at any level, in the informative mode the case is recorded in the Security Report.",
+    modes_p="What happens when the check finds a risk depends on the mode. The Human Manager chooses it when the project opens, and it holds for the whole project.",
+    modes=[("doc", "fw", "Informative mode", "The check does not stop the work: it records the class and every finding in the Security Report, which comes with every release. Proceeding remains the Human Manager's choice, and the Human Manager answers for it. It is the default when the method is used for oneself."),
+           ("lock", "fw", "Blocking mode", "A project that exceeds the qualified level or falls among the excluded cases is stopped; when in doubt it is treated as excluded (see \u201c" + LEVELS["en"]["out"]["h"] + "\u201d). It is the default in every other case: work and organisational contexts, or doubt about the context. The organisation's rules may impose it.")],
+    note="The check classifies the project: it does not protect data in daily use and is not a substitute for legal advice.")
+# La classificazione ferma il progetto solo in modalità bloccante (Guida §14, Classification mode)
+LEVELS["it"]["out"]["p"] = "Ci sono casi in cui il rischio è troppo alto per costruire senza specialisti dedicati. In modalità bloccante il metodo si ferma qui, a qualunque livello; in modalità informativa il caso è registrato nel Security Report."
+LEVELS["en"]["out"]["p"] = "In some cases the risk is too high to build without dedicated specialists. In the blocking mode the method stops here, at any level; in the informative mode the case is recorded in the Security Report."
+COMP["livelli"]["it"]["how"] = COMP["livelli"]["it"]["how"].replace("nel dubbio, il lavoro si ferma.", "in modalità bloccante, nel dubbio, il lavoro si ferma; in modalità informativa il controllo registra e non ferma.")
+COMP["livelli"]["en"]["how"] = COMP["livelli"]["en"]["how"].replace("when in doubt, work stops.", "in the blocking mode, when in doubt, work stops; in the informative mode the check records and does not stop.")
+assert "informativa" in COMP["livelli"]["it"]["how"] and "informative" in COMP["livelli"]["en"]["how"]
+_T(COMP["livelli"], ["rules", 3, 1], "Fuori (modalità bloccante): dati particolari (come salute) o giudiziari, minori, pagamenti nel codice, AI ad alto rischio, NIS2, software distribuito.",
+   "Out (blocking mode): special-category (such as health) or criminal data, minors, payments in the code, high-risk AI, NIS2, distributed software.")

@@ -24,27 +24,37 @@ says so.
 
 ## [0.10.0] - 2026-11-27
 
-Change Request CR-029, decision D-IT-1: the kit carries The Eiraman Guide, the reference of the method, and no
-longer the specification 0.3. The registry is 0.8.0 and the AI Coordinator profile is 0.7.0, both unchanged.
-MINOR: kit content changes (VERSIONING §2.4). Released with the site 0.11.0 ([CHANGELOG.md](../CHANGELOG.md)).
+Change Requests CR-029 and CR-031, decisions D-IT-1 and D-031: the kit carries The Eiraman Guide 1.0.0-rc.6, the
+reference of the method, and no longer the specification 0.3; the registry is 0.11.0 and the AI Coordinator
+profile is 0.13.0, which now reads the Guide itself. MINOR: kit content changes (VERSIONING §2.4). Released with
+the site 0.11.0 ([CHANGELOG.md](../CHANGELOG.md)). Not yet released: the version was prepared in two candidates
+(Guide 1.0.0-rc.5 with registry 0.8.0, then this one) and only this one is the release.
 
 ### Added
 
-- `guide/EIRAMAN-GUIDE.md`: The Eiraman Guide 1.0.0-rc.5, English, canonical, from the guide commit in
-  `guide.ref`. `guide/EIRAMAN-GUIDE.it.md`: the curated Italian translation, added when that commit contains it
-  (not in the first candidate of this version).
-- `LEGGIMI.md` and the start prompt say that the Guide is the reference of the method and that, if the profile
-  cites the specification 0.3 or `framework/Eiraman.md`, the Guide prevails.
+- `guide/EIRAMAN-GUIDE.md`: The Eiraman Guide 1.0.0-rc.6, English, canonical, from the guide commit in
+  `guide.ref`. `guide/EIRAMAN-GUIDE.it.md`: the curated Italian translation 1.0.0-rc.6+it.1.
+- The `CHANGELOG.md` of each profile (decision D-VER-2, registry 0.11.0): the 62 files that sit next to each
+  profile in `role-profiles/`, `role-profiles/CHANGELOG.md` (the registry) and `controllore/CHANGELOG.md` (the AI
+  Coordinator profile). They belong in the kit because they are part of the artifacts of the registry, because the
+  profile of the AI Coordinator and the registry cite them (a kit without them would hold references to files that
+  do not exist) and because a user must be able to tell which version of a profile is in use and what changed. They
+  are text files and add little to the size of the zip. The changelog of the kit itself (this file) stays outside it.
+- `LEGGIMI.md`: a line on where the change histories are.
+- `manifest.json`, `kit.bundled`: `guide` 1.0.0-rc.6, `guide_it` 1.0.0-rc.6+it.1 (the version of the translation,
+  no longer a flag), `registry` 0.11.0, `ai_coordinator_profile` 0.13.0.
 
 ### Removed
 
 - `framework/Eiraman.md`, the Italian specification 0.3: it is historical, non-normative and superseded by the
-  Guide. The registry profiles bundled in this kit still cite it ("se presente", it prevails over the profile in
-  case of conflict): with the file absent they follow the Guide, and the registry will be aligned in its own
-  change. The historical text stays on the site (`specifica.html`) and in the `guide` repository (`history/`).
+  Guide. The historical text stays on the site (`specifica.html`) and in the `guide` repository (`history/`).
 
 ### Changed
 
+- `LEGGIMI.md` and the start prompt: the sentence that told the AI Coordinator to follow the Guide if the profile
+  cited the specification 0.3 is gone, because the profile 0.13.0 reads `guide/EIRAMAN-GUIDE.md` and no longer
+  cites `framework/Eiraman.md`; `LEGGIMI.md` keeps one neutral line (the specification 0.3 is historical and not in
+  the kit). The kit's `AVVIO.md` (from the registry) reads `guide/EIRAMAN-GUIDE.md`, as the start prompt does.
 - `LICENSE.md`: the Guide texts are in `guide/`, no longer in `framework/`; `LEGGIMI.md` cites Guide §13 for the
   qualification of the profiles.
 - Start prompt (published on the site "Come si usa", with the SHA-256 of the zip): "Leggi CONTROLLORE.md e

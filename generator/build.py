@@ -15,7 +15,7 @@ import os, re, json, hashlib, shutil, math, html, sys, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from icons import sprite, icon
-from content import SLUG, ORDER, GUIDE_REF, GUIDE_VALUES, FW_GUIDE, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO, EVIDENZE
+from content import FW_GUIDANCE_URL, SLUG, ORDER, GUIDE_REF, GUIDE_VALUES, FW_GUIDE, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO, EVIDENZE
 import mdlite
 import favicon  # brand mark drawn in code; the mark is a trademark (brand/PROVENANCE.md, TRADEMARK.md)
 import illus6
@@ -429,11 +429,16 @@ def build_method(lang):
                   f'<p class="pr-you"><span class="pr-l">{esc(P["you"])}</span>{icon("manager")} {esc(y)}</p></article>'
                   for ic, a, b, kp, ch, y, k in P["rows"]))
     refs = "".join(f'<a class="card" href="{lnk(lang,k)}"><span class="ic">{icon(ic,"lg")}</span><span><h3>{esc(t)}</h3><p>{esc(p)}</p></span></a>' for k, ic, t, p in m["ref"])
+    ms = m["measure"]  # "the method applies to itself" (Guide §2, §15): the status of the measure is the Guide's own, not a claim of the site
+    gh, gl, ge = guide_link(lang, "s15")
+    measure = (f'<div class="note measure"><p><b>{esc(ms["h"])}.</b> {esc(ms["p"] + (ms["nm"].replace("{v}", GUIDE_VERSION) if GUIDE_NOT_MEASURED else ""))}</p>'
+               f'<p class="muted"><small>{_glink(gh, esc(ms["more"]) + " (§15)", ge)} · <a href="{FW_GUIDANCE_URL}BENCH.md" rel="noopener" hreflang="en" lang="en">{esc(ms["bench"])}</a></small></p></div>')
     body = f"""
 <section class="band"><div class="in">
 <nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,'home')}">{u['home']}</a><span>/</span><span>{u['method']}</span></nav>
 <h1>{esc(m['h1'])}</h1><p class="why">{esc(m['why'])}</p></div></section>
-<section class="sec"><div class="in"><div class="circle3"><div class="emblem-wrap" style="background:var(--band);border-radius:16px;padding:14px">{emblem(lang)}</div>{cols}</div></div></section>
+<section class="sec"><div class="in"><div class="circle3"><div class="emblem-wrap" style="background:var(--band);border-radius:16px;padding:14px">{emblem(lang)}</div>{cols}</div>
+{measure}</div></section>
 <section class="sec"><div class="in">
 <div class="sec-head" id="framework"><span class="tag">{icon('bridge')} {UI[lang]['origin']}</span><h2>{esc(PRACT[lang]['h'])}</h2><p>{esc(PRACT[lang]['p'])}</p></div>
 <div class="prs">{mg}</div><p class="tm">{esc(PRACT[lang]['tm'])}</p><p class="fwlink"><a class="btn ghost" href="{lnk(lang,'framework')}">{icon('bridge')} {esc(PRACT[lang]['fwlink'])} {icon('arrow')}</a></p></div></section>
@@ -475,9 +480,14 @@ def spec_html(lang):
 # ---------- la Guida (riferimento del metodo, D-IT-1) ----------
 GUIDE_DOCS = {}
 GUIDE_VERSION = None  # from the title block of the English Guide, set by guide_doc("en")
+GUIDE_IT_VERSION = None  # version of the Italian translation ("1.0.0-rc.6+it.1"), from its note, set by guide_doc("it")
+GUIDE_NOT_MEASURED = False  # the Status of the English Guide says "not measured" (§15, Measuring the method)
 
-def _guide_label():
-    return GUIDE_VERSION + (" · release candidate" if "-rc" in GUIDE_VERSION else "")
+def _guide_label(lang="en", status=False):
+    """Version label of the Guide. With status=True it also carries the Guide's own status "not measured" (rc.6, §15)."""
+    lab = GUIDE_VERSION + (" · release candidate" if "-rc" in GUIDE_VERSION else "")
+    if status and GUIDE_NOT_MEASURED: lab += " · " + ("non misurata" if lang == "it" else "not measured")
+    return lab
 
 def _anchors_of(content):
     return set(re.findall(r' id="([^"]+)"', content))
@@ -485,7 +495,7 @@ def _anchors_of(content):
 def guide_doc(lang):
     """The Guide rendered from the guide repository: dict(content, side, heads, ids, placeholder). The English text is canonical;
     when the Italian translation is absent, a placeholder is rendered and reported, like the specification (CR-029)."""
-    global GUIDE_VERSION
+    global GUIDE_VERSION, GUIDE_IT_VERSION, GUIDE_NOT_MEASURED
     if lang in GUIDE_DOCS: return GUIDE_DOCS[lang]
     if GUIDE_VERSION is None and lang != "en": guide_doc("en")
     path = GUIDE_EN_FILE if lang == "en" else GUIDE_IT
@@ -504,10 +514,23 @@ def guide_doc(lang):
         v = re.search(r"^\*\*Version (\d+\.\d+\.\d+[-0-9A-Za-z.]*)", body, re.M)
         if not v: sys.exit("ERRORE: %s: versione non trovata nel blocco del titolo (\"**Version x.y.z\")." % path)
         GUIDE_VERSION = v.group(1)
-    elif GUIDE_VERSION not in body[:1500]:
-        sys.exit("ERRORE: la traduzione italiana (%s) non dichiara la versione %s della Guida inglese." % (path, GUIDE_VERSION))
+        st = re.search(r"^\*\*Status\.\*\*(.*)$", body, re.M)  # the Status line of the Guide, not a guess of the site
+        GUIDE_NOT_MEASURED = bool(st and "not measured" in st.group(1))
+    else:
+        if GUIDE_VERSION not in body[:1500]:
+            sys.exit("ERRORE: la traduzione italiana (%s) non dichiara la versione %s della Guida inglese." % (path, GUIDE_VERSION))
+        tv = re.search(r"Versione della traduzione: \*\*(\d+\.\d+\.\d+[-0-9A-Za-z.]*\+it\.\d+)\*\*", body[:3000])
+        if not tv or not tv.group(1).startswith(GUIDE_VERSION + "+it."):
+            sys.exit("ERRORE: la traduzione italiana (%s) non dichiara la propria versione (\"%s+it.N\")." % (path, GUIDE_VERSION))
+        GUIDE_IT_VERSION = tv.group(1)
     toc = []
-    content = mdlite.md(body, lambda u: u, toc)
+    def lm(u):
+        """Links of the translation note that point to files of the guide repository: the canonical text is the site page of the
+        English Guide, the other files (glossary, source notes, changelog of the translation) are in the repository."""
+        if lang == "it" and u == "../../EIRAMAN-GUIDE.md": return f"en/{SLUG['guida'][1]}.html"
+        if lang == "it" and re.fullmatch(r"[A-Za-z0-9.-]+\.md", u): return "https://github.com/eiraman/guide/blob/main/translations/it/" + u
+        return u
+    content = mdlite.md(body, lm, toc)
     heads = {h: re.sub(r"<[^>]+>", "", t) for h, t in re.findall(r'<h[23] id="([^"]+)">(.*?)</h[23]>', content)}
     T = (dict(toc="Contents", md="Guide in Markdown (English, canonical)", src="Source repository", md_path="../guide/EIRAMAN-GUIDE.md") if lang == "en"
          else dict(toc="Indice", md="Guida in Markdown (italiano)", src="Repository sorgente", md_path="guide/EIRAMAN-GUIDE.it.md"))
@@ -549,7 +572,7 @@ def build_guide(lang):
     why = ("Il riferimento del metodo: che cosa è Eiraman e che cosa rende conforme un'applicazione." if it
            else "The reference of the method: what Eiraman is and what makes an application conformant.")
     crumbs = (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,"home")}">{u["home"]}</a><span>/</span><a href="{lnk(lang,"metodo")}">{u["method"]}</a><span>/</span><span>{"La Guida" if it else "The Guide"}</span></nav>')
-    head = (f'<section class="band"><div class="in">{crumbs}<span class="part">{esc(_guide_label())}</span>'
+    head = (f'<section class="band"><div class="in">{crumbs}<span class="part">{esc(_guide_label(lang, True))}</span>'
             f'<h1>{title}</h1><p class="why">{why}</p></div></section>')
     en_href = lnk(lang, "guida") if not it else f"en/{SLUG['guida'][1]}.html"
     it_href = f"../{SLUG['guida'][0]}.html"
@@ -566,7 +589,7 @@ def build_guide(lang):
     else:
         inner = f'\n{d["side"]}\n<article class="prose">{notice}{d["content"]}</article>'
     desc = ("La Guida di Eiraman, il riferimento del metodo, versione %s (traduzione italiana; il testo inglese è canonico)." if it
-            else "The Eiraman Guide, the reference of the method, version %s (English, canonical).") % _guide_label()
+            else "The Eiraman Guide, the reference of the method, version %s (English, canonical).") % _guide_label(lang, True)
     return page(lang, "guida", f"{title} · Eiraman", desc, head + f'<div class="doc in">{inner}</div>', plain=True)
 
 # ---------- grafiche delle pagine componente ----------
@@ -640,7 +663,15 @@ def levels_graphic(lang):
     out = f'<article class="lv-outcard"><header>{icon("alert","lg")}<h3>{esc(o["h"])}</h3></header><p>{esc(o["p"])}</p><ul>{outs}</ul></article>'
     up = "".join(f'<li><span class="st">{i+1}</span>{icon(ic,"lg")}<b>{esc(h)}</b><span>{esc(p)}</span></li>' for i, (ic, h, p) in enumerate(L["up"]))
     story = "".join(f'<li class="lv{n}"><span class="lv-n">{n}</span><b>{esc(h)}</b><span>{esc(p)}</span></li>' for n, h, p in L["story"])
-    return (f'<div class="lv-top">{rings}<div class="lv-cards">{cards}</div></div>{out}'
+    aware = ""
+    if L.get("aware"):  # what is known before building (CR-015, recovered in CR-031): before the level cards; existing components only
+        a = L["aware"]
+        tl = "".join(f'<div class="tile {tone}"><div class="ic">{icon(ic,"lg")}</div><h3>{esc(h)}</h3><p>{esc(p)}</p></div>' for ic, tone, h, p in a["tiles"])
+        md = "".join(f'<div class="tile {tone}"><div class="ic">{icon(ic,"lg")}</div><h3>{esc(h)}</h3><p>{esc(p)}</p></div>' for ic, tone, h, p in a["modes"])
+        aware = (f'<h3 class="sub lv-h">{icon("lens","lg")}{esc(a["h"])}</h3><p class="lede">{esc(a["p"])}</p>'
+                 f'<div class="tiles">{tl}</div><p>{esc(a["ex"])}</p><p class="lede">{esc(a["modes_p"])}</p>'
+                 f'<div class="tiles">{md}</div><p class="note">{esc(a["note"])}</p>')
+    return (f'{aware}<div class="lv-top">{rings}<div class="lv-cards">{cards}</div></div>{out}'
             f'<h3 class="sub lv-h">{icon("steps","lg")}{esc(L["up_h"])}</h3><ol class="lv-up">{up}</ol>'
             f'<p class="lv-down">{icon("alert")}<span>{esc(L["down"])}</span></p>'
             f'<aside class="lv-story"><h3>{icon("bulb","lg")}{esc(L["ex_h"])}</h3><ol>{story}</ol></aside>')
@@ -671,7 +702,10 @@ def build_comp(lang, key):
     grefs = [guide_link(lang, a) for a in GUIDE_REF[key]]
     gitems = "".join(f'<li>{_glink(h, l, en)}</li>' for h, l, en in grefs)
     gnote = f'<p class="muted"><small>{esc(u["gref_en"])}</small></p>' if any(en for _, _, en in grefs) else ""
-    gvals = f'<p class="muted"><small>{esc(u["gref_values"])}</small></p>' if key in GUIDE_VALUES else ""
+    gvals = ""
+    if key in GUIDE_VALUES:  # the Guide states no values: they are Guidance in the Extended Framework, linked by anchor
+        vl = " · ".join(f'<a href="{FW_GUIDANCE_URL}VALUES.md#{a}" rel="noopener" hreflang="en" lang="en">{esc(l_it if lang == "it" else l_en)}</a>' for a, l_it, l_en in GUIDE_VALUES[key])
+        gvals = f'<p class="muted"><small>{esc(u["gref_values"])}: {vl}.</small></p>'
     secs = ", ".join("§" + str(n).replace("bis", " bis") for n in c["spec"])
     hist = ""  # secondary link to the historical specification, only when this build carries it (it is a withheld input)
     if 'data-placeholder="spec03"' not in spec_html(lang):
@@ -1189,7 +1223,7 @@ def kit_bundled(arcs, rp):
     ctrl = os.path.join(rp, "controllore", "CONTROLLORE.md")
     m = re.search(r"^Versione (\d+\.\d+\.\d+)", open(ctrl, encoding="utf-8").read(), re.M) if "CONTROLLORE.md" in arcs else None
     return {"guide": GUIDE_VERSION if "guide/EIRAMAN-GUIDE.md" in arcs else None,  # English, canonical (D-IT-1)
-            "guide_it": "guide/EIRAMAN-GUIDE.it.md" in arcs,  # curated Italian translation, when the pinned guide commit has it
+            "guide_it": GUIDE_IT_VERSION if "guide/EIRAMAN-GUIDE.it.md" in arcs else None,  # curated Italian translation (its own version), when the pinned guide commit has it
             "specification": None,  # the historical specification 0.3 is not in the kit since 0.10.0 (CR-029)
             "registry": (_released_version(os.path.join(rp, "CHANGELOG.md")) or "unknown") if any(a.startswith("role-profiles/") for a in arcs) else None,
             "ai_coordinator_profile": (m.group(1) if m else "unknown") if "CONTROLLORE.md" in arcs else None,
@@ -1206,6 +1240,11 @@ def build_kit():
     files.append((GUIDE_EN_FILE, "guide/EIRAMAN-GUIDE.md"))  # the reference of the method (CR-029, D-IT-1)
     if guide_has_it(): files.append((GUIDE_IT, "guide/EIRAMAN-GUIDE.it.md"))
     files.append((os.path.join(rp, "README.md"), "role-profiles/README.md"))
+    # Change history of the artifacts of the registry (D-VER-2): the CHANGELOG.md next to each profile is picked up by the walk below;
+    # the two that the walk skips are added here. The profile of the AI Coordinator cites controllore/CHANGELOG.md and the registry
+    # one cites the table of profile versions of role-profiles/CHANGELOG.md, so a kit without them would hold dangling references.
+    files.append((os.path.join(ctrl, "CHANGELOG.md"), "controllore/CHANGELOG.md"))
+    files.append((os.path.join(rp, "CHANGELOG.md"), "role-profiles/CHANGELOG.md"))
     withheld = [f for f in files if not os.path.isfile(f[0])]
     if withheld:
         _missing("kit:" + ",".join(a for _, a in withheld))
@@ -1230,7 +1269,8 @@ def build_kit():
               "ai loro titolari con le licenze originali (CC BY-NC-ND 4.0 e MIT).\n\n"
               "I Role Profile e il profilo del Coordinatore AI sono **bozze non qualificate**: non vanno usati in produzione prima della qualificazione (Guida §13).\n\n"
               "**La Guida.** Il riferimento del metodo è The Eiraman Guide, in `guide/EIRAMAN-GUIDE.md` (inglese, canonico)" + (" e nella traduzione italiana `guide/EIRAMAN-GUIDE.it.md`" if guide_has_it() else "") + ". "
-              "La specifica Eiraman 0.3 è superata dalla Guida e non è nel kit; se il profilo o un altro file rimanda alla specifica 0.3 o a `framework/Eiraman.md`, vale la Guida.\n\n"
+              "La specifica Eiraman 0.3 è storica e non è nel kit.\n\n"
+              "**Storia delle versioni.** Ogni profilo ha il proprio `CHANGELOG.md` nella sua cartella di `role-profiles/`; quello del Coordinatore AI è `controllore/CHANGELOG.md` e quello del registro `role-profiles/CHANGELOG.md`.\n\n"
               "**Verifica dello zip.** Se hai scaricato il kit come zip, prima di usarlo confronta l'impronta SHA-256 del file con quella pubblicata "
               "nel prompt di avvio su https://eiraman.tech/come-usarlo.html (in inglese: https://eiraman.tech/en/how-to-use.html). Per calcolarla: `shasum -a 256 eiraman-kit.zip` su macOS e Linux, `Get-FileHash eiraman-kit.zip -Algorithm SHA256` in PowerShell su Windows. Se non coincide, non usarlo.\n\n"
               "**Stato.** Nel kit attuale i divieti del mandato sono istruzioni seguite dal Coordinatore AI, non ancora un blocco tecnico dell'ambiente.\n\n"

@@ -618,3 +618,4 @@ html:not(.js) .rp-card{opacity:1}
 .gref h3{margin:0 0 10px;font-size:1rem;display:flex;gap:10px;align-items:center}
 .gref ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
 .gref p{margin:10px 0 0;font-size:14px}
+.measure{margin:26px 0 0;max-width:78ch}.measure p{margin:0 0 6px}

@@ -5,5 +5,6 @@
 # The first line that is not a comment is the full commit SHA of eiraman/role-profiles, never a branch.
 # Read by generator/build.py (which refuses a checkout at another commit) and by
 # .github/workflows/site-build.yml. Updating it is a reviewed change, with the registry version below.
-# Registry version: 0.8.0
-0bc7f8624e484b2aacd3731c25a13377bc57a84f
+# Registry version: 0.11.0
+# Before release this must be the published commit of eiraman/role-profiles (publication order: guide, role-profiles, site).
+717ab65b155c6275d49e1ae7365a8cbcea131380

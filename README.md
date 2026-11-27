@@ -58,7 +58,11 @@ was used: such a build must never be published), the site version (`version`) an
 versions of what the kit bundles. The rules are in
 [community/VERSIONING.md](https://github.com/eiraman/community/blob/main/VERSIONING.md), the history in
 [CHANGELOG.md](CHANGELOG.md). The changelog of the kit alone is [kit/CHANGELOG.md](kit/CHANGELOG.md)
-(decision D-VER-2); it is a source of the repository and is not put in `kit/eiraman-kit.zip`.
+(decision D-VER-2); it is a source of the repository and is not put in `kit/eiraman-kit.zip`. The kit does contain the changelogs of the artifacts it bundles from the registry (D-VER-2): the
+`CHANGELOG.md` of each profile and of the registry (`role-profiles/`) and the one of the AI Coordinator profile
+(`controllore/CHANGELOG.md`), because the profiles cite them. The build takes the Guide in English and Italian from
+the pinned guide commit and the registry from the pinned role-profiles commit; the versions it records under
+`kit.bundled` are read from those sources.
 
 ## Brand files
 

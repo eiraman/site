@@ -20,16 +20,22 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [0.11.0] - 2026-11-27
 
-Scope: Change Request CR-029 of the method project, decision D-IT-1 of the Human Manager: the site and the kit
-present The Eiraman Guide 1.0.0-rc.5 as the reference of the method (English canonical, curated Italian
-translation valid), and the Italian specification 0.3 only as a historical, non-normative text superseded by the
-Guide. Site bump: MINOR: new pages and changed texts (VERSIONING §2.4). Kit: 0.10.0 (see
-[kit/CHANGELOG.md](kit/CHANGELOG.md)). The pinned registry does not change (`0bc7f86…`, role-profiles 0.8.0).
-The Italian translation of the Guide is not yet in the pinned commit: until it is, `guida.html` is a placeholder.
+Scope: Change Requests CR-029, CR-030 and CR-031 of the method project, decisions D-IT-1 and D-031 of the Human
+Manager: the site and the kit present The Eiraman Guide 1.0.0-rc.6 (+it.1) as the reference of the method (English
+canonical, curated Italian translation valid), and the Italian specification 0.3 only as a historical,
+non-normative text superseded by the Guide. The text of CR-015 (data and risks of the small applications that people
+build for themselves), prepared before and never published, is recovered and aligned to the Guide. Site bump:
+MINOR: new pages and changed texts (VERSIONING §2.4). Kit: 0.10.0 (see [kit/CHANGELOG.md](kit/CHANGELOG.md)).
+Pinned inputs: Guide `4184518…` (1.0.0-rc.6, translation 1.0.0-rc.6+it.1) and registry `717ab65…` (role-profiles
+0.11.0, AI Coordinator profile 0.13.0). **Before the release both pins must be the published commits** of
+`eiraman/guide` and `eiraman/role-profiles` (publication order: guide, role-profiles, site); the links to
+`guidance/VALUES.md` and `guidance/BENCH.md` of `eiraman/framework` work once the Extended Framework 0.3.0 that
+contains them is published. This version was prepared in two candidates (rc.5 with registry 0.8.0, then this one); only
+this one is released.
 
 ### Added
 
-- `guide.ref`: the full commit SHA of the `guide` repository read by the build (`2635a69…`, Guide 1.0.0-rc.5),
+- `guide.ref`: the full commit SHA of the `guide` repository read by the build (`4184518…`, Guide 1.0.0-rc.6),
   same pattern as `profiles.ref`. `generator/build.py` refuses a guide checkout (`EIRAMAN_GUIDE`, default
   `../guide`) that is not the root of a git repository at that commit with a clean tree, with the same message
   and override as the registry (`EIRAMAN_GUIDE_UNPINNED=1`, the manifest says `publishable: false`); the check is
@@ -37,9 +43,10 @@ The Italian translation of the Guide is not yet in the pinned commit: until it i
   outside the checkout the build is not publishable).
 - `.github/workflows/site-build.yml`: reads `guide.ref` and checks out `eiraman/guide` at that commit.
 - Pages `en/guide.html` and `guida.html`: The Eiraman Guide rendered from the guide repository, with the version
-  label "1.0.0-rc.5 · release candidate", a table of contents and the Markdown download (`guide/EIRAMAN-GUIDE.md`,
-  `guide/EIRAMAN-GUIDE.it.md`). The Italian page says that the English text is canonical and links it. When the
-  translation is absent the build renders a placeholder, reports `guide-it` under `placeholders` and the Italian
+  label "1.0.0-rc.6 · release candidate · not measured" ("non misurata" in Italian: the third part is the Status line
+  of the Guide, read by the build, not a statement of the site), a table of contents and the Markdown download (`guide/EIRAMAN-GUIDE.md`,
+  `guide/EIRAMAN-GUIDE.it.md`). The Italian page says that the English text is canonical and links it. The build checks that the translation
+  declares the version of the English text and its own version (`1.0.0-rc.6+it.1`). When the translation is absent the build renders a placeholder, reports `guide-it` under `placeholders` and the Italian
   pages link the English Guide.
 - Sub-sections of the Guide get stable anchors by number (`s8-1`, `s14-2`), the same in every language;
   `<https://…>` links are rendered.
@@ -59,12 +66,62 @@ The Italian translation of the Guide is not yet in the pinned commit: until it i
   historical specification. The method page, the last component page (next page) and the page of the Framework
   (rule links "Guida §N", `FW_GUIDE`) point to the Guide; the functional map points to the Guide for the codes
   E1-E6 and K1-K9. The project description of Eiraman names the Guide, not the specification.
-- The start prompt on "Come si usa" / "How to use" and the steps of the guided path read `guide/EIRAMAN-GUIDE.md`,
-  and say that the specification 0.3 is superseded; the SHA-256 of the kit in the prompt follows the new kit.
+- The start prompt on "Come si usa" / "How to use" and the steps of the guided path read `guide/EIRAMAN-GUIDE.md`
+  ("the Guide is the reference of the method"); the sentence on the specification 0.3 is gone, because the AI
+  Coordinator profile 0.13.0 reads the Guide itself. The SHA-256 of the kit in the prompt follows the new kit.
 - Leftovers: "Eiraman 0.3" and "specifica 0.2" in the generator, its docstring and the cards of the method page.
 - `README.md`: inputs, `guide.ref`, `EIRAMAN_GUIDE`, the manifest fields; the wrong statement that the
   specification is not imported is replaced by what the build does.
-- `manifest.json`: `version` 0.11.0, `kit.version` 0.10.0.
+- `manifest.json`: `version` 0.11.0, `kit.version` 0.10.0; `kit.bundled`: `guide` 1.0.0-rc.6, `guide_it` 1.0.0-rc.6+it.1
+  (the version of the translation, no longer a flag), `registry` 0.11.0, `ai_coordinator_profile` 0.13.0;
+  `registry_commit` `717ab65…`, `guide_commit` `4184518…`.
+- Kit 0.10.0 (see [kit/CHANGELOG.md](kit/CHANGELOG.md)): rebuilt from registry 0.11.0 and Guide rc.6 (English and
+  Italian); it now contains the `CHANGELOG.md` of each profile, of the registry and of the AI Coordinator
+  (`controllore/CHANGELOG.md`), decision D-VER-2; the `LEGGIMI.md` sentence that told the Coordinator to follow the
+  Guide if the profile cited the specification 0.3 is replaced by one neutral line.
+- Levels page (`livelli.html`, `en/levels.html`): the texts that said that the method stops at any level now say that it
+  does so in the blocking mode and that in the informative mode the case is recorded in the Security Report (Guide §14,
+  Classification mode); the same for the "Out" card, the rule "Out" and the sentence "when in doubt, work stops".
+
+### Added by the recovery of CR-015 and the new Guide
+
+- Recovery of CR-015 (branch `cr-015-livelli-perche`, commit `de12f52`, never published), ported to the current code and
+  aligned to the Guide rc.6, in Italian and English: in the home «Contesto» a sentence on the small applications that
+  anyone can build with AI without knowing what data they handle or what happens if the computer is stolen; in the
+  method «Perché esiste» a sentence on whoever builds a small application for themselves; on the Levels page a block
+  «Che cosa si sa prima di costruire» / "What is known before building" (`LEVELS[...]["aware"]` in
+  `generator/content.py`, rendered by `levels_graphic()` in `generator/build.py`): the Manager's role extends to
+  security (Guide §2), the Security Officer classifies the project (§14) with a checklist, two tiles (what data, where
+  it will be exposed), an example and a note, and two tiles for the two modes (informative by default when the method
+  is used for oneself, blocking in every other case). The old wording "checklist run by an AI agent with compliance
+  skills" is replaced by the Security Officer, the classification and the two modes. The old version numbers and
+  changelog of CR-015 are not carried.
+- Method page: a short block "Il metodo si applica a se stesso" / "The method applies to itself" (Guide §2 and §15):
+  every rule is a hypothesis measured against a baseline, and, because the Guide says so in its Status, that the
+  version is a release candidate not measured; links to Guide §15 and to the guidance for the test bench
+  (`eiraman/framework`, `guidance/BENCH.md`). The sentence on "not measured" appears only while the Guide's Status
+  says it.
+- Component pages "ritmo", "decisioni" and "qualita": the note that the Guide states no values now links the
+  guidance `guidance/VALUES.md` of the Extended Framework by anchor (`wave-spending-thresholds`,
+  `cadence-of-the-governance-cycle`, `deadlines-of-a-do`, `number-of-candidates-k3`, `attempts-before-promotion`);
+  `GUIDE_VALUES` is now a map page to anchors and `FW_GUIDANCE_URL` is the base address.
+- `generator/build.py`: `page()` has the option `plain` (the page text is not passed through the site glosses, `gloss()`:
+  used by the Guide pages, whose text is rendered as it is) and the CSS `.notice` (notice box of the
+  historical specification and of the Guide pages) and `.gref` (block "Nella Guida" / "In the Guide" of the component
+  pages) in `generator/site-extra.css`; these were part of 0.11.0 and were not named in this entry; `.measure` is new.
+
+### Corrections of the independent review of the first candidate (REV-029-02)
+
+- Framework page, "architettura", second rule: it linked Guide §10, which says nothing on local and external engines.
+  It now says what §1 says ("Local and external boundary": only what the mandate authorises leaves the Development
+  Environment) and links §1; the claim "chosen by measuring the same load" is dropped, because no rule of the Guide
+  carries it.
+- Framework page, "scrum", second rule (SWOT on a change of Decision): it links Guide §5 ("Changing a Decision"), no
+  longer §7.
+- "Come si usa": the kit tree shows `tools/vista_manager.py`, and the zip contains it (`controllore/tools/` of registry
+  0.11.0). Checked for this release by comparing every file of the tree with the zip.
+- The note "i valori indicativi sono nel Framework esteso": see above, it links `guidance/VALUES.md`; the bench
+  guidance is linked where the site speaks of the measure of the method.
 
 ### Removed
 
