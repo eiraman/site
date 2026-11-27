@@ -1107,27 +1107,19 @@ EVIDENZE_CSS = ("<style>.band .why.ev-intro{font-weight:400}"
 
 def build_evidenze(lang):
     a = EVIDENZE[lang]; u = UI[lang]
-    how = "".join(f"<li>{esc(x)}</li>" for x in a["how"])
     rows = "".join(f'<tr><th scope="row">{esc(n)}</th><td>{esc(t)}</td></tr>' for n, t in a["rows"])
-    ex = "".join(f"<li><strong>{esc(h)}</strong>{esc(t)}</li>" for h, t in a["ex"])
+    ex = "".join(f"<li>{esc(x)}</li>" for x in a["ex"])
     body = f"""
 <section class="band"><div class="in">
 <nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,'home')}">{u['home']}</a><span>/</span><span>{esc(a['h1'])}</span></nav>
-<h1>{esc(a['h1'])}</h1><p class="why ev-intro">{esc(a['intro'])}</p>
+<h1>{esc(a['h1'])}</h1><p class="why ev-intro"><strong>{esc(a['lead'])}</strong>{esc(a['intro'])}</p>
 </div></section>
-<section class="sec"><div class="in block narrow prose">
-<h2>{icon('why','lg')}{esc(a['why_h'])}</h2><p>{esc(a['why'])}</p>
-<h2>{icon('cycle','lg')}{esc(a['how_h'])}</h2><ul>{how}</ul>
-</div></section>
-<section class="sec alt"><div class="in block narrow">
+<section class="sec"><div class="in block narrow">
 <h2 id="ev-risultati">{icon('lens','lg')}{esc(a['tab_h'])}</h2>
 <div class="tbl-wrap"><table class="sd-tab ev-tab" aria-labelledby="ev-risultati"><tbody>{rows}</tbody></table></div>
 </div></section>
-<section class="sec"><div class="in block narrow prose">
-<h2>{icon('check','lg')}{esc(a['ex_h'])}</h2><ol>{ex}</ol>
-</div></section>
 <section class="sec alt"><div class="in block narrow prose">
-<h2>{icon('alert','lg')}{esc(a['lim_h'])}</h2><p>{esc(a['lim'])}</p>
+<h2>{icon('check','lg')}{esc(a['ex_h'])}</h2><ul>{ex}</ul>
 </div></section>
 """
     return page(lang, "evidenze", a["title"], a["desc"], body, extra_head=EVIDENZE_CSS)
