@@ -18,6 +18,25 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-27
+
+Scope: Change Request CR-024 of the method project. Site bump: MINOR, a new page (VERSIONING §2.4). The kit
+does not change and stays 0.9.0.
+
+### Added
+
+- New page «Le prime evidenze» (`evidenze.html`) and its English version «First evidence»
+  (`en/evidence.html`): what the project records show, as of November 2026, about the development of Eiraman
+  with Eiraman, including what the figures do not say. The text is the one approved by the Human Manager.
+- Footer link to the new page on every page with the footer, except the home pages (`index.html`,
+  `en/index.html`), which do not change.
+
+### Changed
+
+- All other pages with the footer: the footer link above.
+- `sitemap.xml`: the two new pages.
+- `manifest.json`: `version` 0.10.0, `date` 2026-11-27, fingerprints.
+
 ## [0.9.0] - 2026-11-26
 
 Scope: Change Requests CR-011 and CR-012 of the method project. The kit follows the Role Profiles registry
@@ -344,7 +363,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.9.0...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.10.0...main
+[0.10.0]: https://github.com/eiraman/site/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/eiraman/site/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/eiraman/site/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/eiraman/site/compare/v0.7.0...v0.8.0

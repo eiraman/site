@@ -12,7 +12,7 @@ import os, re, json, hashlib, shutil, math, html, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from icons import sprite, icon
-from content import SLUG, ORDER, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO
+from content import SLUG, ORDER, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO, EVIDENZE
 import mdlite
 import favicon  # brand mark drawn in code; the mark is a trademark (brand/PROVENANCE.md, TRADEMARK.md)
 import illus6
@@ -23,7 +23,7 @@ def _missing(what):
 
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 # Versions (community/VERSIONING.md). Bump them together with the CHANGELOG.md entry of the release.
-SITE_VERSION = "0.9.0"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
+SITE_VERSION = "0.10.0"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
 KIT_VERSION = "0.9.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
 OLD = os.environ.get("EIRAMAN_OLD") or os.path.join(ROOT, "releases", "0.2.0-candidata")
 OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else SITE_VERSION)
@@ -130,7 +130,7 @@ def page(lang, key, title, desc, body, extra_head=""):
     other_href = (f"en/{SLUG[key][1]}.html" if lang == "it" else f"../{SLUG[key][0]}.html")
     cur = ' aria-current="page"'
     navs = "".join(f'<a href="{lnk(lang, k)}"{cur if (k == key or (k == "metodo" and key in ORDER and key != "livelli")) else ""}>{esc(t)}</a>' for k, t in u["nav"])
-    foot = "".join(f'<a href="{path_of(lang, k)[3:] if lang=="en" else path_of(lang,k)}">{esc(t)}</a>' for k, t in u["footnav"])
+    foot = "".join(f'<a href="{path_of(lang, k)[3:] if lang=="en" else path_of(lang,k)}">{esc(t)}</a>' for k, t in u["footnav"] if not (k == "evidenze" and key == "home"))  # la home resta com'è (CR-024)
     lang_sw = (f'<b aria-current="true">IT</b><span aria-hidden="true">|</span><a href="{other_href}" hreflang="en" lang="en">EN</a>' if lang == "it"
                else f'<a href="{other_href}" hreflang="it" lang="it">IT</a><span aria-hidden="true">|</span><b aria-current="true">EN</b>')
     home = path_of(lang, "home")[3:] if lang == "en" else "index.html"
@@ -1100,6 +1100,38 @@ def build_progetti(lang):
 """
     return page(lang, "progetti", a["title"], a["desc"], body + guide_js, extra_head="<script>document.documentElement.classList.add('js')</script>\n")
 
+# ---------- Le prime evidenze (CR-024) ----------
+EVIDENZE_CSS = ("<style>.band .why.ev-intro{font-weight:400}"
+                ".sd-tab.ev-tab th{font:600 24px/1.25 var(--f-display);text-transform:none;letter-spacing:0;color:var(--ink);white-space:nowrap;width:1%}"
+                ".ev-tab tr:last-child>*{border-bottom:0}</style>\n")
+
+def build_evidenze(lang):
+    a = EVIDENZE[lang]; u = UI[lang]
+    how = "".join(f"<li>{esc(x)}</li>" for x in a["how"])
+    rows = "".join(f'<tr><th scope="row">{esc(n)}</th><td>{esc(t)}</td></tr>' for n, t in a["rows"])
+    ex = "".join(f"<li><strong>{esc(h)}</strong>{esc(t)}</li>" for h, t in a["ex"])
+    body = f"""
+<section class="band"><div class="in">
+<nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,'home')}">{u['home']}</a><span>/</span><span>{esc(a['h1'])}</span></nav>
+<h1>{esc(a['h1'])}</h1><p class="why ev-intro">{esc(a['intro'])}</p>
+</div></section>
+<section class="sec"><div class="in block narrow prose">
+<h2>{icon('why','lg')}{esc(a['why_h'])}</h2><p>{esc(a['why'])}</p>
+<h2>{icon('cycle','lg')}{esc(a['how_h'])}</h2><ul>{how}</ul>
+</div></section>
+<section class="sec alt"><div class="in block narrow">
+<h2 id="ev-risultati">{icon('lens','lg')}{esc(a['tab_h'])}</h2>
+<div class="tbl-wrap"><table class="sd-tab ev-tab" aria-labelledby="ev-risultati"><tbody>{rows}</tbody></table></div>
+</div></section>
+<section class="sec"><div class="in block narrow prose">
+<h2>{icon('check','lg')}{esc(a['ex_h'])}</h2><ol>{ex}</ol>
+</div></section>
+<section class="sec alt"><div class="in block narrow prose">
+<h2>{icon('alert','lg')}{esc(a['lim_h'])}</h2><p>{esc(a['lim'])}</p>
+</div></section>
+"""
+    return page(lang, "evidenze", a["title"], a["desc"], body, extra_head=EVIDENZE_CSS)
+
 # ---------- scrittura ----------
 def write(rel, text):
     p = os.path.join(OUT, rel); os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -1199,6 +1231,7 @@ def main():
         write(path_of(lang, "specifica"), build_spec(lang))
         write(path_of(lang, "mappa"), build_map(lang))
         write(path_of(lang, "progetti"), build_progetti(lang))
+        write(path_of(lang, "evidenze"), build_evidenze(lang))
         write(path_of(lang, "pilota"), redirect_page(lang, "progetti"))
         write(path_of(lang, "originalita"), build_orig(lang))
         write(path_of(lang, "chi"), build_about(lang))
@@ -1212,7 +1245,7 @@ def main():
             if f == "manifest.json" or (f.startswith(".") and f != ".htaccess"): continue
             files.append(os.path.relpath(os.path.join(r, f), OUT))
     files.sort()
-    man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-26", "languages": ["it", "en"],
+    man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-27", "languages": ["it", "en"],
            "placeholders": sorted(PLACEHOLDERS),
            "kit": {"path": "kit/eiraman-kit.zip", "version": KIT_VERSION, "bundled": KIT_BUNDLED},
            "sha256": {f: hashlib.sha256(open(os.path.join(OUT, f), "rb").read()).hexdigest() for f in files}}
