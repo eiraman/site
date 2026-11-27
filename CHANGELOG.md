@@ -26,7 +26,7 @@ does not change and stays 0.9.0.
 ### Added
 
 - New page «Le prime evidenze» (`evidenze.html`) and its English version «First evidence»
-  (`en/evidence.html`): what the project records show, as of November 2026, about the development of Eiraman
+  (`en/evidence.html`): what the project records show, between 24 and 27 November 2026, about the development of Eiraman
   with Eiraman, including what the figures do not say. The text is the one approved by the Human Manager.
 - Footer link to the new page on every page with the footer, except the home pages (`index.html`,
   `en/index.html`), which do not change.
