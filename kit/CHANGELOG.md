@@ -34,9 +34,9 @@ the site 0.11.0 ([CHANGELOG.md](../CHANGELOG.md)). Not yet released: the version
 
 - `guide/EIRAMAN-GUIDE.md`: The Eiraman Guide 1.0.0-rc.6, English, canonical, from the guide commit in
   `guide.ref`. `guide/EIRAMAN-GUIDE.it.md`: the curated Italian translation 1.0.0-rc.6+it.1.
-- The `CHANGELOG.md` of each profile (decision D-VER-2, registry 0.11.0): the 62 files that sit next to each
-  profile in `role-profiles/`, `role-profiles/CHANGELOG.md` (the registry) and `controllore/CHANGELOG.md` (the AI
-  Coordinator profile). They belong in the kit because they are part of the artifacts of the registry, because the
+- The `CHANGELOG.md` files of the registry (decision D-VER-2, registry 0.11.0): 62 in the zip, namely 60 in the
+  folders of the profiles and of the families under `role-profiles/`, `role-profiles/CHANGELOG.md` (the registry) and
+  `controllore/CHANGELOG.md` (the AI Coordinator profile). They belong in the kit because they are part of the artifacts of the registry, because the
   profile of the AI Coordinator and the registry cite them (a kit without them would hold references to files that
   do not exist) and because a user must be able to tell which version of a profile is in use and what changed. They
   are text files and add little to the size of the zip. The changelog of the kit itself (this file) stays outside it.

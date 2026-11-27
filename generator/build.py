@@ -917,6 +917,9 @@ def build_map(lang):
                  ("a user without specialists can bear", "a business user can bear, when competence lives in the profiles and not in every project"),
                  ("How far you can go without specialists", "What you can build, and for whom")):
         main = main.replace(a, b)
+    note = ('<p class="notice in" style="margin-top:24px"><b>Diagramma storico (0.2).</b> Questi schemi vengono dalla versione 0.2 del metodo: il riferimento è oggi <a href="guida.html">La Guida Eiraman</a>.</p>' if lang == "it"
+            else '<p class="notice in" style="margin-top:24px"><b>Historical diagram (0.2).</b> These diagrams come from version 0.2 of the method: the reference is now <a href="guide.html">The Eiraman Guide</a>.</p>')
+    main = note + main
     title = "Mappa funzionale · Eiraman" if lang == "it" else "Functional map · Eiraman"
     desc = "Cinque schemi tecnici del metodo Eiraman." if lang == "it" else "Five technical diagrams of the Eiraman method."
     return page(lang, "mappa", title, desc, main, extra_head=f"<style>{style}</style>\n")

@@ -13,7 +13,7 @@ ORDER = ["principi", "ruoli", "fasi", "decisioni", "qualita", "ritmo", "livelli"
 UI = {
     "it": dict(skip="Vai al contenuto", nav=[("metodo", "Il metodo"), ("livelli", "Livelli"), ("progetti", "I progetti"), ("guida", "La Guida")],
                menu="Menu", home="Home", method="Il metodo", part="Parte {n} di {t}", prev="Precedente", next="Successiva",
-               how="Come funziona", what="Che cosa prevede", gref="Nella Guida", gref_hist="Testo storico: specifica 0.3", gref_en="Il testo inglese è canonico: la traduzione italiana non è ancora disponibile, i rimandi portano alla Guida in inglese.", gref_values="La Guida descrive i meccanismi senza valori: i valori indicativi (per esempio scadenze e soglie) sono nelle linee guida del Framework esteso, in inglese",
+               how="Come funziona", what="Che cosa prevede", gref="Nella Guida", gref_hist="Testo storico: specifica 0.3", gref_en="Il testo inglese è canonico: la traduzione italiana non è ancora disponibile, i rimandi portano alla Guida in inglese.", gref_values="La Guida descrive i meccanismi senza valori: i valori indicativi (per esempio scadenze e soglie) sono nelle Indicazioni del Framework esteso, in inglese",
                foot="© 2026 Paolo Ungari e contributori · Testi della Guida e del sito CC BY-SA 4.0 · Role Profile CC BY 4.0 · Codice Apache 2.0 · Nome e logo Eiraman: marchio, vedi <a href=\"https://github.com/eiraman/community/blob/main/TRADEMARK.md\" rel=\"noopener\">TRADEMARK.md</a>", tog="TOGAF® è un marchio registrato di The Open Group.",
                footnav=[("metodo", "Il metodo"), ("mappa", "Mappa funzionale"), ("progetti", "I progetti"), ("guida", "La Guida"), ("specifica", "Specifica 0.3 (storica)")],
                lang_label="Lingua", explore="Esplora"),
@@ -128,7 +128,7 @@ COMP = {
            ("coin","fw","Ogni costo conta","Anche i tentativi e le candidate scartate.")],
     rules=[("1","La competenza sta nei profili, non in ogni progetto: chi sviluppa porta la propria competenza nei Role Profile qualificati; l'operatore umano del progetto decide su funzioni e costi."),
            ("2","Human as a Manager: l'umano agisce prima, con mandato, principi, deleghe, riserve e budget; non supervisiona l'esecuzione."),
-           ("3","Esclusioni: il metodo non si applica ai sistemi AI vietati o ad alto rischio e agli altri casi fuori perimetro.")]),
+           ("3","Esclusioni (modalità bloccante): il metodo non si applica ai sistemi AI vietati o ad alto rischio e agli altri casi fuori perimetro; in modalità informativa il caso è registrato nel Security Report.")]),
   en=dict(card="Principles", line="Eight ideas behind every choice.", h1="What ideas drive the method?",
     why="Eight principles are enough to understand how Eiraman thinks and to notice at once when something is wrong.",
     how="Every rule of the method comes from one of these principles. If a practice contradicts them, the practice is wrong.",
@@ -142,7 +142,7 @@ COMP = {
            ("coin","fw","Every cost counts","Including discarded attempts and candidates.")],
     rules=[("1","Competence lives in profiles, not in every project: those who develop software bring their competence into qualified Role Profiles; the human operator of the project decides on functions and costs."),
            ("2","Human as a Manager: the human acts first, with mandate, principles, delegations, reserved matters and budget; they do not supervise execution."),
-           ("3","Exclusions: the method does not apply to prohibited or high-risk AI systems or to the other out-of-scope cases.")])),
+           ("3","Exclusions (blocking mode): the method does not apply to prohibited or high-risk AI systems or to the other out-of-scope cases; in the informative mode the case is recorded in the Security Report.")])),
  "ruoli": dict(icon="manager", tone="human", spec=(2,),
   it=dict(card="Ruoli", line="Chi decide, chi esegue, chi risponde.", h1="Chi decide, chi esegue, chi risponde?",
     why="Sapere chi fa che cosa è la condizione per delegare all'AI senza perdere il controllo.",
@@ -540,26 +540,26 @@ COMP["architettura"] = dict(icon="spine", tone="fw", spec=("6bis",),
     body=[("spine", "Backbone", "Il nucleo, per primo"), ("brain", "Brain", "La logica e i motori AI"), ("hand", "Hands, Foot, Eyes, Ears", "Le interfacce"), ("feather", "Hairs", "Le funzioni periferiche")],
     tiles=[("shield", "ai", "Trusted e untrusted", "I compiti del Brain non fidati hanno un controllo deterministico."),
            ("layers", "fw", "Backlog etichettato", "Ogni workstream porta componente e priorità."),
-           ("gear", "fw", "Motore locale o esterno", "Richieste piccole in locale, una richiesta unica all'esterno."),
+           ("gear", "fw", "Confine locale ed esterno", "Verso i motori esterni esce solo ciò che il mandato autorizza."),
            ("alert", "deny", "Niente patchwork", "Le interfacce avanzate solo su un nucleo stabile.")],
     rules=[("1", "Backbone per primo: copre in forma minima i percorsi principali del risultato."),
            ("2", "Brain: i compiti si classificano trusted o untrusted; da qui dipende che cosa si delega."),
            ("3", "Interfacce: presto in forma essenziale, in forma avanzata solo dopo Backbone e Brain."),
            ("4", "Hairs: si aggiungono o si tolgono in ogni momento, verificando la regressione del nucleo."),
-           ("5", "Il documento architetturale segue le viste TOGAF e misura la scelta tra motore locale ed esterno.")]),
+           ("5", "Ogni componente dichiara contratto, dati, dipendenze e test di integrazione; se periferico, anche un controllo del comportamento quando viene rimosso.")]),
   en=dict(card="Composable architecture", line="The essentials first, then the rest.", h1="In what order is an application built?",
     why="With AI, adding pieces is easy: without an order you build a patchwork. Like a good enterprise architect, Eiraman starts from the essentials.",
     how="The application is broken into components by function, like a body: first the backbone, then the brain, then hands, feet, eyes and ears, and finally the hair, which can be cut.",
     body=[("spine", "Backbone", "The core, first"), ("brain", "Brain", "Logic and AI engines"), ("hand", "Hands, Foot, Eyes, Ears", "The interfaces"), ("feather", "Hairs", "Peripheral functions")],
     tiles=[("shield", "ai", "Trusted and untrusted", "Untrusted Brain tasks get a deterministic check."),
            ("layers", "fw", "Labelled backlog", "Each workstream carries its component and priority."),
-           ("gear", "fw", "Local or external engine", "Small requests locally, a single request externally."),
+           ("gear", "fw", "Local and external boundary", "Only what the mandate authorises goes out to external engines."),
            ("alert", "deny", "No patchwork", "Advanced interfaces only on a stable core.")],
     rules=[("1", "Backbone first: it covers, in minimal form, the main paths of the result."),
            ("2", "Brain: tasks are classed trusted or untrusted; this decides what is delegated."),
            ("3", "Interfaces: early in essential form, in advanced form only after Backbone and Brain."),
            ("4", "Hairs: added or removed at any time, checking the core's regression."),
-           ("5", "The architecture document follows the TOGAF views and measures the choice between local and external engines.")]))
+           ("5", "Each component declares its contract, data, dependencies and integration test and, if it is peripheral, a check of behaviour when it is removed.")]))
 
 COMP["scoperta"] = dict(icon="bulb", tone="ai", spec=(5,),
   it=dict(card="Scoperta con il Design Thinking", line="Molte idee, poi una sola Visione.", h1="Come nasce un'idea condivisa?",
@@ -1644,9 +1644,9 @@ _T(FWPAGE, ["fws", 5, "sub"], "Con gli agenti il costo non è più il tempo dell
 
 # --- Livelli ---
 LEVELS["it"].update(up_h="Passaggio a un livello superiore", ex_h="Esempio: un'idea che cresce", details_h="Dettagli normativi",
-                    down="Se un requisito decade, il progetto scende automaticamente di livello: fino al ripristino sono ammessi solo rilasci correttivi.")
-LEVELS["en"].update(up_h="Moving to a higher level", ex_h="Example: an idea that grows", details_h="Normative details",
-                    down="If a requirement lapses, the project automatically drops a level: until it is restored, only corrective releases are allowed.")
+                    down="In modalità bloccante, se un requisito decade, il progetto scende automaticamente di livello: fino al ripristino sono ammessi solo rilasci correttivi.")
+LEVELS["en"].update(up_h="Moving to a higher level", ex_h="Example: an idea that grows", details_h="Requirements in detail",
+                    down="In the blocking mode, if a requirement lapses, the project automatically drops a level: until it is restored, only corrective releases are allowed.")
 _T(LEVELS, ["up", 0, 1], "Risultati dimostrati", "Results demonstrated")
 _T(LEVELS, ["up", 1, 1], "Requisiti aggiuntivi soddisfatti", "Additional requirements met")
 _T(LEVELS, ["up", 2, 1], "Decisione del responsabile di business", "Business owner's decision")
@@ -1696,8 +1696,8 @@ LEVELS["it"]["out"]["items"] = ["Dati particolari (come salute o opinioni) e giu
 LEVELS["en"]["out"]["items"] = ["Special-category data (such as health or opinions) and criminal-record data", "Children's data", "Payments handled in-house",
                                 "Automated decisions about people", "High-risk AI", "Distributed software to be installed",
                                 "Large-scale processing, sector regulations, physical safety and other cases: see the full list"]
-COMP["livelli"]["it"]["how"] = "La classe di un progetto dipende da chi userà il risultato: solo chi lo costruisce, i colleghi, oppure clienti esterni; non può superare il livello di chi adotta il metodo. Prima di iniziare e a ogni ciclo di lavoro un controllo verifica che il progetto resti nella sua classe; nel dubbio, il lavoro si ferma."
-COMP["livelli"]["en"]["how"] = "A project's class depends on who will use the result: only its builder, colleagues, or external customers; it cannot exceed the level of whoever adopts the method. Before starting and at every work cycle a check verifies that the project stays within its class; when in doubt, work stops."
+COMP["livelli"]["it"]["how"] = "La classe di un progetto dipende da chi userà il risultato: solo chi lo costruisce, i colleghi, oppure clienti esterni; in modalità bloccante non può superare il livello di chi adotta il metodo, salvo la decisione del Manager umano di eseguire un progetto di classe 1 a livello 0 (Guida §14.2). Prima di iniziare e a ogni ciclo di lavoro un controllo verifica che il progetto resti nella sua classe; nel dubbio, il lavoro si ferma."
+COMP["livelli"]["en"]["how"] = "A project's class depends on who will use the result: only its builder, colleagues, or external customers; in the blocking mode it cannot exceed the level of whoever adopts the method, except by the Human Manager's decision to run a class 1 project at level 0 (Guide §14.2). Before starting and at every work cycle a check verifies that the project stays within its class; when in doubt, work stops."
 # 3. Shadow IT: «riduce», non «toglie»
 for _L, _old, _new in (("it", "Togliamo la complessità dei cicli di review architetturali e il rischio di shadow IT.", "Si riducono la complessità dei cicli di review architetturali e il rischio di shadow IT."),
                        ("en", "We remove the complexity of architecture review cycles and the risk of shadow IT.", "The complexity of architecture review cycles and the risk of shadow IT are reduced.")):
@@ -1840,7 +1840,7 @@ GUIDE = {
         items=[("Installa Claude Code oppure Codex seguendo la guida ufficiale.", "LINKS"),
                ("Crea una cartella vuota per il tuo progetto e avvia lì lo strumento: «claude» per Claude Code, «codex» per Codex.", "mkdir mio-progetto\ncd mio-progetto\nclaude")]),
    dict(t="Incolla il prompt di avvio", screen="folder", wtitle="mio-progetto",
-        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "role-profiles/"],
+        files=["AVVIO.md", "CONTROLLORE.md", "STATO.md", "controllore/", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "guide/EIRAMAN-GUIDE.it.md", "role-profiles/"],
         items=[("Copia questo prompt e incollalo nella sessione.", "AVVIO"),
                ("Il Coordinatore AI scarica il kit nella cartella, legge il proprio Role Profile e la Guida e assume il ruolo. Concedi soltanto questi permessi: scaricare quel file da eiraman.tech, calcolarne l'impronta, estrarlo e creare file dentro la cartella del progetto. Qualsiasi altra richiesta di permesso non fa parte dell'avvio.", None)]),
    dict(t="Descrivi la tua richiesta", screen="chat", wtitle="Sessione",
@@ -1875,7 +1875,7 @@ GUIDE = {
         items=[("Install Claude Code or Codex following the official guide.", "LINKS"),
                ("Create an empty folder for your project and start the tool there: “claude” for Claude Code, “codex” for Codex.", "mkdir my-project\ncd my-project\nclaude")]),
    dict(t="Paste the start-up prompt", screen="folder", wtitle="my-project",
-        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "role-profiles/"],
+        files=["AVVIO.md", "CONTROLLORE.md", "STATO.md", "controllore/", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "guide/EIRAMAN-GUIDE.it.md", "role-profiles/"],
         items=[("Copy this prompt and paste it into the session.", "AVVIO"),
                ("The AI Coordinator downloads the kit into the folder, reads its Role Profile and the Guide and takes on the role. Grant only these permissions: downloading that file from eiraman.tech, computing its fingerprint, extracting it and creating files inside the project folder. Any other permission request is not part of the start-up.", None)]),
    dict(t="Describe your request", screen="chat", wtitle="Session",
@@ -2146,7 +2146,7 @@ GUIDE_REF = {
     "profili": ["s13", "s7-1", "s15"],
     "sicurezza": ["s11"],
     "squadre": ["s7", "s7-1"],
-    "architettura": ["s10"],
+    "architettura": ["s10", "s1"],
     "scoperta": ["s8", "s8-1"],
 }
 # Component pages that say where the values are (the Guide states none): the thresholds and deadlines of the old text.
@@ -2175,47 +2175,51 @@ FW_GUIDE = {
 # Perché: home («Contesto») e panoramica del metodo («Perché esiste»)
 HOME7["it"]["blocks"][0] = (HOME7["it"]["blocks"][0][0], HOME7["it"]["blocks"][0][1], HOME7["it"]["blocks"][0][2] +
     " Con l'AI chiunque in un'organizzazione può costruirsi una piccola applicazione senza sapere quali dati tratta"
-    " né che cosa succede se il computer viene rubato. Il metodo lo fa emergere prima di costruire: chi delega un compito ne conosce le implicazioni"
-    " per sicurezza, privacy e conformità normativa.")
+    " né che cosa succede se il computer viene rubato. Il metodo lo fa emergere: con la classificazione del progetto e, per chi lo usa per sé,"
+    " nel Security Report a ogni Wave e a ogni rilascio.")
 HOME7["en"]["blocks"][0] = (HOME7["en"]["blocks"][0][0], HOME7["en"]["blocks"][0][1], HOME7["en"]["blocks"][0][2] +
     " With AI, anyone in an organisation can build a small application without knowing what data it handles"
-    " or what happens if the computer is stolen. The method brings this to light before anything is built: whoever delegates a task knows its implications"
-    " for security, privacy and regulatory compliance.")
-_T(METHOD, ["cols", 0, 2], METHOD["it"]["cols"][0][2] + " Chi si costruisce da sé una piccola applicazione spesso non sa quali dati tratta: nel metodo il ruolo del Manager umano si estende alla sicurezza, e chi delega un compito ne conosce le implicazioni per sicurezza, privacy e conformità normativa.",
-   METHOD["en"]["cols"][0][2] + " Whoever builds a small application for themselves often does not know what data it handles: in the method the Human Manager's role extends to security, and whoever delegates a task knows its implications for security, privacy and regulatory compliance.")
-# Il metodo si applica a se stesso (Guida §2 e §15): il testo onesto sullo stato della misura; {v} è la versione della Guida letta dalla build
-METHOD["it"]["measure"] = dict(h="Il metodo si applica a se stesso",
-    p="Eiraman tratta ogni sua regola come un'ipotesi e ne misura gli effetti contro una linea di base: gli stessi compiti svolti senza il metodo. Evolve applicandosi a se stesso: il Manager umano dà la direzione, gli agenti la traducono in richieste di modifica e scelte specifiche, e il Manager umano decide.",
+    " or what happens if the computer is stolen. The method brings this to light: through the classification of the project and, for those who use it for themselves,"
+    " in the Security Report at every Wave and every release.")
+_T(METHOD, ["cols", 0, 2], METHOD["it"]["cols"][0][2] + " Chi si costruisce da sé una piccola applicazione spesso non sa quali dati tratta: nel metodo il ruolo del Manager umano si estende alla sicurezza, e chi delega un compito ne conosce le implicazioni per sicurezza, privacy e conformità normativa: il metodo lo fa emergere con la classificazione del progetto e, per chi lo usa per sé, nel Security Report a ogni Wave e a ogni rilascio.",
+   METHOD["en"]["cols"][0][2] + " Whoever builds a small application for themselves often does not know what data it handles: in the method the Human Manager's role extends to security, and whoever delegates a task knows its implications for security, privacy and regulatory compliance: the method brings this to light through the classification of the project and, for those who use it for themselves, in the Security Report at every Wave and every release.")
+# Il metodo si applica a sé stesso (Guida §2 e §15): il testo onesto sullo stato della misura; {v} è la versione della Guida letta dalla build
+METHOD["it"]["measure"] = dict(h="Il metodo si applica a sé stesso",
+    p="Eiraman tratta ogni sua regola come un'ipotesi e ne misura gli effetti contro una baseline: gli stessi compiti svolti senza il metodo. Evolve applicandosi a sé stesso: il Manager umano dà la direzione, gli agenti la traducono in Change Request, scelte specifiche e suggerimenti, e il Manager umano decide.",
     nm=" La Guida {v} è una release candidate non misurata: nessuna campagna di misura è stata completata, e ogni regola resta un'ipotesi finché una misura non la sostiene.",
-    more="Misurare il metodo nella Guida", bench="Linee guida del banco di prova (in inglese)")
+    more="Misurare il metodo nella Guida", bench="Indicazioni per il banco di prova (in inglese)")
 METHOD["en"]["measure"] = dict(h="The method applies to itself",
-    p="Eiraman treats each of its rules as a hypothesis and measures its effects against a baseline: the same tasks carried out without the method. It evolves by applying itself: the Human Manager gives the direction, the agents translate it into change requests and specific choices, and the Human Manager decides.",
+    p="Eiraman treats each of its rules as a hypothesis and measures its effects against a baseline: the same tasks carried out without the method. It evolves by applying itself: the Human Manager gives the direction, the agents translate it into change requests, specific choices and suggestions, and the Human Manager decides.",
     nm=" The Guide {v} is a release candidate that has not been measured: no measurement campaign has been completed, and every rule stays a hypothesis until a measurement supports it.",
     more="Measuring the method in the Guide", bench="Guidance for the test bench")
 # Livelli: che cosa si sa prima di costruire (reso da levels_graphic dopo «Come funziona», prima delle schede 0/1/2)
 LEVELS["it"]["aware"] = dict(
-    h="Che cosa si sa prima di costruire",
+    h="Che cosa si sa, e quando",
     p="Nel metodo il ruolo del Manager umano si estende alla sicurezza: chi delega un compito ne conosce le implicazioni per sicurezza, privacy e conformità normativa. "
-      "Prima di costruire lo rendono noto la classificazione del progetto e il Security Officer, un agente AI con un proprio Role Profile di conformità: "
-      "con una lista di controllo assegna al progetto una classe all'apertura, a ogni Wave e a ogni cambio di mandato.",
+      "Lo rendono noto la classificazione del progetto e il Security Officer, un ruolo AI di compliance con un proprio Role Profile: "
+      "con una checklist assegna al progetto una classe all'apertura, a ogni Wave e a ogni cambio di mandato. "
+      "In modalità bloccante la conoscenza arriva prima di costruire, perché il progetto che non rientra si ferma; "
+      "in modalità informativa il Security Officer è silenzioso e la conoscenza arriva con il Security Report.",
     tiles=[("doc", "fw", "Quali dati", "Solo i propri, oppure anche nomi e informazioni di colleghi o clienti."),
            ("globe", "fw", "Dove saranno esposti", "Sul proprio computer, nella rete aziendale o su Internet. Un portatile rubato o un file inoltrato espongono i dati che contengono.")],
-    ex="Per esempio, un foglio turni del reparto che registra il motivo delle assenze tratta dati dei colleghi; se il motivo è una malattia, è un dato particolare: in modalità bloccante il progetto è escluso dal metodo a qualunque livello, in modalità informativa il caso è registrato nel Security Report.",
-    modes_p="Che cosa succede quando il controllo trova un rischio dipende dalla modalità. La sceglie il Manager umano all'apertura del progetto e vale per tutto il progetto.",
+    ex="Per esempio, un foglio turni del reparto che registra il motivo delle assenze tratta dati dei colleghi; se il motivo è una malattia, sono dati delle categorie particolari di dati personali: in modalità bloccante il progetto è escluso dal metodo a qualunque livello, in modalità informativa il caso è registrato nel Security Report.",
+    modes_p="Che cosa succede quando il controllo trova un rischio dipende dalla modalità. Il Manager umano può sceglierla all'apertura del progetto; se non sceglie valgono i predefiniti. Vale per tutto il progetto.",
     modes=[("doc", "fw", "Modalità informativa", "Il controllo non ferma il lavoro: registra la classe e ogni rilievo nel Security Report, che arriva con ogni rilascio. La scelta di procedere resta al Manager umano, che ne risponde. È la modalità predefinita quando si usa il metodo per conto proprio."),
-           ("lock", "fw", "Modalità bloccante", "Il progetto che supera il livello qualificato o rientra tra i casi esclusi si ferma; nel dubbio è trattato come escluso (vedi «" + LEVELS["it"]["out"]["h"] + "»). È la modalità predefinita in ogni altro caso: contesti di lavoro e di organizzazione, o dubbio sul contesto. Le regole dell'organizzazione possono imporla.")],
+           ("lock", "fw", "Modalità bloccante", "Il progetto che supera il livello qualificato si ferma, salvo la decisione del Manager umano (§14.2); si ferma anche il progetto fuori perimetro e, nel dubbio, è trattato come fuori perimetro (vedi «" + LEVELS["it"]["out"]["h"] + "»). È la modalità predefinita in ogni altro caso: contesti di lavoro e di organizzazione, o dubbio sul contesto. Le regole dell'organizzazione possono imporla.")],
     note="Il controllo classifica il progetto: non protegge i dati nell'uso quotidiano e non sostituisce un parere legale.")
 LEVELS["en"]["aware"] = dict(
-    h="What is known before building",
+    h="What is known, and when",
     p="In the method the Human Manager's role extends to security: whoever delegates a task knows its implications for security, privacy and regulatory compliance. "
-      "Before building, the classification of the project and the Security Officer make them known. The Security Officer is an AI agent with its own compliance Role Profile: "
-      "using a checklist, it assigns the project a class when the project opens, at every Wave and at every change of mandate.",
+      "The classification of the project and the Security Officer make them known. The Security Officer is an AI compliance role with its own Role Profile: "
+      "using a checklist, it assigns the project a class when the project opens, at every Wave and at every change of mandate. "
+      "In the blocking mode this knowledge comes before building, because a project that does not fit is stopped; "
+      "in the informative mode the Security Officer is silent and the knowledge comes with the Security Report.",
     tiles=[("doc", "fw", "What data", "Only one's own, or also names and information about colleagues or customers."),
            ("globe", "fw", "Where it will be exposed", "On one's own computer, on the company network or on the Internet. A stolen laptop or a forwarded file exposes the data it contains.")],
     ex="For example, a department shift sheet that records the reason for absences handles colleagues' data; if the reason is an illness, it is special-category data: in the blocking mode the project is excluded from the method at any level, in the informative mode the case is recorded in the Security Report.",
-    modes_p="What happens when the check finds a risk depends on the mode. The Human Manager chooses it when the project opens, and it holds for the whole project.",
+    modes_p="What happens when the check finds a risk depends on the mode. The Human Manager may choose it when the project opens; if none is chosen, the defaults apply. It holds for the whole project.",
     modes=[("doc", "fw", "Informative mode", "The check does not stop the work: it records the class and every finding in the Security Report, which comes with every release. Proceeding remains the Human Manager's choice, and the Human Manager answers for it. It is the default when the method is used for oneself."),
-           ("lock", "fw", "Blocking mode", "A project that exceeds the qualified level or falls among the excluded cases is stopped; when in doubt it is treated as excluded (see \u201c" + LEVELS["en"]["out"]["h"] + "\u201d). It is the default in every other case: work and organisational contexts, or doubt about the context. The organisation's rules may impose it.")],
+           ("lock", "fw", "Blocking mode", "A project that exceeds the qualified level is stopped, except by the Human Manager's decision (§14.2); a project that is out of scope is also stopped and, when in doubt, is treated as out of scope (see \u201c" + LEVELS["en"]["out"]["h"] + "\u201d). It is the default in every other case: work and organisational contexts, or doubt about the context. The organisation's rules may impose it.")],
     note="The check classifies the project: it does not protect data in daily use and is not a substitute for legal advice.")
 # La classificazione ferma il progetto solo in modalità bloccante (Guida §14, Classification mode)
 LEVELS["it"]["out"]["p"] = "Ci sono casi in cui il rischio è troppo alto per costruire senza specialisti dedicati. In modalità bloccante il metodo si ferma qui, a qualunque livello; in modalità informativa il caso è registrato nel Security Report."

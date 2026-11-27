@@ -76,8 +76,8 @@ this one is released.
   (the version of the translation, no longer a flag), `registry` 0.11.0, `ai_coordinator_profile` 0.13.0;
   `registry_commit` `717ab65…`, `guide_commit` `4184518…`.
 - Kit 0.10.0 (see [kit/CHANGELOG.md](kit/CHANGELOG.md)): rebuilt from registry 0.11.0 and Guide rc.6 (English and
-  Italian); it now contains the `CHANGELOG.md` of each profile, of the registry and of the AI Coordinator
-  (`controllore/CHANGELOG.md`), decision D-VER-2; the `LEGGIMI.md` sentence that told the Coordinator to follow the
+  Italian); it now contains 62 `CHANGELOG.md` files (60 in the folders of the profiles and of the families, the one of
+  the registry and the one of the AI Coordinator, `controllore/CHANGELOG.md`), decision D-VER-2; the `LEGGIMI.md` sentence that told the Coordinator to follow the
   Guide if the profile cited the specification 0.3 is replaced by one neutral line.
 - Levels page (`livelli.html`, `en/levels.html`): the texts that said that the method stops at any level now say that it
   does so in the blocking mode and that in the informative mode the case is recorded in the Security Report (Guide §14,
@@ -96,7 +96,7 @@ this one is released.
   is used for oneself, blocking in every other case). The old wording "checklist run by an AI agent with compliance
   skills" is replaced by the Security Officer, the classification and the two modes. The old version numbers and
   changelog of CR-015 are not carried.
-- Method page: a short block "Il metodo si applica a se stesso" / "The method applies to itself" (Guide §2 and §15):
+- Method page: a short block "Il metodo si applica a sé stesso" / "The method applies to itself" (Guide §2 and §15):
   every rule is a hypothesis measured against a baseline, and, because the Guide says so in its Status, that the
   version is a release candidate not measured; links to Guide §15 and to the guidance for the test bench
   (`eiraman/framework`, `guidance/BENCH.md`). The sentence on "not measured" appears only while the Guide's Status
@@ -119,9 +119,33 @@ this one is released.
 - Framework page, "scrum", second rule (SWOT on a change of Decision): it links Guide §5 ("Changing a Decision"), no
   longer §7.
 - "Come si usa": the kit tree shows `tools/vista_manager.py`, and the zip contains it (`controllore/tools/` of registry
-  0.11.0). Checked for this release by comparing every file of the tree with the zip.
+  0.11.0). The tree of the project folder now lists `AVVIO.md`, `controllore/` and
+  `guide/EIRAMAN-GUIDE.it.md` too; it is a list of the main entries (`LEGGIMI.md` and `LICENSE.md` are not shown) and
+  every entry it shows was compared with the zip for this release.
 - The note "i valori indicativi sono nel Framework esteso": see above, it links `guidance/VALUES.md`; the bench
   guidance is linked where the site speaks of the measure of the method.
+
+### Corrections of the independent review of the second candidate
+
+- The links of the note of the Italian translation to files of the guide repository are rewritten when the Guide
+  is rendered (`lm()` in `generator/build.py`): the canonical text goes to the site page of the English Guide,
+  glossary, source notes and changelog of the translation to the repository (they were four broken links).
+- Principles, rule 3: "Esclusioni (modalità bloccante)" / "Exclusions (blocking mode)", with the case recorded in
+  the Security Report in the informative mode.
+- Levels page and home: the block is titled "Che cosa si sa, e quando" / "What is known, and when", because in the
+  informative mode the Security Officer is silent and the knowledge comes with the Security Report; the sentences of
+  the home and of the method say so. The class cannot exceed the level of the adopter in the blocking mode only, except
+  by the decision of the Human Manager to run a class 1 project at level 0 (Guide §14.2); the automatic descent of level
+  is stated for the blocking mode; the mode is one the Human Manager may choose, with the defaults otherwise.
+- Italian terms as in the glossary of the translation: baseline, "sé stesso", Change Request (and suggestions),
+  checklist, "ruolo AI di compliance con un proprio Role Profile", Indicazioni (Guidance), "fuori perimetro",
+  "categorie particolari di dati personali". English: "Normative details" becomes "Requirements in detail".
+- Architecture page: rule 5 is now the "Component contract" of Guide §10 (the claim on the TOGAF views and on the
+  measure of local and external engines is dropped: the Guide does not state it); the tile "Motore locale o esterno"
+  becomes "Confine locale ed esterno" / "Local and external boundary" (Guide §1), and the page links §1 as well as §10.
+  TOGAF stays only in the origin of the practice, as the source it comes from.
+- Functional map (`mappa.html`, `en/map.html`): a notice that the diagrams are historical (0.2) and that the
+  reference is the Guide.
 
 ### Removed
 
