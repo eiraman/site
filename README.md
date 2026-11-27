@@ -30,7 +30,8 @@ must produce the same manifest; CI checks this (`.github/workflows/site-build.ym
 `manifest.json` also records the site version (`version`) and, under `kit`, the kit version and the
 versions of what the kit bundles. The rules are in
 [community/VERSIONING.md](https://github.com/eiraman/community/blob/main/VERSIONING.md), the history in
-[CHANGELOG.md](CHANGELOG.md).
+[CHANGELOG.md](CHANGELOG.md). The changelog of the kit alone is [kit/CHANGELOG.md](kit/CHANGELOG.md)
+(decision D-VER-2); it is a source of the repository and is not put in `kit/eiraman-kit.zip`.
 
 ## Brand files
 

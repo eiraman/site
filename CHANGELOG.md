@@ -18,6 +18,23 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-11-27
+
+Scope: Change Request CR-025 of the method project, decision D-VER-2: every versioned artifact inside a
+repository has its own changelog, whose first entry points to the repository changelog for the earlier
+history. Site bump: PATCH: no served file changes; manifest metadata only (VERSIONING §2.4). The kit does not change and stays 0.9.0.
+
+### Added
+
+- `kit/CHANGELOG.md`: the changelog of the kit, with one entry for each kit version from 0.4.0 to 0.9.0,
+  reconstructed from this file, and a first note that the earlier and joint history is in this file. The file
+  is a source of the repository: the generator does not put it in `kit/eiraman-kit.zip` and does not serve it.
+- `README.md`: a line that names `kit/CHANGELOG.md` as the changelog of the kit and says it is not in the zip.
+
+### Changed
+
+- `manifest.json`: `version` 0.10.1, fingerprints. `kit.version` stays 0.9.0.
+
 ## [0.10.0] - 2026-11-27
 
 Scope: Change Request CR-024 of the method project. Site bump: MINOR, a new page (VERSIONING §2.4). The kit
