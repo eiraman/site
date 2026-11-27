@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Genera la release statica Eiraman 0.3 (IT alla radice, EN in /en/).
+"""Genera il sito statico Eiraman (IT alla radice, EN in /en/).
 
 Public repository layout (see README.md, "Withheld inputs"): the author photo, the historical specification 0.3
 and the 0.2 release pages are not in this repository. The brand files in brand/ are trademarks (brand/PROVENANCE.md). When an input is missing the build
@@ -8,24 +8,29 @@ renders a visible placeholder instead and records it in manifest.json under "pla
 Environment: EIRAMAN_OUT (output folder, required), EIRAMAN_PROFILES (role-profiles checkout, default ../role-profiles),
 EIRAMAN_BRAND (folder with the logo PNGs), EIRAMAN_PHOTO (author photo), EIRAMAN_SPEC03 (folder with Eiraman.md and
 Eiraman.en.md), EIRAMAN_OLD (0.2 release folder), EIRAMAN_PROFILES_UNPINNED (1: build from a role-profiles checkout that is not
-the pinned commit; development only, the manifest then says publishable: false)."""
+the pinned commit; development only, the manifest then says publishable: false), EIRAMAN_GUIDE (guide checkout, default ../guide, at
+the commit in guide.ref, clean), EIRAMAN_GUIDE_IT (Italian translation of the Guide, default <guide>/translations/it/EIRAMAN-GUIDE.it.md;
+when the file is absent the build renders a placeholder), EIRAMAN_GUIDE_UNPINNED (1: as EIRAMAN_PROFILES_UNPINNED, for the guide)."""
 import os, re, json, hashlib, shutil, math, html, sys, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from icons import sprite, icon
-from content import SLUG, ORDER, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO, EVIDENZE
+from content import SLUG, ORDER, GUIDE_REF, GUIDE_VALUES, FW_GUIDE, UI, EMBLEM, HOME, METHOD, COMP, ORIG, SRC, ORIGINS, ABOUT, HOME4, PRACT, FWPAGE, FW_SEE, BEZOS_LINE, HOME6, LEVELS, COSTDASH, HOME7, USO, GUIDE, KIT_URL, kit_zip, KIT_ZIP, CC_URL, CODEX_URL, PY_URL, AVVIO_IT, AVVIO_EN, RP_FAM, RPAGE, REQ_TEMPLATE, PROGETTI, COMMUNITY_LINKS, COMMUNITY_REPOS, COMMUNITY_REPO, EVIDENZE
 import mdlite
 import favicon  # brand mark drawn in code; the mark is a trademark (brand/PROVENANCE.md, TRADEMARK.md)
 import illus6
 SPEC03 = os.environ.get("EIRAMAN_SPEC03") or os.path.join(HERE, "spec03")  # optional; the historical specification lives in the guide repository (history/)
+GUIDE_DIR = os.path.abspath(os.environ.get("EIRAMAN_GUIDE") or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", "guide"))
+GUIDE_EN_FILE = os.path.join(GUIDE_DIR, "EIRAMAN-GUIDE.md")  # English, canonical (D-IT-1)
+GUIDE_IT = os.environ.get("EIRAMAN_GUIDE_IT") or os.path.join(GUIDE_DIR, "translations", "it", "EIRAMAN-GUIDE.it.md")  # curated Italian translation; optional
 PLACEHOLDERS = []  # withheld inputs replaced by a placeholder in this build
 def _missing(what):
     if what not in PLACEHOLDERS: PLACEHOLDERS.append(what)
 
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 # Versions (community/VERSIONING.md). Bump them together with the CHANGELOG.md entry of the release.
-SITE_VERSION = "0.10.2"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
-KIT_VERSION = "0.9.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
+SITE_VERSION = "0.11.0"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
+KIT_VERSION = "0.10.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
 OLD = os.environ.get("EIRAMAN_OLD") or os.path.join(ROOT, "releases", "0.2.0-candidata")
 OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else SITE_VERSION)
 LOGO = os.environ.get("EIRAMAN_BRAND") or os.path.join(ROOT, "brand")
@@ -124,8 +129,8 @@ def gloss(lang, body):
         parts[i] = p
     return "".join(parts)
 
-def page(lang, key, title, desc, body, extra_head=""):
-    body = gloss(lang, body)
+def page(lang, key, title, desc, body, extra_head="", plain=False):
+    if not plain: body = gloss(lang, body)  # the Guide text is rendered as it is, without the site glosses
     u = UI[lang]; pre = up(lang)
     other = "en" if lang == "it" else "it"
     other_href = (f"en/{SLUG[key][1]}.html" if lang == "it" else f"../{SLUG[key][0]}.html")
@@ -442,12 +447,12 @@ def build_method(lang):
 """
     return page(lang, "metodo", m["title"], m["desc"], body)
 
-# ---------- estrazione dalla specifica 0.2 ----------
+# ---------- la specifica 0.3 storica (non normativa, superata dalla Guida) ----------
 SPEC = {}
 def spec_html(lang):
     if lang not in SPEC and not os.path.isfile(os.path.join(SPEC03, "Eiraman.md" if lang == "it" else "Eiraman.en.md")):
         _missing("spec03")
-        SPEC[lang] = ('<article class="prose" data-placeholder="spec03"><h1>' + ("Specifica 0.3" if lang == "it" else "Specification 0.3") + '</h1><p>'
+        SPEC[lang] = ('<article class="prose" data-placeholder="spec03"><h1>' + ("Specifica 0.3 (storica)" if lang == "it" else "Specification 0.3 (historical)") + '</h1><p>'
                       + ("La specifica storica 0.3 non fa parte di questo repository." if lang == "it" else "The historical specification 0.3 is not part of this repository.")
                       + '</p></article>')
     if lang not in SPEC:
@@ -455,10 +460,10 @@ def spec_html(lang):
         body = src.split("\n", 1)[1]
         if lang == "it":
             lm = lambda u: u if u.startswith("http") else {"../en/framework/Eiraman.en.md": "en/framework/Eiraman.en.md", "Fonti.md": "framework/Fonti.md"}.get(u, u)
-            T = dict(toc="Indice", h1="Metodo Eiraman · specifica 0.3", dl_spec="framework/Eiraman.md", dl_src="framework/Fonti.md", l1="Specifica in Markdown", l2="Fonti e bibliografia")
+            T = dict(toc="Indice", h1="Metodo Eiraman · specifica 0.3 (storica, non normativa)", dl_spec="framework/Eiraman.md", dl_src="framework/Fonti.md", l1="Specifica 0.3 in Markdown (storica)", l2="Fonti e bibliografia")
         else:
             lm = lambda u: u if u.startswith("http") else {"../../framework/Eiraman.md": "../framework/Eiraman.md", "../../framework/Fonti.md": "../framework/Fonti.md"}.get(u, u)
-            T = dict(toc="Contents", h1="The Eiraman Method · specification 0.3", dl_spec="framework/Eiraman.en.md", dl_src="../framework/Fonti.md", l1="Specification in Markdown", l2="Sources and bibliography")
+            T = dict(toc="Contents", h1="The Eiraman Method · specification 0.3 (historical, non-normative)", dl_spec="framework/Eiraman.en.md", dl_src="../framework/Fonti.md", l1="Specification 0.3 in Markdown (historical)", l2="Sources and bibliography")
         toc = []
         content = mdlite.md(body, lm, toc)
         side = "".join(f'<li><a href="#{h}">{mdlite.inline(x)}</a></li>' for h, x in toc)
@@ -467,20 +472,102 @@ def spec_html(lang):
                       f'<article class="prose"><h1>{T["h1"]}</h1>{content}</article>')
     return SPEC[lang]
 
-def spec_part(lang, anchor):
-    if 'data-placeholder="spec03"' in spec_html(lang):
-        return ('<p class="muted" data-placeholder="spec03">' + ("Testo normativo non incluso in questo repository." if lang == "it"
-                else "Normative text not included in this repository.") + '</p>')
-    a = re.search(r'<article class="prose">(.*)</article>', spec_html(lang), re.S).group(1)
-    m = re.search(rf'<(h[23]) id="{re.escape(anchor)}">', a)
-    if not m: raise SystemExit(f"ancora mancante {lang} {anchor}")
-    lvl = m.group(1); start = m.start()
-    stop_pat = r'<h2 ' if lvl == "h2" else r'<h[23] '
-    n = re.compile(stop_pat).search(a, m.end())
-    chunk = a[start: n.start() if n else len(a)]
-    chunk = re.sub(r' id="[^"]*"', '', chunk)
-    chunk = chunk.replace("<h3", "<h4").replace("</h3>", "</h4>").replace("<h2", "<h3").replace("</h2>", "</h3>")
-    return chunk
+# ---------- la Guida (riferimento del metodo, D-IT-1) ----------
+GUIDE_DOCS = {}
+GUIDE_VERSION = None  # from the title block of the English Guide, set by guide_doc("en")
+
+def _guide_label():
+    return GUIDE_VERSION + (" · release candidate" if "-rc" in GUIDE_VERSION else "")
+
+def _anchors_of(content):
+    return set(re.findall(r' id="([^"]+)"', content))
+
+def guide_doc(lang):
+    """The Guide rendered from the guide repository: dict(content, side, heads, ids, placeholder). The English text is canonical;
+    when the Italian translation is absent, a placeholder is rendered and reported, like the specification (CR-029)."""
+    global GUIDE_VERSION
+    if lang in GUIDE_DOCS: return GUIDE_DOCS[lang]
+    if GUIDE_VERSION is None and lang != "en": guide_doc("en")
+    path = GUIDE_EN_FILE if lang == "en" else GUIDE_IT
+    if not os.path.isfile(path):
+        if lang == "en": sys.exit("ERRORE: la Guida inglese non c'e': %s" % path)
+        _missing("guide-it")
+        print("ATTENZIONE: traduzione italiana della Guida assente (%s): pagina segnaposto, i rimandi puntano al testo inglese." % path, file=sys.stderr)
+        GUIDE_DOCS[lang] = dict(placeholder=True, ids=set(), heads={}, content="", side="")
+        return GUIDE_DOCS[lang]
+    src = open(path, encoding="utf-8").read()
+    src = re.sub(r"\A\s*<!--.*?-->\s*", "", src, flags=re.S)
+    m = re.match(r"# .*\n", src)
+    if not m: sys.exit("ERRORE: %s: manca il titolo di primo livello." % path)
+    body = src[m.end():]
+    if lang == "en":
+        v = re.search(r"^\*\*Version (\d+\.\d+\.\d+[-0-9A-Za-z.]*)", body, re.M)
+        if not v: sys.exit("ERRORE: %s: versione non trovata nel blocco del titolo (\"**Version x.y.z\")." % path)
+        GUIDE_VERSION = v.group(1)
+    elif GUIDE_VERSION not in body[:1500]:
+        sys.exit("ERRORE: la traduzione italiana (%s) non dichiara la versione %s della Guida inglese." % (path, GUIDE_VERSION))
+    toc = []
+    content = mdlite.md(body, lambda u: u, toc)
+    heads = {h: re.sub(r"<[^>]+>", "", t) for h, t in re.findall(r'<h[23] id="([^"]+)">(.*?)</h[23]>', content)}
+    T = (dict(toc="Contents", md="Guide in Markdown (English, canonical)", src="Source repository", md_path="../guide/EIRAMAN-GUIDE.md") if lang == "en"
+         else dict(toc="Indice", md="Guida in Markdown (italiano)", src="Repository sorgente", md_path="guide/EIRAMAN-GUIDE.it.md"))
+    side = "".join(f'<li><a href="#{h}">{mdlite.inline(x)}</a></li>' for h, x in toc)
+    side = (f'<aside class="toc"><details open><summary>{T["toc"]}</summary><ol class="plain">{side}</ol></details>'
+            f'<p class="dl"><a href="{T["md_path"]}">{T["md"]}</a><a href="https://github.com/eiraman/guide">{T["src"]}</a></p></aside>')
+    GUIDE_DOCS[lang] = dict(placeholder=False, ids=_anchors_of(content), heads=heads, content=content, side=side)
+    return GUIDE_DOCS[lang]
+
+def guide_has_it():
+    return not guide_doc("it")["placeholder"]
+
+def check_guide_anchors():
+    """Every Guide section that the site links to must exist in the English text and, when present, in the translation."""
+    want = {a for refs in GUIDE_REF.values() for a in refs} | {a for refs in FW_GUIDE.values() for a in refs}
+    for lang in ("en", "it"):
+        d = guide_doc(lang)
+        if d["placeholder"]: continue
+        miss = sorted(want - d["ids"])
+        if miss: sys.exit("ERRORE: nella Guida (%s) mancano le sezioni a cui il sito rimanda: %s" % (lang, ", ".join(miss)))
+
+def guide_link(lang, anchor):
+    """(href, label, in_english): a link to a Guide section from a page in `lang`. A page in Italian links the Italian
+    Guide when the translation exists, the English one otherwise."""
+    it = lang == "it" and guide_has_it()
+    d = guide_doc("it" if it else "en")
+    if lang == "en": href = f"{SLUG['guida'][1]}.html#{anchor}"
+    else: href = (f"{SLUG['guida'][0]}.html" if it else f"en/{SLUG['guida'][1]}.html") + f"#{anchor}"
+    label = re.sub(r"^(\d+(?:\.\d+)?)\.?\s+", r"§\1 · ", d["heads"][anchor])
+    return href, label, (lang == "it" and not it)
+
+def _glink(href, label, english):
+    return f'<a href="{href}"' + (' hreflang="en" lang="en"' if english else '') + f'>{label}</a>'
+
+def build_guide(lang):
+    d = guide_doc(lang); u = UI[lang]
+    it = lang == "it"
+    title = "La Guida Eiraman" if it else "The Eiraman Guide"
+    why = ("Il riferimento del metodo: che cosa è Eiraman e che cosa rende conforme un'applicazione." if it
+           else "The reference of the method: what Eiraman is and what makes an application conformant.")
+    crumbs = (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,"home")}">{u["home"]}</a><span>/</span><a href="{lnk(lang,"metodo")}">{u["method"]}</a><span>/</span><span>{"La Guida" if it else "The Guide"}</span></nav>')
+    head = (f'<section class="band"><div class="in">{crumbs}<span class="part">{esc(_guide_label())}</span>'
+            f'<h1>{title}</h1><p class="why">{why}</p></div></section>')
+    en_href = lnk(lang, "guida") if not it else f"en/{SLUG['guida'][1]}.html"
+    it_href = f"../{SLUG['guida'][0]}.html"
+    if it:
+        notice = ('<p class="notice">Il testo inglese è canonico: in caso di dubbio fa fede. Questa è la traduzione italiana curata. '
+                  f'<a href="{en_href}" hreflang="en" lang="en">Leggi la Guida in inglese</a>.</p>')
+    else:
+        notice = (f'<p class="notice">This is the canonical text. A curated Italian translation: <a href="{it_href}" hreflang="it" lang="it">La Guida in italiano</a>.</p>'
+                  if guide_has_it() else
+                  '<p class="notice">This is the canonical text. The curated Italian translation is not published yet.</p>')
+    if d["placeholder"]:
+        inner = ('<article class="prose" data-placeholder="guide-it"><p class="notice">La traduzione italiana della Guida non è ancora disponibile. '
+                 f'Il testo inglese è canonico: <a href="{en_href}" hreflang="en" lang="en">leggi la Guida in inglese</a>.</p></article>')
+    else:
+        inner = f'\n{d["side"]}\n<article class="prose">{notice}{d["content"]}</article>'
+    desc = ("La Guida di Eiraman, il riferimento del metodo, versione %s (traduzione italiana; il testo inglese è canonico)." if it
+            else "The Eiraman Guide, the reference of the method, version %s (English, canonical).") % _guide_label()
+    return page(lang, "guida", f"{title} · Eiraman", desc, head + f'<div class="doc in">{inner}</div>', plain=True)
 
 # ---------- grafiche delle pagine componente ----------
 def g_flow(items, tones=None):
@@ -581,14 +668,19 @@ def build_comp(lang, key):
                  f'<p>{esc(s["p"])}</p><p class="src"><a href="https://en.wikisource.org/wiki/The_Pearl_of_Love" rel="noopener" target="_blank">{esc(s["src"])}</a></p></div></figure>')
     orig = ORIGINS[key][0 if lang == "it" else 1]
     rules = '<ul class="rules">' + "".join(f'<li><span class="id">{esc(rid)}</span><span>{esc(txt)}</span></li>' for rid, txt in t["rules"]) + '</ul>'
-    anchors = c.get("norm_en", c["norm"]) if lang == "en" else c["norm"]
-    norm = "".join(spec_part(lang, a) for a in anchors)
+    grefs = [guide_link(lang, a) for a in GUIDE_REF[key]]
+    gitems = "".join(f'<li>{_glink(h, l, en)}</li>' for h, l, en in grefs)
+    gnote = f'<p class="muted"><small>{esc(u["gref_en"])}</small></p>' if any(en for _, _, en in grefs) else ""
+    gvals = f'<p class="muted"><small>{esc(u["gref_values"])}</small></p>' if key in GUIDE_VALUES else ""
     secs = ", ".join("§" + str(n).replace("bis", " bis") for n in c["spec"])
-    spec_link = lnk(lang, "specifica") + f"#s{c['spec'][0]}"
+    hist = ""  # secondary link to the historical specification, only when this build carries it (it is a withheld input)
+    if 'data-placeholder="spec03"' not in spec_html(lang):
+        hist = f'<p class="muted"><small><a href="{lnk(lang, "specifica")}#s{c["spec"][0]}">{u["gref_hist"]} {secs}</a></small></p>'
+    gref = f'<div class="gref"><h3>{icon("doc")}{u["gref"]}</h3><ul>{gitems}</ul>{gnote}{gvals}{hist}</div>'
     prev_k = ORDER[i-1] if i > 0 else None; next_k = ORDER[i+1] if i < len(ORDER)-1 else None
     pager = '<nav class="pager" aria-label="pager">'
     pager += (f'<a class="prev" href="{lnk(lang,prev_k)}"><span>← {u["prev"]}</span><b>{esc(COMP[prev_k][lang]["card"])}</b></a>' if prev_k else f'<a class="prev" href="{lnk(lang,"metodo")}"><span>← {u["method"]}</span><b>{u["method"]}</b></a>')
-    pager += (f'<a class="next" href="{lnk(lang,next_k)}"><span>{u["next"]} →</span><b>{esc(COMP[next_k][lang]["card"])}</b></a>' if next_k else f'<a class="next" href="{lnk(lang,"specifica")}"><span>{u["next"]} →</span><b>{"Specifica 0.3" if lang=="it" else "Specification 0.3"}</b></a>')
+    pager += (f'<a class="next" href="{lnk(lang,next_k)}"><span>{u["next"]} →</span><b>{esc(COMP[next_k][lang]["card"])}</b></a>' if next_k else f'<a class="next" href="{lnk(lang,"guida")}"><span>{u["next"]} →</span><b>{"La Guida" if lang=="it" else "The Guide"}</b></a>')
     pager += '</nav>'
     body = f"""
 <section class="band"><div class="in">
@@ -603,8 +695,7 @@ def build_comp(lang, key):
 <section class="sec alt"><div class="in block">
 <h2>{icon('doc','lg')}{(LEVELS[lang]['details_h'] if key == 'livelli' and 'LEVELS' in globals() else u['what'])}</h2>
 {rules}
-<details class="norm"><summary>{icon('lens')}{u['norm']} · {secs}</summary><div class="prose">{norm}</div></details>
-<p><a class="specref" href="{spec_link}">{icon('arrow')}{u['specref']} {secs}</a></p>
+{gref}
 {pager}
 </div></section>
 """
@@ -652,17 +743,18 @@ def cost_dash(lang):
 
 def build_framework(lang):
     f = FWPAGE[lang]; u = UI[lang]; L = f["lab"]
-    spec = lnk(lang, "specifica")
     idx = "".join(f'<a class="fx-idx" href="#{x["id"]}"><span class="ic">{icon(x["ic"],"lg")}</span><span><small>{esc(x["old"])}</small><b>{esc(x["new"])}</b></span></a>' for x in f["fws"])
     diff = "".join(f'<div class="tile ai"><div class="ic">{icon(ic,"lg")}</div><h3>{esc(h)}</h3><p>{esc(pp)}</p></div>' for ic, h, pp in f["diff"])
     secs = ""
     for n, x in enumerate(f["fws"]):
+        grefs = [guide_link(lang, a) for a in FW_GUIDE[x["id"]]]
+        assert len(grefs) == len(x["rules"]), x["id"]
         chips_b = "".join(f'<li>{esc(c)}</li>' for c in x["before"])
         chips_a = "".join(f'<li>{esc(c)}</li>' for c in x["after"])
         src = (f'<p class="fx-src">{esc(L["src"])}: ' + " · ".join(f'<a href="{esc(url)}" rel="noopener" target="_blank">{esc(lab)}</a>' for lab, url in x["src"]) + '</p>') if x["src"] else ""
         keep = "".join(f'<li>{esc(k)}</li>' for k in x["keep"])
         change = "".join(f'<li>{esc(k)}</li>' for k in x["change"])
-        rules = "".join(f'<li><span>{esc(r)}</span><span class="fx-links"><a href="{lnk(lang,k)}">{esc(f["more"])}</a> · <a href="{spec}#{s}">{esc(L["spec"])} §{s[1:].replace("bis"," bis")}</a></span></li>' for r, k, s in x["rules"])
+        rules = "".join(f'<li><span>{esc(r)}</span><span class="fx-links"><a href="{lnk(lang,k)}">{esc(f["more"])}</a> · {_glink(gh, L["spec"] + " §" + ga[1:].replace("-", "."), ge)}</span></li>' for (r, k, _s), ga, (gh, _gl, ge) in zip(x["rules"], FW_GUIDE[x["id"]], grefs))
         secs += f"""
 <section class="sec fx{' alt' if n % 2 else ''}" id="{x['id']}"><div class="in">
 <header class="fx-head"><span class="fx-n">{n+1:02d}</span><span class="ic">{icon(x['ic'],'xl')}</span><div><p class="fx-old">{esc(x['old'])}</p><h2>{esc(x['new'])}</h2>{f'<p class="fx-sub">{esc(x["sub"])}</p>' if x.get("sub") else ""}</div></header>
@@ -743,12 +835,23 @@ def build_about(lang):
 # ---------- riferimento tecnico ----------
 def build_spec(lang):
     inner = spec_html(lang)
-    inner = inner.replace('<summary>Indice</summary>', '<summary>Indice</summary>').replace("metodo.html", "specifica.html")
-    title = "Specifica 0.3 · Eiraman" if lang == "it" else "Specification 0.3 · Eiraman"
-    desc = "Testo normativo completo del metodo Eiraman 0.3." if lang == "it" else "Full normative text of the Eiraman method 0.3."
-    crumbs = (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,"home")}">{UI[lang]["home"]}</a><span>/</span><a href="{lnk(lang,"metodo")}">{UI[lang]["method"]}</a><span>/</span><span>{"Specifica" if lang=="it" else "Specification"}</span></nav>')
-    head = f'<section class="band"><div class="in">{crumbs}<h1>{"Specifica 0.3" if lang=="it" else "Specification 0.3"}</h1><p class="why">{"Il testo normativo completo, per chi vuole ogni dettaglio." if lang=="it" else "The full normative text, for those who want every detail."}</p></div></section>'
+    it = lang == "it"
+    inner = inner.replace("metodo.html", "specifica.html")
+    title = "Specifica 0.3 (storica) · Eiraman" if it else "Specification 0.3 (historical) · Eiraman"
+    desc = ("Il testo storico e non normativo della specifica Eiraman 0.3, superato dalla Guida." if it
+            else "The historical, non-normative text of the Eiraman specification 0.3, superseded by the Guide.")
+    crumbs = (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{lnk(lang,"home")}">{UI[lang]["home"]}</a><span>/</span><a href="{lnk(lang,"metodo")}">{UI[lang]["method"]}</a><span>/</span><span>{"Specifica (storica)" if it else "Specification (historical)"}</span></nav>')
+    g_href = lnk(lang, "guida"); g_en = f"en/{SLUG['guida'][1]}.html" if it else lnk(lang, "guida")
+    if it:
+        notice = (f'<p class="notice"><b>Testo storico, non normativo.</b> Questa specifica (versione 0.3, novembre 2026) è stata superata da <a href="{g_href}">La Guida Eiraman</a> {esc(_guide_label())}, '
+                  f'che è il riferimento del metodo (il testo inglese è canonico: <a href="{g_en}" hreflang="en" lang="en">The Eiraman Guide</a>). Resta pubblicata per memoria e per i rimandi storici.</p>')
+    else:
+        notice = (f'<p class="notice"><b>Historical text, non-normative.</b> This specification (version 0.3, November 2026) has been superseded by <a href="{g_href}">The Eiraman Guide</a> {esc(_guide_label())}, '
+                  'the reference of the method. It stays published for the record and for historical references.</p>')
+    head = (f'<section class="band"><div class="in">{crumbs}<h1>{"Specifica 0.3 (storica)" if it else "Specification 0.3 (historical)"}</h1>'
+            f'<p class="why">{"Il testo storico e non normativo, superato dalla Guida." if it else "The historical, non-normative text, superseded by the Guide."}</p></div></section>')
     body = head + f'<div class="doc in">{inner}</div>'
+    body = re.sub(r'(<article class="prose"[^>]*>)', lambda m: m.group(1) + notice, body, count=1)
     return page(lang, "specifica", title, desc, body)
 
 
@@ -771,6 +874,9 @@ def build_map(lang):
     style = style[style.index(".wrap{"):]  # rimuove i token della 0.2: valgono quelli del sito
     main = re.search(r'<main id="main">(.*)</main>', t, re.S).group(1)
     main = main.replace('href="metodo.html"', 'href="specifica.html"').replace('href="method.html"', 'href="specification.html"')
+    # the codes E1-E6 and K1-K9 are in the Guide; the numbers of the documentation rules are those of the historical specification (CR-029)
+    main = main.replace('rimandano alla <a href="specifica.html">specifica</a>.', 'rimandano alla <a href="guida.html">Guida</a> (le sigle) e alla <a href="specifica.html">specifica 0.3 (storica)</a> (i numeri delle regole).')
+    main = main.replace('refer to the <a href="specification.html">specification</a>.', 'refer to the <a href="guide.html">Guide</a> (the codes) and to the <a href="specification.html">historical specification 0.3</a> (the rule numbers).')
     main = main.replace('class="dg page-wide"', 'class="dg page-wide in" style="padding-block:36px"')
     for a, b in (("un utente senza specialisti può sostenere", "un utente di business può sostenere, quando la competenza sta nei profili e non in ogni progetto"),
                  ("Fin dove si può arrivare senza specialisti", "Che cosa puoi costruire, e per chi"),
@@ -913,60 +1019,77 @@ def build_uso(lang):
 # ---------- Role Profile ----------
 RP_DIR = os.path.abspath(os.environ.get("EIRAMAN_PROFILES") or os.path.join(ROOT, "..", "role-profiles"))
 
-def _pinned_registry():
-    """Full SHA in profiles.ref: the single source of truth for the registry, also read by the CI workflow (CR-026)."""
+def _pinned(ref_file):
+    """Full SHA in a *.ref file: the single source of truth for an input repository, also read by the CI workflow (CR-026, CR-029)."""
+    path = os.path.join(ROOT, ref_file)
     try:
-        lines = open(os.path.join(ROOT, "profiles.ref"), encoding="utf-8").read().splitlines()
+        lines = open(path, encoding="utf-8").read().splitlines()
     except OSError:
-        sys.exit("ERRORE: profiles.ref non trovato o non leggibile (%s): e' il file che dichiara il registro." % os.path.join(ROOT, "profiles.ref"))
+        sys.exit("ERRORE: %s non trovato o non leggibile (%s): e' il file che dichiara l'input." % (ref_file, path))
     for line in lines:
         line = line.strip()
         if line and not line.startswith("#"):
             if not re.fullmatch(r"[0-9a-f]{40}", line):
-                sys.exit("ERRORE: profiles.ref: SHA a 40 caratteri esadecimali minuscoli (trovato: %r)" % line)
+                sys.exit("ERRORE: %s: SHA a 40 caratteri esadecimali minuscoli (trovato: %r)" % (ref_file, line))
             return line
-    sys.exit("ERRORE: profiles.ref: SHA a 40 caratteri esadecimali minuscoli (nessuno trovato)")
+    sys.exit("ERRORE: %s: SHA a 40 caratteri esadecimali minuscoli (nessuno trovato)" % ref_file)
 
-def _git(*args):
+def _git(d, *args):
     try:
-        r = subprocess.run(["git", "-C", RP_DIR, *args], capture_output=True, text=True)
+        r = subprocess.run(["git", "-C", d, *args], capture_output=True, text=True)
     except OSError:  # git is not installed or not in PATH
         return None
     return r.stdout.strip() if r.returncode == 0 else None
 
-REGISTRY_PINNED = _pinned_registry()
+def check_pinned(d, pinned, ref_file, repo, env_dir, env_unpinned):
+    """An input repository is read only from the commit pinned in its *.ref file, with a clean tree, from the root of the
+    repository (CR-026 for the registry, CR-029 for the Guide). Returns (commit read, publishable)."""
+    head = _git(d, "rev-parse", "HEAD")
+    status = _git(d, "status", "--porcelain")
+    top = _git(d, "rev-parse", "--show-toplevel")
+    commit = head or "unknown"
+    # the folder must be the root of the repository, not a subfolder of it (git -C climbs to the enclosing repository)
+    is_root = top is not None and os.path.realpath(top) == os.path.realpath(d)
+    if head == pinned and status == "" and is_root:
+        return commit, True
+    if head is None or top is None: why = "non è un repository git (o git non è disponibile)"
+    elif not is_root: why = "la cartella è una sottocartella del repository %s, non la sua radice" % top
+    elif head != pinned: why = "HEAD è %s" % head
+    else: why = "ci sono modifiche non committate"
+    if os.environ.get(env_unpinned) == "1":
+        print("ATTENZIONE: %s non fissato (%s; atteso %s): build NON pubblicabile." % (repo, why, pinned), file=sys.stderr)
+        return commit, False
+    sys.exit("""ERRORE: il checkout di %(repo)s non e' quello fissato in %(ref)s.
+  cartella:  %(dir)s
+  motivo:    %(why)s
+  atteso:    %(pin)s, albero pulito
+Il sito si costruisce solo dall'input dichiarato, lo stesso della CI. Per ottenere un checkout corrispondente,
+senza toccare il lavoro in corso del repository:
+  git -C ../%(repo)s worktree add --detach <cartella> %(pin)s
+  %(env)s=<cartella> python3 -B generator/build.py
+Solo per lo sviluppo: %(unp)s=1 permette un altro checkout; il manifest riporta publishable: false.""" % dict(
+        repo=repo, ref=ref_file, dir=d, why=why, pin=pinned, env=env_dir, unp=env_unpinned))
+
+REGISTRY_PINNED = _pinned("profiles.ref")
 REGISTRY_COMMIT = None   # commit actually read by this build, set by check_registry()
-PUBLISHABLE = True       # False when the registry is not the pinned one (EIRAMAN_PROFILES_UNPINNED)
+GUIDE_PINNED = _pinned("guide.ref")
+GUIDE_COMMIT = None      # commit of the guide actually read by this build, set by check_guide()
+PUBLISHABLE = True       # False when an input is not the pinned one (EIRAMAN_PROFILES_UNPINNED, EIRAMAN_GUIDE_UNPINNED)
 
 def check_registry():
     """The build reads the registry only from the commit pinned in profiles.ref, with a clean tree (CR-026)."""
     global REGISTRY_COMMIT, PUBLISHABLE
-    head = _git("rev-parse", "HEAD")
-    status = _git("status", "--porcelain")
-    top = _git("rev-parse", "--show-toplevel")
-    REGISTRY_COMMIT = head or "unknown"
-    # the folder must be the root of the repository, not a subfolder of it (git -C climbs to the enclosing repository)
-    is_root = top is not None and os.path.realpath(top) == os.path.realpath(RP_DIR)
-    if head == REGISTRY_PINNED and status == "" and is_root:
-        return
-    if head is None or top is None: why = "non è un repository git (o git non è disponibile)"
-    elif not is_root: why = "la cartella è una sottocartella del repository %s, non la sua radice" % top
-    elif head != REGISTRY_PINNED: why = "HEAD è %s" % head
-    else: why = "ci sono modifiche non committate"
-    if os.environ.get("EIRAMAN_PROFILES_UNPINNED") == "1":
-        PUBLISHABLE = False
-        print("ATTENZIONE: registro non fissato (%s; atteso %s): build NON pubblicabile." % (why, REGISTRY_PINNED), file=sys.stderr)
-        return
-    sys.exit("""ERRORE: il checkout del registro non e' quello fissato in profiles.ref.
-  cartella:  %s
-  motivo:    %s
-  atteso:    %s, albero pulito
-Il sito si costruisce solo dal registro dichiarato, lo stesso della CI. Per ottenere un checkout corrispondente,
-senza toccare il lavoro in corso del registro:
-  git -C ../role-profiles worktree add --detach <cartella> %s
-  EIRAMAN_PROFILES=<cartella> python3 -B generator/build.py
-Solo per lo sviluppo: EIRAMAN_PROFILES_UNPINNED=1 permette un altro checkout; il manifest riporta publishable: false.""" % (
-        RP_DIR, why, REGISTRY_PINNED, REGISTRY_PINNED))
+    REGISTRY_COMMIT, ok = check_pinned(RP_DIR, REGISTRY_PINNED, "profiles.ref", "role-profiles", "EIRAMAN_PROFILES", "EIRAMAN_PROFILES_UNPINNED")
+    PUBLISHABLE = PUBLISHABLE and ok
+
+def check_guide():
+    """The build reads the Guide only from the commit pinned in guide.ref, with a clean tree (CR-029)."""
+    global GUIDE_COMMIT, PUBLISHABLE
+    GUIDE_COMMIT, ok = check_pinned(GUIDE_DIR, GUIDE_PINNED, "guide.ref", "guide", "EIRAMAN_GUIDE", "EIRAMAN_GUIDE_UNPINNED")
+    if os.environ.get("EIRAMAN_GUIDE_IT") and not os.path.realpath(GUIDE_IT).startswith(os.path.realpath(GUIDE_DIR) + os.sep):
+        print("ATTENZIONE: EIRAMAN_GUIDE_IT punta fuori dal checkout della Guida: build NON pubblicabile.", file=sys.stderr)
+        ok = False
+    PUBLISHABLE = PUBLISHABLE and ok
 
 def _rp_load():
     fams = {}
@@ -1040,7 +1163,7 @@ def build_rp(lang):
 KIT_LICENSE = ("# Licences · Licenze\n\n"
     "Copyright 2026 Paolo Ungari and contributors.\n\n"
     "| Material | Licence | SPDX |\n|---|---|---|\n"
-    "| The Eiraman Guide and its text (`framework/`) | Creative Commons Attribution-ShareAlike 4.0 International: https://creativecommons.org/licenses/by-sa/4.0/legalcode | `CC-BY-SA-4.0` |\n"
+    "| The Eiraman Guide and its text (`guide/`) | Creative Commons Attribution-ShareAlike 4.0 International: https://creativecommons.org/licenses/by-sa/4.0/legalcode | `CC-BY-SA-4.0` |\n"
     "| Role Profiles, AI Coordinator profile texts (`role-profiles/`, `CONTROLLORE.md`, `STATO.md`, `AVVIO.md`) | Creative Commons Attribution 4.0 International: https://creativecommons.org/licenses/by/4.0/legalcode | `CC-BY-4.0` |\n"
     "| Code (`.py` files) | Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0 | `Apache-2.0` |\n"
     "| Eiraman name and logo | Not licensed: trademark, see https://github.com/eiraman/community/blob/main/TRADEMARK.md | `LicenseRef-Eiraman-Trademark` |\n\n"
@@ -1065,8 +1188,9 @@ def kit_bundled(arcs, rp):
     """Versions of what the kit contains. None: not in the kit; "unknown": in the kit, version not recorded at the source."""
     ctrl = os.path.join(rp, "controllore", "CONTROLLORE.md")
     m = re.search(r"^Versione (\d+\.\d+\.\d+)", open(ctrl, encoding="utf-8").read(), re.M) if "CONTROLLORE.md" in arcs else None
-    return {"guide": None,  # the kit does not ship the Eiraman Guide
-            "specification": "0.3" if "framework/Eiraman.md" in arcs else None,  # historical Italian specification, withheld input
+    return {"guide": GUIDE_VERSION if "guide/EIRAMAN-GUIDE.md" in arcs else None,  # English, canonical (D-IT-1)
+            "guide_it": "guide/EIRAMAN-GUIDE.it.md" in arcs,  # curated Italian translation, when the pinned guide commit has it
+            "specification": None,  # the historical specification 0.3 is not in the kit since 0.10.0 (CR-029)
             "registry": (_released_version(os.path.join(rp, "CHANGELOG.md")) or "unknown") if any(a.startswith("role-profiles/") for a in arcs) else None,
             "ai_coordinator_profile": (m.group(1) if m else "unknown") if "CONTROLLORE.md" in arcs else None,
             "tools": None}  # the validator and the activation tool are not in the kit
@@ -1079,7 +1203,8 @@ def build_kit():
     for n in ("CONTROLLORE.md", "STATO.md", "AVVIO.md"):
         files.append((os.path.join(ctrl, n), n))
     files.append((os.path.join(ctrl, "tools", "vista_manager.py"), "tools/vista_manager.py"))
-    files.append((os.path.join(SPEC03, "Eiraman.md"), "framework/Eiraman.md"))
+    files.append((GUIDE_EN_FILE, "guide/EIRAMAN-GUIDE.md"))  # the reference of the method (CR-029, D-IT-1)
+    if guide_has_it(): files.append((GUIDE_IT, "guide/EIRAMAN-GUIDE.it.md"))
     files.append((os.path.join(rp, "README.md"), "role-profiles/README.md"))
     withheld = [f for f in files if not os.path.isfile(f[0])]
     if withheld:
@@ -1103,11 +1228,13 @@ def build_kit():
               "Codice (file .py): Apache 2.0. Nome e logo Eiraman: marchio, regolato da TRADEMARK.md ed escluso dalle licenze CC e Apache. "
               "Dettagli e collegamenti ai testi legali in LICENSE.md. Le copie distribuite fino alla versione 0.3.x restano disponibili "
               "ai loro titolari con le licenze originali (CC BY-NC-ND 4.0 e MIT).\n\n"
-              "I Role Profile e il profilo del Coordinatore AI sono **bozze non qualificate**: non vanno usati in produzione prima della qualificazione (specifica §9).\n\n"
+              "I Role Profile e il profilo del Coordinatore AI sono **bozze non qualificate**: non vanno usati in produzione prima della qualificazione (Guida §13).\n\n"
+              "**La Guida.** Il riferimento del metodo è The Eiraman Guide, in `guide/EIRAMAN-GUIDE.md` (inglese, canonico)" + (" e nella traduzione italiana `guide/EIRAMAN-GUIDE.it.md`" if guide_has_it() else "") + ". "
+              "La specifica Eiraman 0.3 è superata dalla Guida e non è nel kit; se il profilo o un altro file rimanda alla specifica 0.3 o a `framework/Eiraman.md`, vale la Guida.\n\n"
               "**Verifica dello zip.** Se hai scaricato il kit come zip, prima di usarlo confronta l'impronta SHA-256 del file con quella pubblicata "
               "nel prompt di avvio su https://eiraman.tech/come-usarlo.html (in inglese: https://eiraman.tech/en/how-to-use.html). Per calcolarla: `shasum -a 256 eiraman-kit.zip` su macOS e Linux, `Get-FileHash eiraman-kit.zip -Algorithm SHA256` in PowerShell su Windows. Se non coincide, non usarlo.\n\n"
               "**Stato.** Nel kit attuale i divieti del mandato sono istruzioni seguite dal Coordinatore AI, non ancora un blocco tecnico dell'ambiente.\n\n"
-              "Avvio: apri Claude Code o Codex in questa cartella e scrivi: «Leggi CONTROLLORE.md e framework/Eiraman.md. Da ora sei il Coordinatore AI "
+              "Avvio: apri Claude Code o Codex in questa cartella e scrivi: «Leggi CONTROLLORE.md e guide/EIRAMAN-GUIDE.md. Da ora sei il Coordinatore AI "
               "Eiraman di questo progetto e io sono il Manager umano. Segui la procedura di avvio del profilo e apri la Vista del Manager.»\n")
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for src, arc in sorted(files, key=lambda x: x[1]):
@@ -1242,6 +1369,8 @@ def build_host():
 
 def main():
     check_registry()
+    check_guide()
+    guide_doc("en"); guide_doc("it"); check_guide_anchors()  # the Guide is read before the kit and the pages that cite it
     # Svuota il contenuto senza cancellare la cartella: evita i conflitti con le cartelle sincronizzate
     if os.path.exists(OUT):
         for root, dirs, files in os.walk(OUT, topdown=False):
@@ -1265,9 +1394,11 @@ def main():
     else:
         _missing("photo")
     for rel, src in (("framework/Eiraman.md", os.path.join(SPEC03, "Eiraman.md")), ("framework/Fonti.md", os.path.join(OLD, "framework/Fonti.md")),
-                     ("en/framework/Eiraman.en.md", os.path.join(SPEC03, "Eiraman.en.md"))):
+                     ("en/framework/Eiraman.en.md", os.path.join(SPEC03, "Eiraman.en.md")),  # historical specification 0.3: same paths as before
+                     ("guide/EIRAMAN-GUIDE.md", GUIDE_EN_FILE), ("guide/EIRAMAN-GUIDE.it.md", GUIDE_IT)):
         if not os.path.isfile(src):
-            _missing("download:" + rel); continue
+            if not rel.startswith("guide/"): _missing("download:" + rel)  # the Italian translation is reported as "guide-it"
+            continue
         os.makedirs(os.path.dirname(os.path.join(OUT, rel)), exist_ok=True)
         shutil.copy(src, os.path.join(OUT, rel))
     # Il kit si costruisce prima delle pagine: il prompt di avvio ne cita l'impronta (lo zip non contiene pagine HTML)
@@ -1278,6 +1409,7 @@ def main():
         write(path_of(lang, "home"), build_home(lang))
         write(path_of(lang, "metodo"), build_method(lang))
         for k in ORDER: write(path_of(lang, k), build_comp(lang, k))
+        write(path_of(lang, "guida"), build_guide(lang))
         write(path_of(lang, "specifica"), build_spec(lang))
         write(path_of(lang, "mappa"), build_map(lang))
         write(path_of(lang, "progetti"), build_progetti(lang))
@@ -1297,7 +1429,7 @@ def main():
     files.sort()
     man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-27", "languages": ["it", "en"],
            "placeholders": sorted(PLACEHOLDERS),
-           "registry_commit": REGISTRY_COMMIT, "publishable": PUBLISHABLE,
+           "registry_commit": REGISTRY_COMMIT, "guide_commit": GUIDE_COMMIT, "guide_version": GUIDE_VERSION, "publishable": PUBLISHABLE,
            "kit": {"path": "kit/eiraman-kit.zip", "version": KIT_VERSION, "bundled": KIT_BUNDLED},
            "sha256": {f: hashlib.sha256(open(os.path.join(OUT, f), "rb").read()).hexdigest() for f in files}}
     json.dump(man, open(os.path.join(OUT, "manifest.json"), "w"), indent=2, ensure_ascii=False)

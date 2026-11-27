@@ -18,6 +18,60 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-11-27
+
+Scope: Change Request CR-029 of the method project, decision D-IT-1 of the Human Manager: the site and the kit
+present The Eiraman Guide 1.0.0-rc.5 as the reference of the method (English canonical, curated Italian
+translation valid), and the Italian specification 0.3 only as a historical, non-normative text superseded by the
+Guide. Site bump: MINOR: new pages and changed texts (VERSIONING §2.4). Kit: 0.10.0 (see
+[kit/CHANGELOG.md](kit/CHANGELOG.md)). The pinned registry does not change (`0bc7f86…`, role-profiles 0.8.0).
+The Italian translation of the Guide is not yet in the pinned commit: until it is, `guida.html` is a placeholder.
+
+### Added
+
+- `guide.ref`: the full commit SHA of the `guide` repository read by the build (`2635a69…`, Guide 1.0.0-rc.5),
+  same pattern as `profiles.ref`. `generator/build.py` refuses a guide checkout (`EIRAMAN_GUIDE`, default
+  `../guide`) that is not the root of a git repository at that commit with a clean tree, with the same message
+  and override as the registry (`EIRAMAN_GUIDE_UNPINNED=1`, the manifest says `publishable: false`); the check is
+  now one function for both inputs. `EIRAMAN_GUIDE_IT` points to another Italian translation (development only:
+  outside the checkout the build is not publishable).
+- `.github/workflows/site-build.yml`: reads `guide.ref` and checks out `eiraman/guide` at that commit.
+- Pages `en/guide.html` and `guida.html`: The Eiraman Guide rendered from the guide repository, with the version
+  label "1.0.0-rc.5 · release candidate", a table of contents and the Markdown download (`guide/EIRAMAN-GUIDE.md`,
+  `guide/EIRAMAN-GUIDE.it.md`). The Italian page says that the English text is canonical and links it. When the
+  translation is absent the build renders a placeholder, reports `guide-it` under `placeholders` and the Italian
+  pages link the English Guide.
+- Sub-sections of the Guide get stable anchors by number (`s8-1`, `s14-2`), the same in every language;
+  `<https://…>` links are rendered.
+- Component pages: a block "Nella Guida" / "In the Guide" with links to the sections of the Guide that carry the
+  rules of the page (`GUIDE_REF` in `generator/content.py`), a note that the Guide states no values, and, when the
+  build has the specification, a secondary link to the historical text. The build checks that every Guide section
+  the site links to exists in the English text and in the translation.
+- `manifest.json`: `guide_commit`, `guide_version`, `kit.bundled.guide_it`.
+
+### Changed
+
+- `specifica.html`, `en/specification.html`: titled "Specifica 0.3 (storica)" / "Specification 0.3
+  (historical)", with a notice that the text is historical, non-normative and superseded by the Guide, linking the
+  Guide pages; the claims of "normative text" are removed. The text and its Markdown downloads are unchanged and
+  keep their addresses.
+- Navigation: "La Guida" / "The Guide" replaces "Specifica" in the header; the footer lists the Guide and the
+  historical specification. The method page, the last component page (next page) and the page of the Framework
+  (rule links "Guida §N", `FW_GUIDE`) point to the Guide; the functional map points to the Guide for the codes
+  E1-E6 and K1-K9. The project description of Eiraman names the Guide, not the specification.
+- The start prompt on "Come si usa" / "How to use" and the steps of the guided path read `guide/EIRAMAN-GUIDE.md`,
+  and say that the specification 0.3 is superseded; the SHA-256 of the kit in the prompt follows the new kit.
+- Leftovers: "Eiraman 0.3" and "specifica 0.2" in the generator, its docstring and the cards of the method page.
+- `README.md`: inputs, `guide.ref`, `EIRAMAN_GUIDE`, the manifest fields; the wrong statement that the
+  specification is not imported is replaced by what the build does.
+- `manifest.json`: `version` 0.11.0, `kit.version` 0.10.0.
+
+### Removed
+
+- On the component pages, the excerpts of the normative text of the specification 0.3 ("Testo normativo completo")
+  and the links "Leggi nella specifica": the Guide is the reference and is linked section by section. The excerpts
+  were a copy of the historical text; the whole text stays on the historical specification page.
+
 ## [0.10.2] - 2026-11-27
 
 Scope: Change Request CR-026 of the method project: the registry read by the build is declared in one place
@@ -412,7 +466,8 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.10.2...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.11.0...main
+[0.11.0]: https://github.com/eiraman/site/compare/v0.10.2...v0.11.0
 [0.10.2]: https://github.com/eiraman/site/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/eiraman/site/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/eiraman/site/compare/v0.9.0...v0.10.0

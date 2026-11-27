@@ -22,6 +22,34 @@ says so.
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-27
+
+Change Request CR-029, decision D-IT-1: the kit carries The Eiraman Guide, the reference of the method, and no
+longer the specification 0.3. The registry is 0.8.0 and the AI Coordinator profile is 0.7.0, both unchanged.
+MINOR: kit content changes (VERSIONING §2.4). Released with the site 0.11.0 ([CHANGELOG.md](../CHANGELOG.md)).
+
+### Added
+
+- `guide/EIRAMAN-GUIDE.md`: The Eiraman Guide 1.0.0-rc.5, English, canonical, from the guide commit in
+  `guide.ref`. `guide/EIRAMAN-GUIDE.it.md`: the curated Italian translation, added when that commit contains it
+  (not in the first candidate of this version).
+- `LEGGIMI.md` and the start prompt say that the Guide is the reference of the method and that, if the profile
+  cites the specification 0.3 or `framework/Eiraman.md`, the Guide prevails.
+
+### Removed
+
+- `framework/Eiraman.md`, the Italian specification 0.3: it is historical, non-normative and superseded by the
+  Guide. The registry profiles bundled in this kit still cite it ("se presente", it prevails over the profile in
+  case of conflict): with the file absent they follow the Guide, and the registry will be aligned in its own
+  change. The historical text stays on the site (`specifica.html`) and in the `guide` repository (`history/`).
+
+### Changed
+
+- `LICENSE.md`: the Guide texts are in `guide/`, no longer in `framework/`; `LEGGIMI.md` cites Guide §13 for the
+  qualification of the profiles.
+- Start prompt (published on the site "Come si usa", with the SHA-256 of the zip): "Leggi CONTROLLORE.md e
+  guide/EIRAMAN-GUIDE.md".
+
 ## [0.9.0] - 2026-11-26
 
 The registry is 0.8.0 and the AI Coordinator profile is 0.7.0. A first candidate of this version followed

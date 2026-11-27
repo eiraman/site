@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
 # SPDX-License-Identifier: Apache-2.0
-"""Sottoinsieme Markdown usato per rendere la specifica in HTML."""
+"""Sottoinsieme Markdown usato per rendere la Guida e la specifica storica in HTML."""
 import re, html
 
 # ---------------- markdown (subset) ----------------
@@ -21,6 +21,7 @@ def inline(s, linkmap=None):
         if linkmap: url = linkmap(url)
         return f'<a href="{url}">{txt}</a>'
     s = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", link, s)
+    s = re.sub(r"&lt;(https?://[^\s&]+)&gt;", r'<a href="\1">\1</a>', s)  # autolink <https://...>
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", s)
     s = re.sub(r"\x00(\d+)\x00", lambda m: codes[int(m.group(1))], s)
@@ -42,6 +43,8 @@ def blocks(lines, linkmap, toc, hshift):
             lvl = len(m.group(1)) + hshift; txt = m.group(2).strip()
             mm = re.match(r"^(\d+)( bis)?\.\s", txt)
             hid = (f"s{mm.group(1)}" + ("bis" if mm.group(2) else "")) if (mm and len(m.group(1)) == 2) else slug(txt)
+            ms = re.match(r"^(\d+)\.(\d+)\s", txt)
+            if ms and len(m.group(1)) == 3: hid = f"s{ms.group(1)}-{ms.group(2)}"  # sub-section "8.1 ...": id by number, stable across translations
             if toc is not None and len(m.group(1)) == 2: toc.append((hid, txt))
             out.append(f'<h{lvl} id="{hid}">{inline(txt, linkmap)}</h{lvl}>'); i += 1; continue
         if ln.lstrip().startswith("|"):

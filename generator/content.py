@@ -1,27 +1,27 @@
-"""Contenuti bilingui del sito Eiraman 0.3. Struttura: Perché -> Come -> Cosa."""
+"""Contenuti bilingui del sito Eiraman. Struttura: Perché -> Come -> Cosa."""
 
 SLUG = {  # chiave: (it, en)
     "home": ("index", "index"), "metodo": ("metodo", "method"),
     "principi": ("principi", "principles"), "ruoli": ("ruoli", "roles"), "fasi": ("fasi", "phases"),
     "decisioni": ("decisioni", "decisions"), "qualita": ("qualita", "quality"), "ritmo": ("ritmo", "rhythm"),
     "livelli": ("livelli", "levels"), "documenti": ("documenti", "documents"), "profili": ("profili", "profiles"),
-    "sicurezza": ("sicurezza", "security"), "specifica": ("specifica", "specification"),
+    "sicurezza": ("sicurezza", "security"), "specifica": ("specifica", "specification"), "guida": ("guida", "guide"),
     "mappa": ("mappa", "map"), "pilota": ("pilota", "pilot"), "progetti": ("progetti", "projects"),
 }
 ORDER = ["principi", "ruoli", "fasi", "decisioni", "qualita", "ritmo", "livelli", "documenti", "profili", "sicurezza"]
 
 UI = {
-    "it": dict(skip="Vai al contenuto", nav=[("metodo", "Il metodo"), ("livelli", "Livelli"), ("progetti", "I progetti"), ("specifica", "Specifica")],
+    "it": dict(skip="Vai al contenuto", nav=[("metodo", "Il metodo"), ("livelli", "Livelli"), ("progetti", "I progetti"), ("guida", "La Guida")],
                menu="Menu", home="Home", method="Il metodo", part="Parte {n} di {t}", prev="Precedente", next="Successiva",
-               how="Come funziona", what="Che cosa prevede", norm="Testo normativo completo", specref="Leggi nella specifica",
+               how="Come funziona", what="Che cosa prevede", gref="Nella Guida", gref_hist="Testo storico: specifica 0.3", gref_en="Il testo inglese è canonico: la traduzione italiana non è ancora disponibile, i rimandi portano alla Guida in inglese.", gref_values="La Guida descrive i meccanismi senza valori: i valori indicativi (per esempio scadenze e soglie) sono nel Framework esteso.",
                foot="© 2026 Paolo Ungari e contributori · Testi della Guida e del sito CC BY-SA 4.0 · Role Profile CC BY 4.0 · Codice Apache 2.0 · Nome e logo Eiraman: marchio, vedi <a href=\"https://github.com/eiraman/community/blob/main/TRADEMARK.md\" rel=\"noopener\">TRADEMARK.md</a>", tog="TOGAF® è un marchio registrato di The Open Group.",
-               footnav=[("metodo", "Il metodo"), ("mappa", "Mappa funzionale"), ("progetti", "I progetti"), ("specifica", "Specifica 0.3")],
+               footnav=[("metodo", "Il metodo"), ("mappa", "Mappa funzionale"), ("progetti", "I progetti"), ("guida", "La Guida"), ("specifica", "Specifica 0.3 (storica)")],
                lang_label="Lingua", explore="Esplora"),
-    "en": dict(skip="Skip to content", nav=[("metodo", "The method"), ("livelli", "Levels"), ("progetti", "Projects"), ("specifica", "Specification")],
+    "en": dict(skip="Skip to content", nav=[("metodo", "The method"), ("livelli", "Levels"), ("progetti", "Projects"), ("guida", "The Guide")],
                menu="Menu", home="Home", method="The method", part="Part {n} of {t}", prev="Previous", next="Next",
-               how="How it works", what="What it requires", norm="Full normative text", specref="Read in the specification",
+               how="How it works", what="What it requires", gref="In the Guide", gref_hist="Historical text: specification 0.3", gref_en="", gref_values="The Guide describes the mechanisms without values: indicative values (for example deadlines and thresholds) are in the Extended Framework.",
                foot="© 2026 Paolo Ungari and contributors · Guide and site text CC BY-SA 4.0 · Role Profiles CC BY 4.0 · Code Apache 2.0 · Eiraman name and logo: trademark, see <a href=\"https://github.com/eiraman/community/blob/main/TRADEMARK.md\" rel=\"noopener\">TRADEMARK.md</a>", tog="TOGAF® is a registered trademark of The Open Group.",
-               footnav=[("metodo", "The method"), ("mappa", "Functional map"), ("progetti", "Projects"), ("specifica", "Specification 0.3")],
+               footnav=[("metodo", "The method"), ("mappa", "Functional map"), ("progetti", "Projects"), ("guida", "The Guide"), ("specifica", "Specification 0.3 (historical)")],
                lang_label="Language", explore="Explore"),
 }
 
@@ -94,7 +94,7 @@ METHOD = {
               ("how", "Come funziona", "Tu decidi prima, con un mandato. L'AI Squad svolge tutte le fasi e risolve da sola ciò che si può annullare. A te arrivano poche decisioni, sempre in linguaggio di business."),
               ("what", "Che cosa contiene", "Principi, ruoli, fasi, regole per le decisioni e per la qualità, un ritmo di lavoro, livelli di applicabilità, documenti, competenze e sicurezza. Ogni parte ha la sua pagina.")],
         explore_h="Esplora il metodo", explore_p="Dieci parti, dalla più semplice alla più tecnica. Ognuna parte dal perché.",
-        ref_h="Per approfondire", ref=[("specifica", "doc", "La specifica 0.2", "Il testo normativo completo, sezione per sezione."),
+        ref_h="Per approfondire", ref=[("guida", "doc", "La Guida", "Il riferimento del metodo, sezione per sezione."),
                                         ("mappa", "layers", "La mappa funzionale", "Cinque schemi tecnici del funzionamento."),
                                         ("progetti", "target", "I progetti", "Che cosa è stato costruito con il metodo, con i numeri.")],
         note="Le pagine seguono lo schema Perché, Come, Cosa (S. Sinek, Start with Why, 2009)."),
@@ -106,15 +106,15 @@ METHOD = {
               ("how", "How it works", "You decide first, with a mandate. The AI Squad carries out every phase and settles on its own whatever can be undone. Only a few decisions reach you, always in business language."),
               ("what", "What it contains", "Principles, roles, phases, rules for decisions and quality, a working rhythm, applicability levels, documents, expertise and security. Each part has its own page.")],
         explore_h="Explore the method", explore_p="Ten parts, from the simplest to the most technical. Each one starts from the why.",
-        ref_h="Go deeper", ref=[("specifica", "doc", "Specification 0.2", "The full normative text, section by section."),
+        ref_h="Go deeper", ref=[("guida", "doc", "The Guide", "The reference of the method, section by section."),
                                  ("mappa", "layers", "Functional map", "Five technical diagrams of how it works."),
                                  ("progetti", "target", "Projects", "What has been built with the method, with the numbers.")],
         note="Pages follow the Why, How, What pattern (S. Sinek, Start with Why, 2009)."),
 }
 
-# Pagine componente: card (icona, tono, titolo breve, riga), titolo pagina, perché, come (testo), tessere, cosa (regole), sezioni normative
+# Pagine componente: card (icona, tono, titolo breve, riga), titolo pagina, perché, come (testo), tessere, cosa (regole), rimandi alla Guida (GUIDE_REF)tive
 COMP = {
- "principi": dict(icon="flag", tone="fw", spec=(1,), norm=["s1"],
+ "principi": dict(icon="flag", tone="fw", spec=(1,),
   it=dict(card="Principi", line="Otto idee che guidano ogni scelta.", h1="Quali idee guidano il metodo?",
     why="Otto principi bastano per capire come ragiona Eiraman e per accorgersi subito quando qualcosa non va.",
     how="Ogni regola del metodo discende da uno di questi principi. Se una pratica li contraddice, è la pratica a essere sbagliata.",
@@ -143,7 +143,7 @@ COMP = {
     rules=[("1","Competence lives in profiles, not in every project: those who develop software bring their competence into qualified Role Profiles; the human operator of the project decides on functions and costs."),
            ("2","Human as a Manager: the human acts first, with mandate, principles, delegations, reserved matters and budget; they do not supervise execution."),
            ("3","Exclusions: the method does not apply to prohibited or high-risk AI systems or to the other out-of-scope cases.")])),
- "ruoli": dict(icon="manager", tone="human", spec=(2,), norm=["s2"],
+ "ruoli": dict(icon="manager", tone="human", spec=(2,),
   it=dict(card="Ruoli", line="Chi decide, chi esegue, chi risponde.", h1="Chi decide, chi esegue, chi risponde?",
     why="Sapere chi fa che cosa è la condizione per delegare all'AI senza perdere il controllo.",
     how="Tu rispondi delle tue decisioni. Le AI rispondono in senso operativo: ogni chiusura ha una prova. Verso clienti e terzi risponde il titolare: tu, se il progetto è per te; la tua organizzazione, se è per altri.",
@@ -166,7 +166,7 @@ COMP = {
     rules=[("A","Internal accountability: each answers for what they decide; the AIs' responsibility is operational, not legal."),
            ("B","Towards third parties the owner answers: the person at level 0, the organisation at levels 1 and 2."),
            ("C","At levels 1 and 2 the Product Owner acts under a formal mandate from the organisation.")])),
- "fasi": dict(icon="compass", tone="ai", spec=(5,), norm=["governare-lo-scopo", "ciclo-di-produzione"], norm_en=["governing-the-scope", "production-cycle"],
+ "fasi": dict(icon="compass", tone="ai", spec=(5,),
   it=dict(card="Fasi", line="Dalla prima idea al servizio in esercizio.", h1="Dalla prima idea al servizio: che cosa succede?",
     story=dict(h="La perla d'amore", src="H. G. Wells, «The Pearl of Love» · Wikisource",
       p="In un racconto di H. G. Wells un principe dedica la vita a costruire un mausoleo per la donna amata. Anno dopo anno lo amplia e lo perfeziona, finché il sarcofago gli sembra fuori posto nella composizione e ordina: «Portate via quella cosa». Eiraman protegge la Visione perché l'opera non divori il proprio scopo: cambiarla significa aprire un nuovo progetto."),
@@ -187,7 +187,7 @@ COMP = {
     rules=[("V","The Vision becomes binding with the mandate; changing it means opening a new project."),
            ("P","Principles are frozen at the end of planning; a change during installation marks the version as failed."),
            ("S","The mandate contains stopping criteria: spend, cycles without results, a negative POC.")])),
- "decisioni": dict(icon="door1", tone="human", spec=(3,), norm=["s3"],
+ "decisioni": dict(icon="door1", tone="human", spec=(3,),
   it=dict(card="Decisioni", line="Quali scelte arrivano a te, e quali no.", h1="Quali decisioni arrivano a te?",
     why="Solo quelle che non si possono annullare o che toccano ciò che ti sei riservato. Tutto il resto lo decide l'AI Squad.",
     how="Il criterio viene dalle «porte a una via» e «a due vie» di Jeff Bezos: una porta a due vie si può riattraversare a un costo noto. Nel dubbio, la si tratta come una porta a una via.",
@@ -214,7 +214,7 @@ COMP = {
            ("E4","A classifier on a different model decides what reaches you; if it disagrees, it reaches you."),
            ("E5","Deviations from the plan add up in a drift budget."),
            ("E6","Decisions that should have reached you, and those that reached you needlessly, are measured.")])),
- "qualita": dict(icon="scale", tone="ai", spec=(4, 6), norm=["s4", "chiusura"], norm_en=["s4", "closure"],
+ "qualita": dict(icon="scale", tone="ai", spec=(4, 6),
   it=dict(card="Qualità", line="Come l'AI si controlla da sola.", h1="Come fa l'AI a controllarsi da sola?",
     why="Non basta che un agente dica «fatto». Servono prove, giudici indipendenti e, quando conviene, più proposte a confronto.",
     how="Per i lavori più delicati si preparano due o tre proposte; un giudice di un altro modello le valuta con criteri fissati prima. Poi le critiche delle perdenti migliorano la vincitrice.",
@@ -245,7 +245,7 @@ COMP = {
            ("K5","Some criteria stay hidden and judges rotate."),
            ("K6","If comparison does not beat the single executor, that type of work goes back to one proposal."),
            ("K7–K9","Very divergent proposals: choose what is cheapest to undo; repeated cases become a topic for you.")])),
- "ritmo": dict(icon="calendar", tone="human", spec=(5,), norm=["wave-e-ciclo-di-governo", "scadenze-e-urgenze"], norm_en=["waves-and-the-governance-cycle", "deadlines-and-urgencies"],
+ "ritmo": dict(icon="calendar", tone="human", spec=(5,),
   it=dict(card="Ritmo", line="Mezz'ora a settimana: come è possibile.", h1="Mezz'ora a settimana: come è possibile?",
     why="Le AI lavorano a cicli brevi; tu decidi con il tuo ritmo, una volta a settimana, su una sola pagina.",
     how="Le Wave dell'AI Squad si susseguono in automatico entro budget e mandato. Il ciclo di governo raccoglie tutto in una revisione: consegne, spesa, decisioni aperte, proposta per la settimana dopo.",
@@ -268,7 +268,7 @@ COMP = {
     rules=[("≈3","Reference: about 3 decisions per cycle and 30 minutes a week; anyone can set their own values."),
            ("80%","At 80% of a Wave's budget a warning arrives; at 100% no new work starts."),
            ("3+3","Ordinary decision: 3 working days, then 3 more; urgent: 4 hours.")])),
- "livelli": dict(icon="steps", tone="fw", spec=(10,), norm=["s10"],
+ "livelli": dict(icon="steps", tone="fw", spec=(10,),
   it=dict(card="Livelli", line="Fin dove si arriva senza uno specialista in ogni progetto.", h1="Fin dove si arriva senza uno specialista in ogni progetto?",
     why="Il metodo limita il rischio in partenza: si comincia per sé, si sale un gradino alla volta con prove, alcuni casi restano esclusi.",
     how="Ogni progetto ha una classe, ogni adozione un livello. Un progetto parte solo se la sua classe non supera il livello di chi lo usa. Un controllo automatico lo verifica all'inizio, a ogni Wave e a ogni cambio di mandato; nel dubbio, il progetto è fuori.",
@@ -283,7 +283,7 @@ COMP = {
            ("1","For my team: company sign-in, restore test, a 72-hour data-breach procedure."),
            ("2","For customers: OWASP ASVS requirements, scans at every release, a purchased external penetration test."),
            ("✕","Out: special-category (such as health) or criminal data, minors, payments in the code, high-risk AI, NIS2, distributed software.")])),
- "documenti": dict(icon="doc", tone="fw", spec=(8,), norm=["s8"],
+ "documenti": dict(icon="doc", tone="fw", spec=(8,),
   it=dict(card="Documenti", line="Che cosa leggi tu, che cosa leggono gli altri.", h1="Che cosa leggi tu, e che cosa no?",
     why="Leggi poche pagine scritte per un manager. Il resto lo leggono e lo verificano gli agenti.",
     how="I documenti hanno tre livelli. Quelli per te sono brevi, in linguaggio di business, e aprono con le cattive notizie: gli agenti usano modelli linguistici, che tendono a compiacere chi li interroga e ad attenuare ciò che è andato male. Per auditor e clienti esiste un pacchetto di prove separato.",
@@ -308,7 +308,7 @@ COMP = {
     rules=[("1–6","Business language; four questions up front; changes first; one page; outcomes, not procedures; every claim with evidence."),
            ("7","An agent with the Product Owner's profile tries to understand the document before delivery."),
            ("8–12","Minimum set per level; bad news first; completeness check; evidence pack for third parties; qualified templates.")])),
- "profili": dict(icon="layers", tone="fw", spec=(9,), norm=["s9"],
+ "profili": dict(icon="layers", tone="fw", spec=(9,),
   it=dict(card="Competenze", line="Dove stanno gli esperti che non hai.", h1="Dove stanno gli esperti che non hai?",
     why="Nelle competenze scritte per gli agenti, i Role Profile, verificate una volta per tutte da esperti della tua organizzazione.",
     how="Un esperto scrive o aggiorna un profilo; un LLM lo pre-valuta e può solo respingerlo; un revisore esperto, diverso dall'autore, lo pubblica. I progetti usano solo profili qualificati.",
@@ -331,7 +331,7 @@ COMP = {
     rules=[("◆","Every rule in a profile points to a clause of a public standard."),
            ("◆","A profile not requalified on time is suspended."),
            ("◆","The same rules apply to document templates and to the gate checklist.")])),
- "sicurezza": dict(icon="lock", tone="ai", spec=(7,), norm=["s7"],
+ "sicurezza": dict(icon="lock", tone="ai", spec=(7,),
   it=dict(card="Sicurezza", line="Che cosa resta tuo e che cosa esce.", h1="Che cosa resta tuo, e che cosa esce?",
     why="Stato, registri, codice e segreti restano nel tuo ambiente. Escono solo i dati che il mandato autorizza, verso i motori AI ammessi.",
     how="Ciò che è vietato deve bloccarlo l'ambiente, non l'agente. Ogni esecuzione è registrata e si può riprendere dopo un'interruzione senza fare due volte la stessa cosa.",
@@ -413,11 +413,9 @@ ORIG = {
 }
 
 # =====================================================================
-# Aggiornamento alla specifica 0.3: management tradizionale applicato all'AI,
+# Aggiornamento ai contenuti della specifica 0.3 (ora Guida): management tradizionale applicato all'AI,
 # AI Squad e Scrum, architettura componibile, scoperta con Design Thinking, DevSecOps.
 # =====================================================================
-for lang, lab in (("it", "Specifica 0.3"), ("en", "Specification 0.3")):
-    UI[lang]["footnav"] = [(k, (lab if k == "specifica" else v)) for k, v in UI[lang]["footnav"]]
 UI["it"]["origin"] = "Dal management"
 UI["en"]["origin"] = "From management"
 UI["it"]["see"] = "Vedi anche"
@@ -449,7 +447,8 @@ HOME["en"].update(
 METHOD["it"].update(
     why="Eiraman riparte dal management tradizionale e lo applica all'AI: chi decide governa gli agenti come governa un'organizzazione.",
     explore_p="Tredici parti, dalla più semplice alla più tecnica. Ognuna parte dal perché e dalla pratica di management da cui nasce.",
-    ref=[("specifica", "doc", "La specifica 0.3", "Il testo normativo completo, sezione per sezione.")] + METHOD["it"]["ref"][1:],
+    ref=[("guida", "doc", "La Guida", "Il riferimento del metodo, sezione per sezione, per chi vuole ogni dettaglio."),
+         ("specifica", "doc", "Specifica 0.3 (storica)", "Il testo storico e non normativo, superato dalla Guida.")] + METHOD["it"]["ref"][1:],
     mg_h="Le pratiche di management che Eiraman applica all'AI",
     mg_p="Ogni regola del metodo traspone una pratica nota. Cambia solo ciò che serve, perché chi esegue è un agente.",
     mg=[("target", "Obiettivi e mandato", "Mandato, Visione, criteri misurati", "fasi"),
@@ -466,7 +465,8 @@ METHOD["it"].update(
 METHOD["en"].update(
     why="Eiraman starts again from traditional management and applies it to AI: whoever decides governs agents the way they govern an organisation.",
     explore_p="Thirteen parts, from the simplest to the most technical. Each starts from the why and from the management practice it comes from.",
-    ref=[("specifica", "doc", "Specification 0.3", "The full normative text, section by section.")] + METHOD["en"]["ref"][1:],
+    ref=[("guida", "doc", "The Guide", "The reference of the method, section by section, for those who want every detail."),
+         ("specifica", "doc", "Specification 0.3 (historical)", "The historical, non-normative text, superseded by the Guide.")] + METHOD["en"]["ref"][1:],
     mg_h="The management practices Eiraman applies to AI",
     mg_p="Every rule of the method transposes a known practice. Only what must change changes, because the one executing is an agent.",
     mg=[("target", "Objectives and mandate", "Mandate, Vision, measured criteria", "fasi"),
@@ -497,7 +497,7 @@ ORIGINS = {
     "sicurezza": ("Security by Design e gestione del rischio IT", "Security by Design and IT risk management"),
 }
 
-COMP["squadre"] = dict(icon="pyramid", tone="ai", spec=("4bis",), norm=["s4bis"],
+COMP["squadre"] = dict(icon="pyramid", tone="ai", spec=("4bis",),
   it=dict(card="AI Squad e Scrum", line="Come si organizzano gli agenti.", h1="Come si organizza un'AI Squad?",
     why="Come in un'azienda: ruoli diversi, una squadra per ogni pacchetto di lavoro, un responsabile che coordina e una retrospettiva che migliora la squadra.",
     how="Il Coordinatore AI forma una squadra per ogni pacchetto, con uno Scrum Master AI che la coordina e gli rende conto. Niente Sprint: i limiti sono costo, contesto e quote, non le ore delle persone.",
@@ -533,7 +533,7 @@ COMP["squadre"] = dict(icon="pyramid", tone="ai", spec=("4bis",), norm=["s4bis"]
            ("4", "The AI Coordinator validates technique and compliance and closes the Wave after the integrated increment."),
            ("5", "Savings within tolerance apply on their own; changing a Decision comes back to you with a SWOT.")]))
 
-COMP["architettura"] = dict(icon="spine", tone="fw", spec=("6bis",), norm=["s6bis"],
+COMP["architettura"] = dict(icon="spine", tone="fw", spec=("6bis",),
   it=dict(card="Architettura componibile", line="Prima l'essenziale, poi il resto.", h1="In che ordine si costruisce un'applicazione?",
     why="Con l'AI aggiungere pezzi è facile: senza un ordine si costruisce un patchwork. Come un buon architetto d'impresa, Eiraman parte dall'essenziale.",
     how="L'applicazione si scompone in componenti per funzione, come un corpo: prima la spina dorsale, poi il cervello, poi mani, piedi, occhi e orecchie, infine i capelli, che si possono tagliare.",
@@ -561,7 +561,7 @@ COMP["architettura"] = dict(icon="spine", tone="fw", spec=("6bis",), norm=["s6bi
            ("4", "Hairs: added or removed at any time, checking the core's regression."),
            ("5", "The architecture document follows the TOGAF views and measures the choice between local and external engines.")]))
 
-COMP["scoperta"] = dict(icon="bulb", tone="ai", spec=(5,), norm=["design-thinking-affidato-all-ai-fase-1"], norm_en=["design-thinking-delegated-to-ai-phase-1"],
+COMP["scoperta"] = dict(icon="bulb", tone="ai", spec=(5,),
   it=dict(card="Scoperta con il Design Thinking", line="Molte idee, poi una sola Visione.", h1="Come nasce un'idea condivisa?",
     why="Come in un workshop di Design Thinking: prima si aprono le idee, poi si converge. Le macchine però non hanno buon senso, quindi servono confini chiari.",
     how="Più modelli, ognuno con un ruolo, esplorano il problema in modo indipendente. Tu puoi intervenire a momenti fissi. Poi un analista raccoglie, sceglie e scrive la prima Visione.",
@@ -588,8 +588,6 @@ COMP["scoperta"] = dict(icon="bulb", tone="ai", spec=(5,), norm=["design-thinkin
            ("4", "The Human Manager approves the Vision or relaunches the exploration.")]))
 
 # Qualità: i 4 tipi di test DevSecOps
-COMP["qualita"]["norm"] = ["s4", "chiusura", "devsecops-e-test"]
-COMP["qualita"]["norm_en"] = ["s4", "closure", "devsecops-and-tests"]
 COMP["qualita"]["it"]["tests_h"] = "I quattro tipi di test (DevSecOps)"
 COMP["qualita"]["it"]["tests"] = [("gear", "ai", "Unit test", "A fine pacchetto, dal tester indipendente; aggiornano sicurezza e prestazioni."),
     ("log", "ai", "Funzionale con script", "L'agente lancia lo script e registra i log; corregge da solo gli errori banali."),
@@ -964,7 +962,7 @@ FWPAGE = {
   why="Il management funziona già. Lo ripensiamo per AI Squad, e il manager resti tu.",
   idx_h="Sei framework, un solo schema", idx_p="Per ognuno: l'originale, che cosa resta, che cosa cambia e perché, che cosa fai tu, le regole.",
   lab=dict(orig="Il framework originale", keep="Che cosa conserva Eiraman", change="Che cosa cambia con gli agenti, e perché", you="Tu fai",
-           rules="Le regole nel metodo", before="Con le persone", after="Con gli agenti", src="Fonte", spec="Specifica"),
+           rules="Le regole nel metodo", before="Con le persone", after="Con gli agenti", src="Fonte", spec="Guida"),
   diff_h="Perché cambiare qualcosa", diff=[("cycle", "Ritmo di lavoro", "I limiti non sono più il tempo delle persone, ma costo, contesto e quote dei fornitori."),
      ("alert", "Niente buon senso", "Servono confini espliciti: ruoli, guardrail, criteri di arresto."),
      ("team", "Nessuna armonia da preservare", "Si possono mettere in concorrenza, se il selettore è affidabile."),
@@ -1035,7 +1033,7 @@ FWPAGE["en"] = dict(title="Frameworks rethought · Eiraman", crumb="Frameworks r
   why="Management already works. We rethink it for AI Squads, and you stay the manager.",
   idx_h="Six frameworks, one pattern", idx_p="For each: the original, what stays, what changes and why, what you do, the rules.",
   lab=dict(orig="The original framework", keep="What Eiraman keeps", change="What changes with agents, and why", you="You",
-           rules="The rules in the method", before="With people", after="With agents", src="Source", spec="Specification"),
+           rules="The rules in the method", before="With people", after="With agents", src="Source", spec="Guide"),
   diff_h="Why change anything", diff=[("cycle", "Pace of work", "The limits are no longer people's time, but cost, context and provider quotas."),
      ("alert", "No common sense", "Explicit boundaries are needed: roles, guardrails, stop criteria."),
      ("team", "No harmony to preserve", "They can be made to compete, if the selector is reliable."),
@@ -1665,8 +1663,8 @@ ORIG["en"].update(h1="Original elements and references", proof_btn="Pilot data")
 _T(ORIG, ["own", 2, 2], "Si accetta il software e, separatamente, ciò che il software produce.", "The software is accepted and, separately, what the software produces.")
 
 # --- Etichette comuni ---
-UI["it"].update(specref="Riferimento nella specifica", explore="Componenti")
-UI["en"].update(specref="Reference in the specification", explore="Components")
+UI["it"].update(explore="Componenti")
+UI["en"].update(explore="Components")
 
 # ===================== Correzioni (25 novembre 2026) =====================
 # 1. §06 framework: «spese sconosciute, mai zero» non è nella specifica 0.3 → tolto dalle regole; rimandi corretti
@@ -1822,13 +1820,13 @@ AVVIO_IT = ("Questa cartella vuota conterrà il mio progetto. "
             "1) Scarica il pacchetto Eiraman dal sito {zip} e mettilo in questa cartella. "
             "Prima di estrarlo calcola lo SHA-256 del file: deve essere {sha}. Se è diverso, fermati e dimmelo. "
             "Se coincide, estraine qui il contenuto. "
-            "2) Leggi CONTROLLORE.md e framework/Eiraman.md. "
+            "2) Leggi CONTROLLORE.md e guide/EIRAMAN-GUIDE.md: la Guida è il riferimento del metodo; la specifica 0.3, se il profilo la cita, è superata e non è nel pacchetto. "
             "3) Da ora sei il Coordinatore AI Eiraman di questo progetto e io sono il Manager umano: segui la procedura di avvio del profilo, apri la Vista del Manager e chiedimi la mia richiesta.")
 AVVIO_EN = ("This empty folder will hold my project. "
             "1) Download the Eiraman package from the site {zip} and put it in this folder. "
             "Before extracting it, compute the file's SHA-256: it must be {sha}. If it differs, stop and tell me. "
             "If it matches, extract its content here. "
-            "2) Read CONTROLLORE.md and framework/Eiraman.md. "
+            "2) Read CONTROLLORE.md and guide/EIRAMAN-GUIDE.md: the Guide is the reference of the method; the specification 0.3, if the profile cites it, is superseded and not in the package. "
             "3) From now on you are the Eiraman AI Coordinator of this project and I am the Human Manager: follow the profile's start-up procedure, open the Manager view and ask me for my request.")
 GUIDE = {
  "it": dict(
@@ -1842,9 +1840,9 @@ GUIDE = {
         items=[("Installa Claude Code oppure Codex seguendo la guida ufficiale.", "LINKS"),
                ("Crea una cartella vuota per il tuo progetto e avvia lì lo strumento: «claude» per Claude Code, «codex» per Codex.", "mkdir mio-progetto\ncd mio-progetto\nclaude")]),
    dict(t="Incolla il prompt di avvio", screen="folder", wtitle="mio-progetto",
-        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "framework/Eiraman.md", "role-profiles/"],
+        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "role-profiles/"],
         items=[("Copia questo prompt e incollalo nella sessione.", "AVVIO"),
-               ("Il Coordinatore AI scarica il kit nella cartella, legge il proprio Role Profile e la specifica e assume il ruolo. Concedi soltanto questi permessi: scaricare quel file da eiraman.tech, calcolarne l'impronta, estrarlo e creare file dentro la cartella del progetto. Qualsiasi altra richiesta di permesso non fa parte dell'avvio.", None)]),
+               ("Il Coordinatore AI scarica il kit nella cartella, legge il proprio Role Profile e la Guida e assume il ruolo. Concedi soltanto questi permessi: scaricare quel file da eiraman.tech, calcolarne l'impronta, estrarlo e creare file dentro la cartella del progetto. Qualsiasi altra richiesta di permesso non fa parte dell'avvio.", None)]),
    dict(t="Descrivi la tua richiesta", screen="chat", wtitle="Sessione",
         bubbles=[("ai", "Sono il Coordinatore AI. Qual è la tua richiesta?"),
                  ("me", "Problema: le richieste di acquisto arrivano via email e alcune si perdono. Utenti: 15 colleghi degli acquisti. Beneficio: nessuna richiesta persa. Vincoli: 50 € al mese, entro gennaio. Successo: un mese senza richieste perse."),
@@ -1877,9 +1875,9 @@ GUIDE = {
         items=[("Install Claude Code or Codex following the official guide.", "LINKS"),
                ("Create an empty folder for your project and start the tool there: “claude” for Claude Code, “codex” for Codex.", "mkdir my-project\ncd my-project\nclaude")]),
    dict(t="Paste the start-up prompt", screen="folder", wtitle="my-project",
-        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "framework/Eiraman.md", "role-profiles/"],
+        files=["CONTROLLORE.md", "STATO.md", "tools/vista_manager.py", "guide/EIRAMAN-GUIDE.md", "role-profiles/"],
         items=[("Copy this prompt and paste it into the session.", "AVVIO"),
-               ("The AI Coordinator downloads the kit into the folder, reads its Role Profile and the specification and takes on the role. Grant only these permissions: downloading that file from eiraman.tech, computing its fingerprint, extracting it and creating files inside the project folder. Any other permission request is not part of the start-up.", None)]),
+               ("The AI Coordinator downloads the kit into the folder, reads its Role Profile and the Guide and takes on the role. Grant only these permissions: downloading that file from eiraman.tech, computing its fingerprint, extracting it and creating files inside the project folder. Any other permission request is not part of the start-up.", None)]),
    dict(t="Describe your request", screen="chat", wtitle="Session",
         bubbles=[("ai", "I am the AI Coordinator. What is your request?"),
                  ("me", "Problem: purchase requests arrive by email and some get lost. Users: 15 colleagues in purchasing. Benefit: no request lost. Constraints: €50 per month, by January. Success: one month with no lost requests."),
@@ -2009,8 +2007,8 @@ PROGETTI = {
          ("Costo", ["Spesa reale: solo abbonamenti già attivi. Equivalente a listino della generazione dei documenti: circa 98 USD; il costo dei giudizi non è misurato."])],
         source="Fonti: registro del progetto (decisioni, run, esiti), storia delle versioni, sessioni di lavoro. Dati al 25/11/2026."),
    dict(name="Il metodo Eiraman", icon="layers", state="sviluppato con Eiraman · in corso",
-        short="Il metodo stesso, gestito come un prodotto: specifica, Role Profile, Vista del Manager, sito e kit.",
-        vision="Un metodo per far lavorare squadre di agenti AI sotto il governo di un manager umano deve restare coerente, verificabile e pubblicabile mentre cambia ogni giorno. Per questo Eiraman è gestito con Eiraman: ogni modifica della specifica e ogni pubblicazione è una decisione del Manager umano, ogni pacchetto chiuso passa da una revisione indipendente, il cui esito resta registrato.",
+        short="Il metodo stesso, gestito come un prodotto: Guida, Role Profile, Vista del Manager, sito e kit.",
+        vision="Un metodo per far lavorare squadre di agenti AI sotto il governo di un manager umano deve restare coerente, verificabile e pubblicabile mentre cambia ogni giorno. Per questo Eiraman è gestito con Eiraman: ogni modifica della Guida e ogni pubblicazione è una decisione del Manager umano, ogni pacchetto chiuso passa da una revisione indipendente, il cui esito resta registrato.",
         numbers=[("Work Package", "39", "ricostruito"), ("decisioni del Manager (Do), di cui 3 aperte", "44", "ricostruito"), ("pubblicazioni verificate", "12", "ricostruito"),
                  ("agenti avviati", "45", "misurato"), ("revisioni indipendenti", "21", "misurato"), ("interventi del Manager", "117", "misurato"),
                  ("agenti per intervento", "0,4", "misurato"), ("Role Profile prodotti", "41", "misurato")],
@@ -2020,7 +2018,7 @@ PROGETTI = {
              "La ricerca di anteriorità non è ancora stata fatta, e un conflitto di sincronizzazione delle cartelle ha costretto a spostare la generazione del sito.",
              "Le revisioni sono state fatte da agenti dello stesso fornitore dell'autore: un'indipendenza limitata."],
         sections=[
-         ("Come funziona il deliverable", ["La specifica descrive come un Manager umano affida il lavoro a un Coordinatore AI e alle sue AI Squad, con decisioni, livelli e prove.",
+         ("Come funziona il deliverable", ["La Guida descrive come un Manager umano affida il lavoro a un Coordinatore AI e alle sue AI Squad, con decisioni, livelli e prove.",
                                          "Il registro dei Role Profile contiene 48 profili in 8 famiglie più il Coordinatore AI, con 433 task catalogati e la Seniority Digitale che sceglie motore e ragionamento.",
                                          "La Vista del Manager mostra decisioni, budget, albero del lavoro e documenti. Un pacchetto scaricabile è progettato per avviare il metodo in un nuovo progetto con un solo prompt (il percorso completo con un LLM non è ancora stato provato); il sito bilingue viene pubblicato solo dopo il via del Manager, verificando ogni file online."]),
          ("Come ha lavorato il metodo", ["Wave pilota e Wave di avvio: valutazione della proposta e prima specifica.",
@@ -2070,8 +2068,8 @@ PROGETTI = {
          ("Cost", ["Actual spend: only subscriptions already in place. List-price equivalent of document generation: about USD 98; the cost of judging is not measured."])],
         source="Sources: project record (decisions, runs, outcomes), version history, work sessions. Data as of 25/11/2026."),
    dict(name="The Eiraman method", icon="layers", state="developed with Eiraman · in progress",
-        short="The method itself, managed as a product: specification, Role Profiles, Manager view, site and kit.",
-        vision="A method for having AI agent teams work under the governance of a human manager must stay consistent, verifiable and publishable while it changes every day. That is why Eiraman is managed with Eiraman: every change to the specification and every publication is a Human Manager decision, every closed package goes through an independent review, whose outcome is recorded.",
+        short="The method itself, managed as a product: Guide, Role Profiles, Manager view, site and kit.",
+        vision="A method for having AI agent teams work under the governance of a human manager must stay consistent, verifiable and publishable while it changes every day. That is why Eiraman is managed with Eiraman: every change to the Guide and every publication is a Human Manager decision, every closed package goes through an independent review, whose outcome is recorded.",
         numbers=[("Work Packages", "39", "reconstructed"), ("Manager decisions (Do), 3 still open", "44", "reconstructed"), ("verified publications", "12", "reconstructed"),
                  ("agents started", "45", "measured"), ("independent reviews", "21", "measured"), ("Manager interventions", "117", "measured"),
                  ("agents per intervention", "0.4", "measured"), ("Role Profiles produced", "41", "measured")],
@@ -2081,7 +2079,7 @@ PROGETTI = {
              "The prior-art search has not been done yet, and a folder synchronisation conflict forced the site build to be moved.",
              "Reviews were done by agents from the author's own provider: limited independence."],
         sections=[
-         ("How the deliverable works", ["The specification describes how a Human Manager entrusts work to an AI Coordinator and its AI Squads, with decisions, levels and evidence.",
+         ("How the deliverable works", ["The Guide describes how a Human Manager entrusts work to an AI Coordinator and its AI Squads, with decisions, levels and evidence.",
                                        "The Role Profile registry holds 48 profiles in 8 families plus the AI Coordinator, with 433 catalogued tasks and the Digital Seniority that picks engine and reasoning.",
                                        "The Manager view shows decisions, budget, the work tree and documents. A downloadable package is designed to start the method in a new project with a single prompt (the full path with an LLM has not been tested yet); the bilingual site is published only after the Manager's go-ahead, verifying every file online."]),
          ("How the method worked", ["Pilot and start-up Waves: assessment of the proposal and first specification.",
@@ -2130,4 +2128,35 @@ EVIDENZE = {
    ex=["Before launch, a check found personal information left in the files. It was removed.",
        "A text was rejected in which not answering counted as a yes to a risky choice.",
        "A proposal was stopped that dropped a security check for some projects."]),
+}
+
+
+# ===================== La Guida è il riferimento del metodo (CR-029, D-IT-1) =====================
+# Component page -> sections of The Eiraman Guide (anchors "sN" and "sN-M" of the rendered Guide pages; the numbering is the
+# Guide's and is the same in the Italian translation). The specification 0.3 stays as a historical page.
+GUIDE_REF = {
+    "principi": ["s1", "s2", "s3"],
+    "ruoli": ["s4"],
+    "fasi": ["s8", "s8-1", "s9"],
+    "decisioni": ["s5"],
+    "qualita": ["s6", "s9", "s9-1"],
+    "ritmo": ["s8", "s5"],
+    "livelli": ["s14", "s14-1", "s14-2"],
+    "documenti": ["s12", "s9"],
+    "profili": ["s13", "s7-1", "s15"],
+    "sicurezza": ["s11"],
+    "squadre": ["s7", "s7-1"],
+    "architettura": ["s10"],
+    "scoperta": ["s8", "s8-1"],
+}
+# Component pages that say where the values are (the Guide states none): the thresholds and deadlines of the old text.
+GUIDE_VALUES = {"ritmo", "decisioni", "qualita"}
+# Framework page: one Guide section for each rule of each framework, in the order of the rules.
+FW_GUIDE = {
+    "design-thinking": ["s8", "s8"],
+    "scrum": ["s7", "s7", "s6"],
+    "delega": ["s5", "s5", "s5"],
+    "architettura": ["s10", "s10"],
+    "devsecops": ["s9-1", "s9"],
+    "reporting": ["s8", "s8", "s6", "s7", "s5", "s12", "s12"],
 }

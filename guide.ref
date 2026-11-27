@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Single source of truth for the Eiraman Guide read by the build (the English text, and the Italian translation
+# when the commit contains it). The first line that is not a comment is the full commit SHA of eiraman/guide,
+# never a branch or a tag. Read by generator/build.py (which refuses a checkout at another commit) and by
+# .github/workflows/site-build.yml. Updating it is a reviewed change, with the Guide version below.
+# Guide version: 1.0.0-rc.5 (release candidate)
+# TODO before release (CR-029, D-IT-1): move it to the guide commit that contains the Italian translation.
+2635a69f879bca37b73c8a8ef2142254dc282e2a

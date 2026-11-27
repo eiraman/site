@@ -16,8 +16,9 @@ permissions:
 
 env:
   PROFILES_REPO: eiraman/role-profiles
-  # The commit of role-profiles read by the build is pinned in site/profiles.ref (single source of truth,
-  # also checked by generator/build.py), never a branch. Updating it is a reviewed change.
+  GUIDE_REPO: eiraman/guide
+  # The commits of role-profiles and of guide read by the build are pinned in site/profiles.ref and site/guide.ref
+  # (single source of truth, also checked by generator/build.py), never a branch. Updating them is a reviewed change.
 
 jobs:
   build:
@@ -40,6 +41,18 @@ jobs:
           ref: ${{ env.PROFILES_REF }}
           path: role-profiles
           persist-credentials: false
+      - name: Read the pinned guide commit
+        run: |
+          set -euo pipefail
+          ref="$(grep -v '^[[:space:]]*#' site/guide.ref | grep -E '^[0-9a-f]{40}$')"
+          test "$(printf '%s\n' "$ref" | wc -l)" -eq 1
+          echo "GUIDE_REF=$ref" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.GUIDE_REPO }}
+          ref: ${{ env.GUIDE_REF }}
+          path: guide
+          persist-credentials: false
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
@@ -47,7 +60,7 @@ jobs:
         run: |
           set -euo pipefail
           for n in 1 2; do
-            EIRAMAN_OUT="$RUNNER_TEMP/build-$n" EIRAMAN_PROFILES="$GITHUB_WORKSPACE/role-profiles" \
+            EIRAMAN_OUT="$RUNNER_TEMP/build-$n" EIRAMAN_PROFILES="$GITHUB_WORKSPACE/role-profiles" EIRAMAN_GUIDE="$GITHUB_WORKSPACE/guide" \
               python3 -I -B site/generator/build.py
           done
       - name: Compare manifests and trees
