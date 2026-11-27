@@ -18,6 +18,37 @@ first published on 25 November 2026. Where the log is not precise, the entry say
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-11-27
+
+Scope: Change Request CR-026 of the method project: the registry read by the build is declared in one place
+and checked, so that a local build cannot read a registry other than the one the CI reads (a publication build
+almost shipped an unreleased branch of `role-profiles`). Site bump: PATCH: no served file changes; manifest
+metadata and build tooling only (VERSIONING §2.4). The kit does not change and stays 0.9.0. The pinned
+registry does not change: `0bc7f86…`, role-profiles 0.8.0.
+
+### Added
+
+- `profiles.ref`: the full commit SHA of `role-profiles` read by the build, with the registry version in a
+  comment. It is the single source of truth.
+- `generator/build.py`: before building, the checkout in `EIRAMAN_PROFILES` must be a git repository whose
+  `HEAD` is the SHA in `profiles.ref`, with no uncommitted changes; otherwise the build exits with an error
+  that explains how to get a matching worktree. `EIRAMAN_PROFILES_UNPINNED=1` overrides the check for
+  development. The folder must be the root of the git repository, not a subfolder of it (`git rev-parse
+  --show-toplevel`, compared with `realpath`). A missing `git` is reported as "not a git repository", and a
+  missing `profiles.ref` or a value that is not 40 lowercase hexadecimal characters ends with a clear message;
+  these checks also apply with the override.
+- `manifest.json`: `registry_commit` (the commit actually read) and `publishable` (`false` when the override
+  was used).
+- `CHANGELOG.md`: the comparison links of 0.10.1 and 0.10.2; `[Unreleased]` now starts from v0.10.2.
+- `README.md`: build instructions with a pinned worktree, the new variable, the new manifest fields.
+
+### Changed
+
+- `.github/workflows/site-build.yml`: `PROFILES_REF` is no longer written in the workflow; a step reads it from
+  `site/profiles.ref` before the checkout of `role-profiles`. Same value as before.
+- `manifest.json`: `version` 0.10.2, the new fields. The `sha256` fingerprints of the served files are
+  unchanged. `kit.version` stays 0.9.0.
+
 ## [0.10.1] - 2026-11-27
 
 Scope: Change Request CR-025 of the method project, decision D-VER-2: every versioned artifact inside a
@@ -381,7 +412,9 @@ identical across two builds, with a manifest of fingerprints. The log records th
 verified; the external HTTPS check then found the hosting provider's "under construction" page, and it does
 not record that 0.1.0 itself went online.
 
-[Unreleased]: https://github.com/eiraman/site/compare/v0.10.0...main
+[Unreleased]: https://github.com/eiraman/site/compare/v0.10.2...main
+[0.10.2]: https://github.com/eiraman/site/compare/v0.10.1...v0.10.2
+[0.10.1]: https://github.com/eiraman/site/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/eiraman/site/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/eiraman/site/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/eiraman/site/compare/v0.8.0...v0.8.1

@@ -16,9 +16,8 @@ permissions:
 
 env:
   PROFILES_REPO: eiraman/role-profiles
-  # Full commit SHA of role-profiles read by the build (profilo.json files and the kit), never a branch,
-  # so that two builds from the same site commit read the same registry. Updating it is a reviewed change.
-  PROFILES_REF: "0bc7f8624e484b2aacd3731c25a13377bc57a84f" # role-profiles 0.8.0
+  # The commit of role-profiles read by the build is pinned in site/profiles.ref (single source of truth,
+  # also checked by generator/build.py), never a branch. Updating it is a reviewed change.
 
 jobs:
   build:
@@ -29,6 +28,12 @@ jobs:
         with:
           path: site
           persist-credentials: false
+      - name: Read the pinned registry commit
+        run: |
+          set -euo pipefail
+          ref="$(grep -v '^[[:space:]]*#' site/profiles.ref | grep -E '^[0-9a-f]{40}$')"
+          test "$(printf '%s\n' "$ref" | wc -l)" -eq 1
+          echo "PROFILES_REF=$ref" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ env.PROFILES_REPO }}

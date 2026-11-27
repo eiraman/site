@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2026 Paolo Ungari and contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Single source of truth for the Role Profiles registry read by the build (profilo.json files and the kit).
+# The first line that is not a comment is the full commit SHA of eiraman/role-profiles, never a branch.
+# Read by generator/build.py (which refuses a checkout at another commit) and by
+# .github/workflows/site-build.yml. Updating it is a reviewed change, with the registry version below.
+# Registry version: 0.8.0
+0bc7f8624e484b2aacd3731c25a13377bc57a84f

@@ -7,8 +7,9 @@ and the 0.2 release pages are not in this repository. The brand files in brand/ 
 renders a visible placeholder instead and records it in manifest.json under "placeholders".
 Environment: EIRAMAN_OUT (output folder, required), EIRAMAN_PROFILES (role-profiles checkout, default ../role-profiles),
 EIRAMAN_BRAND (folder with the logo PNGs), EIRAMAN_PHOTO (author photo), EIRAMAN_SPEC03 (folder with Eiraman.md and
-Eiraman.en.md), EIRAMAN_OLD (0.2 release folder)."""
-import os, re, json, hashlib, shutil, math, html, sys
+Eiraman.en.md), EIRAMAN_OLD (0.2 release folder), EIRAMAN_PROFILES_UNPINNED (1: build from a role-profiles checkout that is not
+the pinned commit; development only, the manifest then says publishable: false)."""
+import os, re, json, hashlib, shutil, math, html, sys, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from icons import sprite, icon
@@ -23,7 +24,7 @@ def _missing(what):
 
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 # Versions (community/VERSIONING.md). Bump them together with the CHANGELOG.md entry of the release.
-SITE_VERSION = "0.10.1"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
+SITE_VERSION = "0.10.2"  # 0.4.0 was the 25 November 2026 deployment, published under the label 0.3.0 (CHANGELOG.md)
 KIT_VERSION = "0.9.0"   # kit/eiraman-kit.zip; its line continues the 0.3.x copies named in the licence notice
 OLD = os.environ.get("EIRAMAN_OLD") or os.path.join(ROOT, "releases", "0.2.0-candidata")
 OUT = os.environ.get("EIRAMAN_OUT") or os.path.join(ROOT, "build", sys.argv[1] if len(sys.argv) > 1 else SITE_VERSION)
@@ -911,6 +912,62 @@ def build_uso(lang):
 
 # ---------- Role Profile ----------
 RP_DIR = os.path.abspath(os.environ.get("EIRAMAN_PROFILES") or os.path.join(ROOT, "..", "role-profiles"))
+
+def _pinned_registry():
+    """Full SHA in profiles.ref: the single source of truth for the registry, also read by the CI workflow (CR-026)."""
+    try:
+        lines = open(os.path.join(ROOT, "profiles.ref"), encoding="utf-8").read().splitlines()
+    except OSError:
+        sys.exit("ERRORE: profiles.ref non trovato o non leggibile (%s): e' il file che dichiara il registro." % os.path.join(ROOT, "profiles.ref"))
+    for line in lines:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            if not re.fullmatch(r"[0-9a-f]{40}", line):
+                sys.exit("ERRORE: profiles.ref: SHA a 40 caratteri esadecimali minuscoli (trovato: %r)" % line)
+            return line
+    sys.exit("ERRORE: profiles.ref: SHA a 40 caratteri esadecimali minuscoli (nessuno trovato)")
+
+def _git(*args):
+    try:
+        r = subprocess.run(["git", "-C", RP_DIR, *args], capture_output=True, text=True)
+    except OSError:  # git is not installed or not in PATH
+        return None
+    return r.stdout.strip() if r.returncode == 0 else None
+
+REGISTRY_PINNED = _pinned_registry()
+REGISTRY_COMMIT = None   # commit actually read by this build, set by check_registry()
+PUBLISHABLE = True       # False when the registry is not the pinned one (EIRAMAN_PROFILES_UNPINNED)
+
+def check_registry():
+    """The build reads the registry only from the commit pinned in profiles.ref, with a clean tree (CR-026)."""
+    global REGISTRY_COMMIT, PUBLISHABLE
+    head = _git("rev-parse", "HEAD")
+    status = _git("status", "--porcelain")
+    top = _git("rev-parse", "--show-toplevel")
+    REGISTRY_COMMIT = head or "unknown"
+    # the folder must be the root of the repository, not a subfolder of it (git -C climbs to the enclosing repository)
+    is_root = top is not None and os.path.realpath(top) == os.path.realpath(RP_DIR)
+    if head == REGISTRY_PINNED and status == "" and is_root:
+        return
+    if head is None or top is None: why = "non è un repository git (o git non è disponibile)"
+    elif not is_root: why = "la cartella è una sottocartella del repository %s, non la sua radice" % top
+    elif head != REGISTRY_PINNED: why = "HEAD è %s" % head
+    else: why = "ci sono modifiche non committate"
+    if os.environ.get("EIRAMAN_PROFILES_UNPINNED") == "1":
+        PUBLISHABLE = False
+        print("ATTENZIONE: registro non fissato (%s; atteso %s): build NON pubblicabile." % (why, REGISTRY_PINNED), file=sys.stderr)
+        return
+    sys.exit("""ERRORE: il checkout del registro non e' quello fissato in profiles.ref.
+  cartella:  %s
+  motivo:    %s
+  atteso:    %s, albero pulito
+Il sito si costruisce solo dal registro dichiarato, lo stesso della CI. Per ottenere un checkout corrispondente,
+senza toccare il lavoro in corso del registro:
+  git -C ../role-profiles worktree add --detach <cartella> %s
+  EIRAMAN_PROFILES=<cartella> python3 -B generator/build.py
+Solo per lo sviluppo: EIRAMAN_PROFILES_UNPINNED=1 permette un altro checkout; il manifest riporta publishable: false.""" % (
+        RP_DIR, why, REGISTRY_PINNED, REGISTRY_PINNED))
+
 def _rp_load():
     fams = {}
     for fid, *_ in RP_FAM:
@@ -1184,6 +1241,7 @@ def build_host():
     print("host: .htaccess, robots.txt, sitemap.xml con", len(pages), "pagine")
 
 def main():
+    check_registry()
     # Svuota il contenuto senza cancellare la cartella: evita i conflitti con le cartelle sincronizzate
     if os.path.exists(OUT):
         for root, dirs, files in os.walk(OUT, topdown=False):
@@ -1239,6 +1297,7 @@ def main():
     files.sort()
     man = {"format": 1, "version": SITE_VERSION, "date": "2026-11-27", "languages": ["it", "en"],
            "placeholders": sorted(PLACEHOLDERS),
+           "registry_commit": REGISTRY_COMMIT, "publishable": PUBLISHABLE,
            "kit": {"path": "kit/eiraman-kit.zip", "version": KIT_VERSION, "bundled": KIT_BUNDLED},
            "sha256": {f: hashlib.sha256(open(os.path.join(OUT, f), "rb").read()).hexdigest() for f in files}}
     json.dump(man, open(os.path.join(OUT, "manifest.json"), "w"), indent=2, ensure_ascii=False)

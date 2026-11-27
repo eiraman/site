@@ -12,13 +12,22 @@ library only. Status: **draft**, prepared for a restricted launch. Nothing here 
 
 ```sh
 git clone https://github.com/eiraman/role-profiles ../role-profiles   # the build reads profilo.json files
-EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
+# The registry must be at the commit pinned in profiles.ref, with a clean tree: use a detached worktree, so that
+# the work in progress of ../role-profiles is left alone.
+git -C ../role-profiles worktree add --detach ../.build/rp-pinned "$(grep -v '^#' profiles.ref)"
+EIRAMAN_PROFILES=../.build/rp-pinned EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
 ```
+
+The registry commit is declared once, in [profiles.ref](profiles.ref); the CI workflow reads it from there. The
+build exits with an error, and a message that says how to get a matching checkout, if `EIRAMAN_PROFILES` is not
+a git checkout whose `HEAD` is that commit with no uncommitted changes. To update the registry, change
+`profiles.ref` (with the registry version in its comment) in a reviewed commit.
 
 | Variable | Meaning | Default |
 |---|---|---|
 | `EIRAMAN_OUT` | output folder (emptied before the build) | `build/<site version>`, for example `build/0.4.1` |
-| `EIRAMAN_PROFILES` | checkout of the `role-profiles` repository | `../role-profiles` |
+| `EIRAMAN_PROFILES` | checkout of the `role-profiles` repository, at the commit in `profiles.ref`, clean | `../role-profiles` |
+| `EIRAMAN_PROFILES_UNPINNED` | `1` allows a checkout at another commit or with changes; development only, the manifest says `publishable: false` | unset |
 | `EIRAMAN_BRAND` | folder holding `eiraman-su-chiaro.png` and `eiraman-su-scuro.png` | `brand/` |
 | `EIRAMAN_PHOTO` | author photo for the Author & community page | unset |
 | `EIRAMAN_SPEC03` | folder with the historical specification `Eiraman.md` and `Eiraman.en.md` | `generator/spec03/` (absent) |
@@ -27,7 +36,8 @@ EIRAMAN_OUT=/tmp/eiraman-site python3 -B generator/build.py
 The build writes `manifest.json` with the SHA-256 of every output file. Two builds from the same commit
 must produce the same manifest; CI checks this (`.github/workflows/site-build.yml`).
 
-`manifest.json` also records the site version (`version`) and, under `kit`, the kit version and the
+`manifest.json` also records the registry commit read by the build (`registry_commit`), `publishable` (`false` when
+`EIRAMAN_PROFILES_UNPINNED` was used: such a build must never be published), the site version (`version`) and, under `kit`, the kit version and the
 versions of what the kit bundles. The rules are in
 [community/VERSIONING.md](https://github.com/eiraman/community/blob/main/VERSIONING.md), the history in
 [CHANGELOG.md](CHANGELOG.md). The changelog of the kit alone is [kit/CHANGELOG.md](kit/CHANGELOG.md)
